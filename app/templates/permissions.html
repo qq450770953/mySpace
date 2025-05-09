@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">权限管理</h5>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addPermissionModal">
+                        <i class="fas fa-plus"></i> 添加权限
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>权限名称</th>
+                                    <th>描述</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="permissionsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加权限模态框 -->
+<div class="modal fade" id="addPermissionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加权限</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addPermissionForm">
+                    <div class="form-group">
+                        <label for="permissionName">权限名称</label>
+                        <input type="text" class="form-control" id="permissionName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="permissionDescription">描述</label>
+                        <textarea class="form-control" id="permissionDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addPermission()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑权限模态框 -->
+<div class="modal fade" id="editPermissionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑权限</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editPermissionForm">
+                    <input type="hidden" id="editPermissionId">
+                    <div class="form-group">
+                        <label for="editPermissionName">权限名称</label>
+                        <input type="text" class="form-control" id="editPermissionName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPermissionDescription">描述</label>
+                        <textarea class="form-control" id="editPermissionDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updatePermission()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 加载权限列表
+function loadPermissions() {
+    fetch('/api/auth/permissions')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('permissionsTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(permission => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${permission.name}</td>
+                    <td>${permission.description || '-'}</td>
+                    <td>${new Date(permission.created_at).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editPermission(${permission.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePermission(${permission.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        });
+}
+
+// 添加权限
+function addPermission() {
+    const formData = {
+        name: document.getElementById('permissionName').value,
+        description: document.getElementById('permissionDescription').value
+    };
+    
+    fetch('/api/auth/permissions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        $('#addPermissionModal').modal('hide');
+        document.getElementById('addPermissionForm').reset();
+        loadPermissions();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('添加权限失败');
+    });
+}
+
+// 编辑权限
+function editPermission(permissionId) {
+    fetch(`/api/auth/permissions/${permissionId}`)
+        .then(response => response.json())
+        .then(permission => {
+            document.getElementById('editPermissionId').value = permission.id;
+            document.getElementById('editPermissionName').value = permission.name;
+            document.getElementById('editPermissionDescription').value = permission.description || '';
+            
+            $('#editPermissionModal').modal('show');
+        });
+}
+
+// 更新权限
+function updatePermission() {
+    const permissionId = document.getElementById('editPermissionId').value;
+    const formData = {
+        name: document.getElementById('editPermissionName').value,
+        description: document.getElementById('editPermissionDescription').value
+    };
+    
+    fetch(`/api/auth/permissions/${permissionId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        $('#editPermissionModal').modal('hide');
+        document.getElementById('editPermissionForm').reset();
+        loadPermissions();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('更新权限失败');
+    });
+}
+
+// 删除权限
+function deletePermission(permissionId) {
+    if (!confirm('确定要删除该权限吗？')) {
+        return;
+    }
+    
+    fetch(`/api/auth/permissions/${permissionId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        loadPermissions();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('删除权限失败');
+    });
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    loadPermissions();
+});
+</script>
+{% endblock %} 

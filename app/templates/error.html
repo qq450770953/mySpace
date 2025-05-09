@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}错误 - {{ status_code }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        错误 {{ status_code }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="display-1 text-danger mb-3">
+                            <i class="bi bi-x-circle"></i>
+                        </div>
+                        <h2 class="text-danger">{{ message }}</h2>
+                        {% if details %}
+                        <p class="text-secondary">{{ details }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-center mt-4">
+                        <a href="/" class="btn btn-primary me-2">
+                            <i class="bi bi-house-door"></i> 返回首页
+                        </a>
+                        <button onclick="history.back()" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> 返回上一页
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

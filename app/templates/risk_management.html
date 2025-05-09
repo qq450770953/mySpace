@@ -1,0 +1,550 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+<style>
+    .risk-card {
+        background: white;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .risk-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    .risk-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    .risk-level {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    .risk-level.critical {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+    .risk-level.high {
+        background-color: #fff3e0;
+        color: #ef6c00;
+    }
+    .risk-level.medium {
+        background-color: #fff8e1;
+        color: #ff8f00;
+    }
+    .risk-level.low {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+    .risk-details {
+        margin: 1rem 0;
+    }
+    .risk-property {
+        display: flex;
+        margin-bottom: 0.5rem;
+    }
+    .risk-property-label {
+        width: 100px;
+        font-weight: bold;
+        color: #6c757d;
+    }
+    .risk-property-value {
+        flex: 1;
+    }
+    .risk-matrix {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    .risk-matrix-cell {
+        padding: 0.5rem;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+    }
+    .risk-matrix-cell.active {
+        background-color: #e9ecef;
+    }
+    .risk-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    .risk-chart {
+        height: 300px;
+        margin: 1rem 0;
+    }
+    .risk-timeline {
+        margin: 1rem 0;
+    }
+    .timeline-item {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+    .timeline-date {
+        width: 150px;
+        color: #6c757d;
+    }
+    .timeline-content {
+        flex: 1;
+        padding-left: 1rem;
+        border-left: 2px solid #dee2e6;
+    }
+    .risk-filters {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .risk-statistics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .stat-card {
+        background: white;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stat-title {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">风险列表</h5>
+                    {% if current_user.is_authenticated and not user_is_regular(current_user) %}
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRiskModal">
+                        <i class="bi bi-plus-circle"></i> 添加风险
+                    </button>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <!-- 风险统计 -->
+                    <div class="risk-statistics" id="riskStatistics">
+                        <div class="stat-card">
+                            <div class="stat-title">总风险数</div>
+                            <div class="stat-value" id="totalRisks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">严重风险</div>
+                            <div class="stat-value" id="criticalRisks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">高风险</div>
+                            <div class="stat-value" id="highRisks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">中风险</div>
+                            <div class="stat-value" id="mediumRisks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">低风险</div>
+                            <div class="stat-value" id="lowRisks">0</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 风险筛选 -->
+                    <div class="risk-filters">
+                        <select class="form-select" id="filterProject" onchange="applyFilters()">
+                            <option value="">所有项目</option>
+                        </select>
+                        <select class="form-select" id="filterLevel" onchange="applyFilters()">
+                            <option value="">所有等级</option>
+                            <option value="critical">严重</option>
+                            <option value="high">高</option>
+                            <option value="medium">中</option>
+                            <option value="low">低</option>
+                        </select>
+                        <select class="form-select" id="filterStatus" onchange="applyFilters()">
+                            <option value="">所有状态</option>
+                            <option value="active">活跃</option>
+                            <option value="mitigated">已缓解</option>
+                            <option value="closed">已关闭</option>
+                        </select>
+                        <button class="btn btn-outline-secondary" onclick="clearFilters()">
+                            <i class="fas fa-times"></i> 清除筛选
+                        </button>
+                    </div>
+                    
+                    <!-- 风险列表 -->
+                    <div id="riskList">
+                        <!-- 风险卡片将通过JavaScript动态添加 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加风险模态框 -->
+<div class="modal fade" id="addRiskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加风险</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addRiskForm">
+                    <div class="mb-3">
+                        <label class="form-label">任务</label>
+                        <select class="form-select" id="riskTask" required>
+                            <option value="">选择任务</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">风险标题</label>
+                        <input type="text" class="form-control" id="riskTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">风险描述</label>
+                        <textarea class="form-control" id="riskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">发生概率 (1-5)</label>
+                        <input type="number" class="form-control" id="riskProbability" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">影响程度 (1-5)</label>
+                        <input type="number" class="form-control" id="riskImpact" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">缓解计划</label>
+                        <textarea class="form-control" id="riskMitigationPlan" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addRisk()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="D:\work\app\static\js\chart.js"></script>
+<script>
+// 初始化风险管理
+function initRiskManagement() {
+    // 加载项目数据
+    fetch('/api/projects', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            const projectSelect = document.getElementById('filterProject');
+            data.projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                projectSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading projects:', error);
+            showMessage('加载项目列表失败', 'danger');
+        });
+    
+    // 加载风险数据
+    loadRisks();
+}
+
+// 加载风险数据
+function loadRisks() {
+    const projectId = document.getElementById('filterProject').value;
+    const level = document.getElementById('filterLevel').value;
+    const status = document.getElementById('filterStatus').value;
+    
+    // 构建查询参数
+    const params = new URLSearchParams();
+    if (projectId) params.append('project_id', projectId);
+    if (level) params.append('level', level);
+    if (status) params.append('status', status);
+    
+    fetch(`/api/auth/risks?${params.toString()}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        updateRiskList(data.risks);
+        updateRiskStatistics(data.risks);
+    })
+    .catch(error => {
+        console.error('Error loading risks:', error);
+        showMessage('加载风险列表失败', 'danger');
+    });
+}
+
+// 更新风险列表显示
+function updateRiskList(risks) {
+    const riskList = document.getElementById('riskList');
+    riskList.innerHTML = '';
+    
+    if (risks.length === 0) {
+        riskList.innerHTML = '<div class="alert alert-info">暂无风险记录</div>';
+        return;
+    }
+    
+    risks.forEach(risk => {
+        const card = createRiskCard(risk);
+        riskList.appendChild(card);
+    });
+}
+
+// 创建风险卡片
+function createRiskCard(risk) {
+    const card = document.createElement('div');
+    card.className = 'risk-card';
+    card.dataset.riskId = risk.id;
+    
+    const header = document.createElement('div');
+    header.className = 'risk-header';
+    
+    const title = document.createElement('div');
+    title.className = 'risk-title';
+    title.textContent = risk.title;
+    
+    const level = document.createElement('div');
+    level.className = `risk-level ${getRiskLevel(risk)}`;
+    level.textContent = getRiskLevelText(risk);
+    
+    header.appendChild(title);
+    header.appendChild(level);
+    
+    const details = document.createElement('div');
+    details.className = 'risk-details';
+    
+    const properties = [
+        { label: '描述', value: risk.description || '无' },
+        { label: '概率', value: risk.probability },
+        { label: '影响', value: risk.impact },
+        { label: '状态', value: risk.status },
+        { label: '缓解计划', value: risk.mitigation_plan || '无' }
+    ];
+    
+    properties.forEach(prop => {
+        const property = document.createElement('div');
+        property.className = 'risk-property';
+        
+        const label = document.createElement('div');
+        label.className = 'risk-property-label';
+        label.textContent = prop.label;
+        
+        const value = document.createElement('div');
+        value.className = 'risk-property-value';
+        value.textContent = prop.value;
+        
+        property.appendChild(label);
+        property.appendChild(value);
+        details.appendChild(property);
+    });
+    
+    const actions = document.createElement('div');
+    actions.className = 'risk-actions';
+    
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-outline-primary btn-sm';
+    editBtn.innerHTML = '<i class="fas fa-edit"></i> 编辑';
+    editBtn.onclick = () => showEditRiskModal(risk);
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-outline-danger btn-sm';
+    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> 删除';
+    deleteBtn.onclick = () => deleteRisk(risk.id);
+    
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+    
+    card.appendChild(header);
+    card.appendChild(details);
+    card.appendChild(actions);
+    
+    return card;
+}
+
+// 获取风险等级
+function getRiskLevel(risk) {
+    if (risk.probability === 'high' && risk.impact === 'high') {
+        return 'critical';
+    } else if (risk.probability === 'high' || risk.impact === 'high') {
+        return 'high';
+    } else if (risk.probability === 'medium' || risk.impact === 'medium') {
+        return 'medium';
+    } else {
+        return 'low';
+    }
+}
+
+// 获取风险等级文本
+function getRiskLevelText(risk) {
+    const level = getRiskLevel(risk);
+    return {
+        'critical': '严重',
+        'high': '高',
+        'medium': '中',
+        'low': '低'
+    }[level];
+}
+
+// 更新风险统计
+function updateRiskStatistics(risks) {
+    const stats = {
+        total: risks.length,
+        critical: 0,
+        high: 0,
+        medium: 0,
+        low: 0
+    };
+    
+    risks.forEach(risk => {
+        const level = getRiskLevel(risk);
+        stats[level]++;
+    });
+    
+    document.getElementById('totalRisks').textContent = stats.total;
+    document.getElementById('criticalRisks').textContent = stats.critical;
+    document.getElementById('highRisks').textContent = stats.high;
+    document.getElementById('mediumRisks').textContent = stats.medium;
+    document.getElementById('lowRisks').textContent = stats.low;
+}
+
+// 显示添加风险模态框
+function showAddRiskModal() {
+    const modal = new bootstrap.Modal(document.getElementById('addRiskModal'));
+    modal.show();
+}
+
+// 添加风险
+function addRisk() {
+    const form = document.getElementById('addRiskForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const riskData = {
+        title: document.getElementById('riskTitle').value,
+        description: document.getElementById('riskDescription').value,
+        probability: document.getElementById('riskProbability').value,
+        impact: document.getElementById('riskImpact').value,
+        mitigation_plan: document.getElementById('riskMitigationPlan').value
+    };
+    
+    fetch('/api/auth/risks', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(riskData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        showMessage('风险添加成功', 'success');
+        bootstrap.Modal.getInstance(document.getElementById('addRiskModal')).hide();
+        loadRisks();
+    })
+    .catch(error => {
+        console.error('Error adding risk:', error);
+        showMessage('添加风险失败', 'danger');
+    });
+}
+
+// 删除风险
+function deleteRisk(riskId) {
+    if (!confirm('确定要删除此风险吗？')) {
+        return;
+    }
+    
+    fetch(`/api/auth/risks/${riskId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        showMessage('风险删除成功', 'success');
+        loadRisks();
+    })
+    .catch(error => {
+        console.error('Error deleting risk:', error);
+        showMessage('删除风险失败', 'danger');
+    });
+}
+
+// 应用筛选
+function applyFilters() {
+    loadRisks();
+}
+
+// 清除筛选
+function clearFilters() {
+    document.getElementById('filterProject').value = '';
+    document.getElementById('filterLevel').value = '';
+    document.getElementById('filterStatus').value = '';
+    loadRisks();
+}
+
+// 刷新风险数据
+function refreshRisks() {
+    loadRisks();
+}
+
+// 显示消息
+function showMessage(message, type) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} alert-dismissible fade show`;
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.querySelector('.container-fluid').insertBefore(alert, document.querySelector('.row'));
+    setTimeout(() => alert.remove(), 3000);
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', () => {
+    loadRisks();
+});
+</script>
+{% endblock %} 

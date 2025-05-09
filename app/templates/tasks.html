@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}任务管理{% endblock %}
+
+{% block styles %}
+<style>
+    .task-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid #ccc;
+    }
+    .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .priority-high {
+        border-left-color: #dc3545;
+    }
+    .priority-medium {
+        border-left-color: #ffc107;
+    }
+    .priority-low {
+        border-left-color: #0dcaf0;
+    }
+    .kanban-column {
+        min-height: 200px;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    .table-responsive {
+        margin-top: 1rem;
+    }
+    .task-status-todo {
+        background-color: #f8f9fa;
+    }
+    .task-status-in-progress {
+        background-color: #e8f4f8;
+    }
+    .task-status-review {
+        background-color: #fff8e8;
+    }
+    .task-status-done {
+        background-color: #e8f8e8;
+    }
+    .alert-info {
+        border-left: 4px solid #0dcaf0;
+    }
+    /* 优化操作按钮样式 */
+    .task-operations {
+        display: flex;
+        white-space: nowrap;
+        gap: 5px;
+        justify-content: flex-end;
+    }
+    .task-operations .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    .task-operations .btn i {
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}任务管理{% endblock %}
+
+{% block header_buttons %}
+<div class="btn-group me-2">
+    <button type="button" class="btn btn-sm btn-primary new-task-btn" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+        <i class="bi bi-plus-circle"></i> 新建任务
+    </button>
+    <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-outline-secondary active" data-view="list">
+            <i class="bi bi-list"></i> 列表视图
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-view="kanban">
+            <i class="bi bi-kanban"></i> 看板视图
+        </button>
+    </div>
+</div>
+<div class="ms-2">
+    <a href="/logout" class="btn btn-sm btn-outline-danger">
+        <i class="bi bi-box-arrow-right"></i> 重新登录
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- 任务数量调试信息 -->
+<div class="alert alert-info">
+    <h5>任务信息:</h5>
+    <p>共找到 {{ tasks|length }} 个任务</p>
+    {% if debug %}
+    <pre>{{ tasks|tojson }}</pre>
+    {% endif %}
+</div>
+
+<!-- 任务列表视图 -->
+<div id="listView" class="view">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="card-title mb-0">任务列表</h5>
+        </div>
+        <div class="card-body">
+            {% if tasks and tasks|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>任务名称</th>
+                            <th>负责人</th>
+                            <th>优先级</th>
+                            <th>截止日期</th>
+                            <th>状态</th>
+                            <th class="text-end">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr class="task-status-{{ task.status|replace('_', '-') }}" data-task-id="{{ task.id }}">
+                            <td>{{ task.title }}</td>
+                            <td>{% if task.assignee %}{{ task.assignee.name }}{% else %}未分配{% endif %}</td>
+                            <td>
+                                <span class="badge {% if task.priority == 'high' %}bg-danger{% elif task.priority == 'medium' %}bg-warning{% else %}bg-info{% endif %}">
+                                    {{ task.priority }}
+                                </span>
+                            </td>
+                            <td>{{ task.due_date or '-' }}</td>
+                            <td>
+                                <span class="badge {% if task.status == 'todo' %}bg-secondary{% elif task.status == 'in_progress' %}bg-primary{% elif task.status == 'review' %}bg-info{% else %}bg-success{% endif %}">
+                                    {{ task.status }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="task-operations">
+                                    <button type="button" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary edit-btn task-edit-btn">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-btn task-delete-btn">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-clipboard-x" style="font-size: 3rem; color: #6c757d;"></i>
+                </div>
+                <h4 class="text-muted">暂无任务数据</h4>
+                <p class="text-muted">您当前没有任何任务，可以点击上方"新建任务"按钮创建一个新任务</p>
+                <div class="mt-4">
+                    <button type="button" class="btn btn-primary new-task-btn" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                        <i class="bi bi-plus-circle"></i> 新建任务
+                    </button>
+                    <a href="/login" class="btn btn-outline-secondary ms-2">
+                        <i class="bi bi-arrow-repeat"></i> 重新登录
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- 看板视图 -->
+<div id="kanbanView" class="view" style="display: none;">
+    {% if tasks and tasks|length > 0 %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">待办</h5>
+                </div>
+                <div class="card-body kanban-column" data-status="todo">
+                    {% for task in tasks if task.status == 'todo' %}
+                    <div class="card mb-2 task-card" draggable="true" data-task-id="{{ task.id }}">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ task.title }}</h6>
+                            <p class="card-text small">{% if task.assignee %}{{ task.assignee.name }}{% else %}未分配{% endif %}</p>
+                            <span class="badge {% if task.priority == 'high' %}bg-danger{% elif task.priority == 'medium' %}bg-warning{% else %}bg-info{% endif %}">{{ task.priority }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="card-title mb-0">进行中</h5>
+                </div>
+                <div class="card-body kanban-column" data-status="in_progress">
+                    {% for task in tasks if task.status == 'in_progress' %}
+                    <div class="card mb-2 task-card" draggable="true" data-task-id="{{ task.id }}">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ task.title }}</h6>
+                            <p class="card-text small">{% if task.assignee %}{{ task.assignee.name }}{% else %}未分配{% endif %}</p>
+                            <span class="badge {% if task.priority == 'high' %}bg-danger{% elif task.priority == 'medium' %}bg-warning{% else %}bg-info{% endif %}">{{ task.priority }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">待审核</h5>
+                </div>
+                <div class="card-body kanban-column" data-status="review">
+                    {% for task in tasks if task.status == 'review' %}
+                    <div class="card mb-2 task-card" draggable="true" data-task-id="{{ task.id }}">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ task.title }}</h6>
+                            <p class="card-text small">{% if task.assignee %}{{ task.assignee.name }}{% else %}未分配{% endif %}</p>
+                            <span class="badge {% if task.priority == 'high' %}bg-danger{% elif task.priority == 'medium' %}bg-warning{% else %}bg-info{% endif %}">{{ task.priority }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">已完成</h5>
+                </div>
+                <div class="card-body kanban-column" data-status="done">
+                    {% for task in tasks if task.status == 'done' %}
+                    <div class="card mb-2 task-card" draggable="true" data-task-id="{{ task.id }}">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ task.title }}</h6>
+                            <p class="card-text small">{% if task.assignee %}{{ task.assignee.name }}{% else %}未分配{% endif %}</p>
+                            <span class="badge {% if task.priority == 'high' %}bg-danger{% elif task.priority == 'medium' %}bg-warning{% else %}bg-info{% endif %}">{{ task.priority }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <div class="mb-3">
+                <i class="bi bi-kanban" style="font-size: 3rem; color: #6c757d;"></i>
+            </div>
+            <h4 class="text-muted">看板中暂无任务</h4>
+            <p class="text-muted">您当前没有任何任务，可以点击上方"新建任务"按钮创建一个新任务</p>
+            <div class="mt-4">
+                <button type="button" class="btn btn-primary new-task-btn" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                    <i class="bi bi-plus-circle"></i> 新建任务
+                </button>
+                <a href="/login" class="btn btn-outline-secondary ms-2">
+                    <i class="bi bi-arrow-repeat"></i> 重新登录
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 新建任务模态框 -->
+<div class="modal fade" id="newTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建任务</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <div class="mb-3">
+                        <label for="taskName" class="form-label">任务名称</label>
+                        <input type="text" class="form-control" id="taskName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectId" class="form-label">所属项目</label>
+                        <select class="form-select" id="projectId" required>
+                            {% for project in projects %}
+                            <option value="{{ project.id }}">{{ project.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assigneeId" class="form-label">负责人</label>
+                        <select class="form-select" id="assigneeId" required>
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">优先级</label>
+                        <select class="form-select" id="priority" required>
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">开始日期</label>
+                        <input type="date" class="form-control" id="startDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">截止日期</label>
+                        <input type="date" class="form-control" id="endDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDescription" class="form-label">任务描述</label>
+                        <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="saveTaskBtn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- 加载CSRF工具 -->
+<script src="/static/js/csrf.js"></script>
+<!-- 加载主JS文件，其中包含hasPermission函数 -->
+<script src="/static/js/main.js"></script>
+<!-- 加载任务工具 -->
+<script>
+    // 页面加载后绑定任务操作事件
+    document.addEventListener('DOMContentLoaded', function() {
+        // 任务操作事件委托
+        document.addEventListener('click', function(event) {
+            // 查找最近的操作按钮
+            const button = event.target.closest('.task-operations button');
+            if (!button) return;
+            
+            // 获取任务ID和操作类型
+            const taskId = button.closest('tr').dataset.taskId || 
+                          button.getAttribute('data-task-id');
+            
+            if (!taskId) return;
+            
+            // 确定操作类型
+            if (button.classList.contains('btn-outline-primary') || 
+                button.querySelector('.bi-eye')) {
+                // 查看操作
+                window.location.href = `/tasks/${taskId}/view?bypass_jwt=true`;
+            } 
+            else if (button.classList.contains('btn-outline-secondary') || 
+                     button.classList.contains('edit-btn') || 
+                     button.classList.contains('task-edit-btn') || 
+                     button.querySelector('.bi-pencil')) {
+                // 编辑操作
+                window.location.href = `/tasks/${taskId}/edit?bypass_jwt=true`;
+            } 
+            else if (button.classList.contains('btn-outline-danger') || 
+                     button.classList.contains('delete-btn') || 
+                     button.classList.contains('task-delete-btn') || 
+                     button.querySelector('.bi-trash')) {
+                // 删除操作
+                if (confirm('确定要删除此任务吗？')) {
+                    // 发送删除请求
+                    fetch(`/tasks/${taskId}?bypass_jwt=true`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // 删除成功，移除对应的表格行
+                            const row = document.querySelector(`tr[data-task-id="${taskId}"]`);
+                            if (row) {
+                                row.remove();
+                            } else {
+                                // 如果找不到行，刷新页面
+                                window.location.reload();
+                            }
+                        } else {
+                            return response.json().then(data => {
+                                throw new Error(data.message || '删除任务失败');
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('删除任务失败:', error);
+                        alert('删除任务失败: ' + error.message);
+                    });
+                }
+            }
+        });
+        
+        // 视图切换功能
+        window.switchView = function(viewType) {
+            const listView = document.getElementById('listView');
+            const kanbanView = document.getElementById('kanbanView');
+            
+            if (viewType === 'list') {
+                listView.style.display = 'block';
+                kanbanView.style.display = 'none';
+                document.querySelector('button[data-view="list"]').classList.add('active');
+                document.querySelector('button[data-view="kanban"]').classList.remove('active');
+            } else if (viewType === 'kanban') {
+                listView.style.display = 'none';
+                kanbanView.style.display = 'block';
+                document.querySelector('button[data-view="list"]').classList.remove('active');
+                document.querySelector('button[data-view="kanban"]').classList.add('active');
+            }
+        };
+        
+        // 绑定视图切换按钮事件
+        document.querySelectorAll('button[data-view]').forEach(button => {
+            button.addEventListener('click', function() {
+                switchView(this.getAttribute('data-view'));
+            });
+        });
+        
+        // 检查用户权限并设置按钮可见性
+        const canCreateTask = hasPermission('create_task');
+        const canManageTask = hasPermission('manage_task') || hasPermission('manage_all_tasks');
+        
+        console.log('任务权限检查:', { canCreateTask, canManageTask });
+        
+        // 设置"新建任务"按钮可见性
+        const newTaskButtons = document.querySelectorAll('.new-task-btn, .create-task-btn, [data-action="new-task"], [data-bs-target="#newTaskModal"]');
+        newTaskButtons.forEach(button => {
+            if (button) {
+                button.style.display = canCreateTask ? 'inline-block' : 'none';
+            }
+        });
+        
+        // 设置任务编辑按钮可见性
+        const taskEditButtons = document.querySelectorAll('.edit-btn, .task-edit-btn, [data-action="edit-task"]');
+        taskEditButtons.forEach(button => {
+            if (button) {
+                button.style.display = canManageTask ? 'inline-block' : 'none';
+            }
+        });
+        
+        // 设置任务删除按钮可见性
+        const taskDeleteButtons = document.querySelectorAll('.delete-btn, .task-delete-btn, [data-action="delete-task"]');
+        taskDeleteButtons.forEach(button => {
+            if (button) {
+                button.style.display = canManageTask ? 'inline-block' : 'none';
+            }
+        });
+        
+        // 如果用户没有管理任务权限，禁用任务拖拽功能
+        if (!canManageTask) {
+            document.querySelectorAll('.task-card').forEach(card => {
+                card.setAttribute('draggable', 'false');
+            });
+        }
+        
+        // 绑定保存任务按钮事件
+        const saveTaskBtn = document.getElementById('saveTaskBtn');
+        if (saveTaskBtn) {
+            saveTaskBtn.addEventListener('click', saveTask);
+        }
+    });
+    
+    // 保存任务函数
+    window.saveTask = function() {
+        const taskForm = document.getElementById('taskForm');
+        
+        // 收集表单数据
+        const taskData = {
+            title: document.getElementById('taskName').value,
+            project_id: document.getElementById('projectId').value,
+            assignee_id: document.getElementById('assigneeId').value,
+            priority: document.getElementById('priority').value,
+            start_date: document.getElementById('startDate').value,
+            due_date: document.getElementById('endDate').value,
+            description: document.getElementById('taskDescription').value
+        };
+        
+        // 发送创建任务请求
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(taskData)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.message || '创建任务失败');
+                });
+            }
+        })
+        .then(data => {
+            console.log('任务创建成功:', data);
+            
+            // 关闭模态框
+            const modal = document.getElementById('newTaskModal');
+            const bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) bsModal.hide();
+            
+            // 刷新页面
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('创建任务失败:', error);
+            alert('创建任务失败: ' + error.message);
+        });
+    };
+</script>
+{% endblock %}

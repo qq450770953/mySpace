@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="项目管理系统">
+    <meta name="author" content="ProjectSystem">
+    <!-- 添加CSRF令牌meta标签 -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>{% block title %}{% endblock %} - 项目管理系统</title>
+    
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- 引入jQuery和Bootstrap -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    {% block head_scripts %}{% endblock %}
+    {% block head %}{% endblock %}
+
+    <!-- 添加用户角色权限检查函数 -->
+    <script>
+        // 获取Cookie函数
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+        
+        // 将用户角色和权限存储在全局变量中，安全地处理匿名用户
+        var currentUser = {
+            roles: {% if current_user and current_user.is_authenticated and hasattr(current_user, 'roles') %}{{ (current_user.roles|map(attribute='name')|list|tojson) }}{% else %}[]{% endif %},
+            permissions: {% if current_user and current_user.is_authenticated and hasattr(current_user, 'roles') %}{{ (current_user.roles|map(attribute='permissions')|flatten|map(attribute='name')|list|tojson) }}{% else %}[]{% endif %}
+        };
+        
+        // 尝试从Cookie中获取用户角色，增强可靠性
+        function initializeUserRoles() {
+            var userRolesCookie = getCookie('user_roles');
+            if (userRolesCookie && (!currentUser.roles || currentUser.roles.length === 0)) {
+                console.log("从Cookie中获取用户角色:", userRolesCookie);
+                currentUser.roles = userRolesCookie.split(',');
+            }
+            
+            // 尝试从localStorage中获取
+            try {
+                const storedRoles = localStorage.getItem('user_roles');
+                if (storedRoles && (!currentUser.roles || currentUser.roles.length === 0)) {
+                    console.log("从localStorage中获取用户角色:", storedRoles);
+                    currentUser.roles = storedRoles.split(',');
+                }
+            } catch(e) {
+                console.error("读取localStorage角色出错:", e);
+            }
+            
+            // 从JWT令牌中提取
+            try {
+                const token = localStorage.getItem('access_token');
+                if (token && (!currentUser.roles || currentUser.roles.length === 0)) {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    if (payload.roles) {
+                        console.log("从JWT中获取用户角色:", payload.roles);
+                        currentUser.roles = payload.roles;
+                    }
+                }
+            } catch(e) {
+                console.error("解析JWT角色出错:", e);
+            }
+            
+            console.log("初始化后用户角色:", currentUser.roles);
+        }
+        
+        // 页面加载时初始化用户角色
+        initializeUserRoles();
+        
+        // 检查用户是否有指定角色
+        function hasRole(role) {
+            // 确保在检查前已初始化
+            if (!currentUser.roles || currentUser.roles.length === 0) {
+                initializeUserRoles();
+            }
+            
+            var hasRole = currentUser.roles.includes(role);
+            console.log(`检查角色 ${role}:`, hasRole, "当前角色:", currentUser.roles);
+            return hasRole;
+        }
+        
+        // 检查用户是否有指定权限
+        function hasPermission(permission) {
+            return currentUser.permissions.includes(permission) || hasRole('admin');
+        }
+        
+        // 检查用户是否可以编辑内容（项目、任务等）
+        function canEdit() {
+            return hasPermission('manage_project') || hasPermission('manage_task') || 
+                   hasRole('admin') || hasRole('manager');
+        }
+        
+        // 检查用户是否是普通用户（只有查看权限）
+        function isRegularUser() {
+            // 确保在检查前已初始化
+            if (!currentUser.roles || currentUser.roles.length === 0) {
+                initializeUserRoles();
+            }
+            
+            // 在客户端通过角色判断
+            var isRegular = !hasRole('admin') && !hasRole('manager');
+            console.log("用户角色列表:", currentUser.roles);
+            console.log("用户是否为普通用户:", isRegular);
+            console.log("是否管理员:", hasRole('admin'));
+            console.log("是否项目经理:", hasRole('manager'));
+            return isRegular;
+        }
+        
+        // 权限检查函数
+        // 检查用户是否可以管理用户（针对管理员）
+        function canManageUsers() {
+            return hasPermission('manage_users') || hasRole('admin');
+        }
+        
+        // 检查用户是否可以管理项目（针对管理员和项目经理）
+        function canManageProjects() {
+            return hasPermission('manage_project') || hasPermission('manage_all_projects') || 
+                   hasRole('admin') || hasRole('manager');
+        }
+        
+        // 检查用户是否可以管理任务（针对管理员和项目经理）
+        function canManageTasks() {
+            return hasPermission('manage_task') || hasPermission('manage_all_tasks') || 
+                   hasRole('admin') || hasRole('manager');
+        }
+        
+        // 检查用户是否可以管理风险（针对管理员和项目经理）
+        function canManageRisks() {
+            return hasPermission('manage_risks') || hasRole('admin') || hasRole('manager');
+        }
+        
+        // 检查用户是否可以管理资源（针对管理员和项目经理）
+        function canManageResources() {
+            return hasPermission('manage_resources') || hasRole('admin') || hasRole('manager');
+        }
+        
+        // 页面加载完成后初始化用户权限
+        function initUserPermissions() {
+            console.log("初始化用户权限，当前用户角色:", currentUser.roles);
+            console.log("用户是否为普通用户:", isRegularUser());
+            
+            if (isRegularUser()) {
+                console.log("当前用户是普通用户，隐藏编辑按钮");
+                // 隐藏所有编辑、删除和新建按钮
+                hideEditButtons();
+            } else {
+                console.log("当前用户是管理员或项目经理，显示编辑按钮");
+            }
+        }
+        
+        // 页面加载完成后隐藏编辑按钮
+        document.addEventListener('DOMContentLoaded', function() {
+            initUserPermissions();
+        });
+        
+        // 初始化完整页面后，再次检查并隐藏按钮
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                // 延迟执行，确保所有动态内容都已加载
+                initUserPermissions();
+            }, 200);
+        });
+        
+        // 隐藏编辑按钮的函数
+        function hideEditButtons() {
+            // 检查用户是否有管理项目或任务的权限
+            if (hasPermission('manage_project') || hasPermission('manage_all_projects') || 
+                hasPermission('manage_task') || hasPermission('manage_all_tasks') || 
+                hasPermission('create_project') || hasPermission('create_task')) {
+                console.log("用户有项目或任务管理权限，不隐藏编辑按钮");
+                return;
+            }
+            
+            console.log("隐藏普通用户的编辑按钮");
+            // 隐藏新建项目/任务按钮
+            document.querySelectorAll('[data-bs-target="#newProjectModal"], [data-bs-target="#newTaskModal"], [data-bs-target="#taskModal"], [data-bs-target="#addMemberModal"]').forEach(function(btn) {
+                btn.style.display = 'none';
+            });
+            
+            // 隐藏编辑和删除按钮
+            document.querySelectorAll('.edit-btn, .delete-btn, .btn-edit, .btn-delete, [data-action="edit"], [data-action="delete"], [data-action="remove"]').forEach(function(btn) {
+                btn.style.display = 'none';
+            });
+            
+            // 隐藏包含编辑、删除字样的按钮
+            document.querySelectorAll('button, a.btn').forEach(function(btn) {
+                const text = btn.textContent.toLowerCase();
+                if (text.includes('编辑') || text.includes('删除') || text.includes('新建') || 
+                    text.includes('修改') || text.includes('添加') || text.includes('上传')) {
+                    btn.style.display = 'none';
+                }
+            });
+            
+            // 专门处理项目和任务页面的操作区域
+            document.querySelectorAll('td .project-operations, td .task-operations').forEach(function(container) {
+                // 仅保留查看按钮
+                container.querySelectorAll('button, a').forEach(function(btn) {
+                    if (!btn.innerHTML.includes('eye') && !btn.innerHTML.includes('查看')) {
+                        btn.style.display = 'none';
+                    }
+                });
+            });
+            
+            // 隐藏拖拽功能
+            document.querySelectorAll('.task-card[draggable="true"]').forEach(function(card) {
+                card.setAttribute('draggable', 'false');
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            {% if current_user and current_user.is_authenticated %}
+            <!-- 侧边栏 -->
+            <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}?bypass_jwt=true">
+                                <i class="bi bi-speedometer2"></i> 仪表盘
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.projects' %}active{% endif %}" href="{{ url_for('main.projects') }}?bypass_jwt=true">
+                                <i class="bi bi-folder"></i> 项目管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.tasks' %}active{% endif %}" href="{{ url_for('main.tasks') }}?bypass_jwt=true">
+                                <i class="bi bi-list-task"></i> 任务管理
+                            </a>
+                        </li>
+                        <!-- 风险管理 - 检查用户是否有manage_risks权限或是管理员 -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.risks' %}active{% endif %}" href="{{ url_for('main.risks') }}?bypass_jwt=true">
+                                <i class="bi bi-exclamation-triangle"></i> 风险管理
+                            </a>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // 检查用户是否有管理风险的权限
+                                    if (!hasPermission('manage_risks')) {
+                                        const riskMenuItem = document.querySelector('a[href*="risks"]').parentNode;
+                                        if (riskMenuItem) {
+                                            riskMenuItem.style.display = 'none';
+                                        }
+                                    }
+                                });
+                            </script>
+                        </li>
+                        <!-- 资源管理 - 检查用户是否有manage_resources权限或是管理员 -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.resources' %}active{% endif %}" href="{{ url_for('main.resources') }}?bypass_jwt=true">
+                                <i class="bi bi-people"></i> 资源管理
+                            </a>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // 检查用户是否有管理资源的权限
+                                    if (!hasPermission('manage_resources')) {
+                                        const resourceMenuItem = document.querySelector('a[href*="resources"]').parentNode;
+                                        if (resourceMenuItem) {
+                                            resourceMenuItem.style.display = 'none';
+                                        }
+                                    }
+                                });
+                            </script>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.reports' %}active{% endif %}" href="{{ url_for('main.reports') }}?bypass_jwt=true">
+                                <i class="bi bi-file-earmark-text"></i> 报表统计
+                            </a>
+                        </li>
+                        <!-- 仅当用户有管理用户的权限时显示用户管理 -->
+                        {% if 'manage_users' in (current_user_data.permissions or []) or 'admin' in (current_user_data.roles or []) %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.users' %}active{% endif %}" href="{{ url_for('main.users') }}?bypass_jwt=true">
+                                <i class="bi bi-person-gear"></i> 用户管理
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0);" onclick="logout()">
+                                <i class="bi bi-box-arrow-right"></i> 退出登录
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- 主内容区 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">{% block header %}{% endblock %}</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        {% block header_buttons %}{% endblock %}
+                    </div>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/fix-modals.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+    <script>
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                // 使用fetchWithCsrf向后端发送退出请求
+                fetchWithCsrf('{{ url_for("auth.logout") }}?bypass_jwt=true', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '{{ url_for("auth.login_page") }}';
+                    } else {
+                        alert('退出失败，请重试');
+                    }
+                })
+                .catch(error => {
+                    console.error('退出错误:', error);
+                    // 即使请求失败也重定向到登录页
+                    window.location.href = '{{ url_for("auth.login_page") }}';
+                });
+            }
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

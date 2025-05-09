@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}服务器错误{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="error-template">
+                <h1>500</h1>
+                <h2>服务器错误</h2>
+                <div class="error-details">
+                    <p>抱歉，服务器发生了一个错误。请稍后再试。</p>
+                </div>
+                <div class="error-actions mt-4">
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-house-door"></i> 返回首页
+                    </a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg ms-2">
+                        <i class="bi bi-arrow-left"></i> 返回上一页
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-template {
+        padding: 40px 15px;
+        text-align: center;
+    }
+    
+    .error-template h1 {
+        font-size: 100px;
+        font-weight: 700;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+    
+    .error-template h2 {
+        font-size: 30px;
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+    
+    .error-details {
+        color: #6c757d;
+        margin-bottom: 30px;
+    }
+    
+    .error-actions .btn {
+        padding: 10px 20px;
+    }
+</style>
+{% endblock %} 

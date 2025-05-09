@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block title %}任务看板{% endblock %}
+
+{% block header %}任务看板{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- 导航按钮 -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3 mb-2">
+                    <a href="{{ url_for('main.tasks') }}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-list-task"></i> 任务管理
+                    </a>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <a href="{{ url_for('main.projects') }}" class="btn btn-outline-success w-100">
+                        <i class="bi bi-folder"></i> 项目管理
+                    </a>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <a href="{{ url_for('main.resources') }}" class="btn btn-outline-info w-100">
+                        <i class="bi bi-people"></i> 资源管理
+                    </a>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <a href="{{ url_for('main.risks') }}" class="btn btn-outline-warning w-100">
+                        <i class="bi bi-exclamation-triangle"></i> 风险管理
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>任务看板</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                    <i class="bi bi-plus-circle"></i> 新建任务
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">待办任务</h5>
+                </div>
+                <div class="card-body">
+                    <div class="task-list" id="todo-list" data-status="todo">
+                        {% for task in tasks if task.status == 'todo' %}
+                        <div class="card mb-2 task-card" data-task-id="{{ task.id }}">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ task.title }}</h6>
+                                <p class="card-text small">{{ task.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-{{ 'danger' if task.priority == 3 else 'warning' if task.priority == 2 else 'info' }}">
+                                        {{ '高' if task.priority == 3 else '中' if task.priority == 2 else '低' }}优先级
+                                    </span>
+                                    <small>截止: {{ task.due_date }}</small>
+                                </div>
+                                <div class="mt-2">
+                                    <img src="{{ task.assignee.avatar }}" class="rounded-circle" width="24" height="24" 
+                                         alt="{{ task.assignee.name }}" title="{{ task.assignee.name }}">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">进行中</h5>
+                </div>
+                <div class="card-body">
+                    <div class="task-list" id="in-progress-list" data-status="in_progress">
+                        {% for task in tasks if task.status == 'in_progress' %}
+                        <div class="card mb-2 task-card" data-task-id="{{ task.id }}">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ task.title }}</h6>
+                                <p class="card-text small">{{ task.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-{{ 'danger' if task.priority == 3 else 'warning' if task.priority == 2 else 'info' }}">
+                                        {{ '高' if task.priority == 3 else '中' if task.priority == 2 else '低' }}优先级
+                                    </span>
+                                    <small>截止: {{ task.due_date }}</small>
+                                </div>
+                                <div class="mt-2">
+                                    <img src="{{ task.assignee.avatar }}" class="rounded-circle" width="24" height="24" 
+                                         alt="{{ task.assignee.name }}" title="{{ task.assignee.name }}">
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">已完成</h5>
+                </div>
+                <div class="card-body">
+                    <div class="task-list" id="completed-list" data-status="completed">
+                        {% for task in tasks if task.status == 'completed' %}
+                        <div class="card mb-2 task-card" data-task-id="{{ task.id }}">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ task.title }}</h6>
+                                <p class="card-text small">{{ task.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-{{ 'danger' if task.priority == 3 else 'warning' if task.priority == 2 else 'info' }}">
+                                        {{ '高' if task.priority == 3 else '中' if task.priority == 2 else '低' }}优先级
+                                    </span>
+                                    <small>完成于: {{ task.completed_at }}</small>
+                                </div>
+                                <div class="mt-2">
+                                    <img src="{{ task.assignee.avatar }}" class="rounded-circle" width="24" height="24" 
+                                         alt="{{ task.assignee.name }}" title="{{ task.assignee.name }}">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 创建任务模态框 -->
+<div class="modal fade" id="createTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> 新建任务</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="create-task-form">
+                    <div class="mb-3">
+                        <label class="form-label">任务标题</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">任务描述</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">优先级</label>
+                        <select class="form-select" name="priority">
+                            <option value="1">低</option>
+                            <option value="2">中</option>
+                            <option value="3">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">负责人</label>
+                        <select class="form-select" name="assignee_id" required>
+                            {% for member in project_members %}
+                            <option value="{{ member.id }}">{{ member.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">截止日期</label>
+                        <input type="date" class="form-control" name="due_date" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitTask()">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link href="https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.css" rel="stylesheet">
+<style>
+.task-list {
+    min-height: 100px;
+    padding: 10px;
+}
+
+.task-card {
+    cursor: move;
+}
+
+.task-card:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化拖拽
+    const drake = dragula([
+        document.getElementById('todo-list'),
+        document.getElementById('in-progress-list'),
+        document.getElementById('completed-list')
+    ]);
+
+    // 处理拖拽完成事件
+    drake.on('drop', function(el, target, source) {
+        const taskId = el.dataset.taskId;
+        const newStatus = target.dataset.status;
+        
+        updateTaskStatus(taskId, newStatus);
+    });
+
+    // 更新任务状态
+    function updateTaskStatus(taskId, status) {
+        fetch(`/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('更新任务状态失败');
+            }
+            // 发送WebSocket消息通知其他用户
+            socket.emit('task_status_changed', {
+                task_id: taskId,
+                new_status: status,
+                updated_by: currentUser.name
+            });
+        })
+        .catch(error => {
+            console.error('Error updating task status:', error);
+            alert('更新任务状态失败');
+            location.reload(); // 刷新页面恢复原状态
+        });
+    }
+});
+
+// 创建新任务
+async function submitTask() {
+    const form = document.getElementById('create-task-form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        const response = await fetch('/tasks', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('createTaskModal'));
+            modal.hide();
+            form.reset();
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert(error.error || '创建任务失败');
+        }
+    } catch (error) {
+        console.error('Error creating task:', error);
+        alert('创建任务时发生错误');
+    }
+}
+
+// WebSocket连接
+const socket = io();
+
+socket.on('task_status_update', function(data) {
+    // 更新UI显示实时状态变化
+    const taskCard = document.querySelector(`[data-task-id="${data.task_id}"]`);
+    if (taskCard) {
+        const targetList = document.querySelector(`[data-status="${data.new_status}"]`);
+        if (targetList) {
+            targetList.appendChild(taskCard);
+        }
+    }
+});
+</script>
+{% endblock %} 

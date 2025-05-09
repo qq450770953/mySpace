@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}登录{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- 添加CSRF令牌元信息，确保值不为空 -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- 预加载背景图片 -->
+<link rel="preload" href="{{ url_for('static', filename='images/background.png') }}" as="image">
+<link rel="preload" href="{{ url_for('static', filename='uploads/background.png') }}" as="image">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-image: url("{{ url_for('static', filename='images/background.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    
+    /* 背景图容器 */
+    #bg-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background-image: url("{{ url_for('static', filename='images/background.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.95);
+    }
+    
+    .card-title {
+        color: #343a40;
+        font-weight: 600;
+    }
+    
+    .form-control {
+        border-radius: 5px;
+    }
+    
+    .btn-primary {
+        border-radius: 5px;
+        padding: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 背景图容器 -->
+<div id="bg-container"></div>
+
+<!-- 背景图片元素，直接使用HTML -->
+<img id="bg-image" src="{{ url_for('static', filename='images/background.png') }}" 
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; opacity: 0;"
+     alt="背景图片">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h3 class="card-title">项目管理系统</h3>
+                        <p class="text-muted">请登录您的账户</p>
+                    </div>
+
+                    <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                    
+                    <!-- 添加Flask flash消息显示 -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category if category != 'message' else 'info' }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form id="loginForm" method="POST" action="/login">
+                        <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">记住我</label>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">登录</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="mb-0">
+                            还没有账户？
+                            <a href="/register" class="text-decoration-none">立即注册</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- 确保加载CSRF.js，提供CSRF令牌管理功能 -->
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<!-- 加载背景辅助脚本 -->
+<script src="{{ url_for('static', filename='js/background-helper.js') }}"></script>
+
+<!-- 添加角色调试脚本 -->
+<script>
+    // 页面加载时检查用户角色状态
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("登录页面加载 - 检查角色状态");
+        
+        // 检查localStorage中的角色信息
+        const storedRoles = localStorage.getItem('user_roles');
+        console.log("localStorage中的用户角色:", storedRoles);
+        
+        // 检查Cookie中的角色信息
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+        
+        const cookieRoles = getCookie('user_roles');
+        console.log("Cookie中的用户角色:", cookieRoles);
+        
+        // 检查JWT中的角色信息
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            try {
+                // JWT由三部分组成，用.分隔，第二部分是payload
+                const payload = token.split('.')[1];
+                // Base64解码
+                const decoded = JSON.parse(atob(payload));
+                console.log("JWT中的用户信息:", decoded);
+            } catch (e) {
+                console.error("解析JWT失败:", e);
+            }
+        }
+    });
+</script>
+{% endblock %} 

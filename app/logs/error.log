@@ -1,0 +1,1471 @@
+2025-05-01 12:30:46,897 - app - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:06,978 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,004 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,031 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,053 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,077 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,100 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,123 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,146 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:07,170 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,254 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,304 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,349 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,420 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,514 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,568 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,632 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,681 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,730 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:08,797 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,401 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,485 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,566 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,651 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,749 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,827 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,895 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:12,987 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:13,054 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,178 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,219 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,261 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,303 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,367 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,428 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,498 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,541 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,588 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:14,649 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,356 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,401 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,453 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,503 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,562 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,634 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,735 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,791 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,837 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:18,880 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:19,917 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:19,968 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,007 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,052 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,102 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,149 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,209 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,285 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,358 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:20,423 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,311 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,364 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,416 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,572 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,655 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,702 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,745 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,798 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,841 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-01 19:12:32,885 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers or query_string (Missing Authorization Header; Missing 'jwt' query paramater)
+2025-05-02 10:25:34,279 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,303 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,326 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,348 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,370 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,392 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,411 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,431 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:34,450 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,527 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,550 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,574 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,594 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,615 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,637 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,659 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,681 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,716 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:35,750 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:40,800 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:40,849 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:40,882 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:40,915 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:40,949 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:40,999 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:41,032 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:25:41,073 - app - ERROR - Dashboard error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:28:56,101 - app - ERROR - Login page error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:29:07,597 - app - ERROR - Login page error: Could not build url for endpoint 'project.list'. Did you mean 'main.projects' instead?
+2025-05-02 10:33:59,139 - app - ERROR - Login page error: Could not build url for endpoint 'task.list'. Did you mean 'main.tasks' instead?
+2025-05-02 10:37:28,806 - app - ERROR - Login page error: Could not build url for endpoint 'main.resources'. Did you mean 'main.reports' instead?
+2025-05-02 10:37:34,406 - app - ERROR - Login page error: Could not build url for endpoint 'main.resources'. Did you mean 'main.reports' instead?
+2025-05-02 10:40:14,422 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,451 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,496 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,529 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,564 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,586 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,639 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,673 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,703 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:14,749 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:15,829 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:15,872 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:15,922 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:15,964 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:16,003 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:16,038 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:16,075 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:16,109 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:16,141 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:16,165 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,222 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,265 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,300 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,332 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,366 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,399 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,432 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,466 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,515 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:40:21,548 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:21,898 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:21,926 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:21,972 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,007 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,044 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,088 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,114 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,160 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,205 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:22,251 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,343 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,381 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,420 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,450 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,484 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,520 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,559 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,590 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,621 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:23,655 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,722 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,756 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,789 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,840 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,873 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,906 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,939 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:28,973 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:29,017 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:29,050 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,167 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,201 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,237 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,276 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,312 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,344 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,373 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,449 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,476 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:46:59,505 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:47,867 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:47,888 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:47,913 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:47,936 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:47,957 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:47,978 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:48,000 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:48,020 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:48,038 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,101 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,123 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,146 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,167 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,188 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,209 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,233 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,254 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,272 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:49,295 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,085 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,119 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,158 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,192 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,227 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,269 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,306 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,337 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:52,383 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,459 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,514 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,547 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,571 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,614 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,647 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,682 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,717 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,753 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:53,785 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:58,827 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:58,881 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:58,923 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,054 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,087 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,143 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,185 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,222 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,256 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:47:59,298 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,382 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,418 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,454 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,488 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,523 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,561 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,599 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,630 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,662 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:48:29,703 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,786 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,822 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,855 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,884 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,919 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,952 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:29,983 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:30,017 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:30,048 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:49:30,082 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,781 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,808 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,827 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,847 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,868 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,887 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,907 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,925 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:13,943 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:14,995 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,016 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,040 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,063 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,086 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,108 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,128 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,149 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,169 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:15,191 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,429 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,473 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,501 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,558 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,602 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,649 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,693 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,718 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,765 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:25,803 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:26,890 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:26,929 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:26,968 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,001 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,030 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,058 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,099 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,138 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,293 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:27,334 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:32,377 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:32,400 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:32,450 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:32,483 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:32,712 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:32,985 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:33,225 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:33,557 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:33,625 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:51:33,697 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,012 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,051 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,090 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,125 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,163 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,199 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,232 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,261 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,297 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:51,327 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,399 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,446 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,483 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,516 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,548 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,582 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,620 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,660 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,699 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:52,725 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,831 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,868 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,899 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,925 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,949 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,973 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:57,996 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:58,018 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:58,042 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 10:58:58,065 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:45,831 - app - ERROR - Error checking login status: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 13:11:49,000 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,048 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,081 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,112 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,161 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,191 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,223 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,272 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,302 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:11:49,350 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,264 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,286 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,308 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,337 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,363 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,385 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,408 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,433 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,457 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:28,480 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,541 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,576 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,601 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,627 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,651 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,675 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,708 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,732 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,757 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:29,781 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:34,846 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:34,895 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:34,928 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:34,960 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:34,980 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:35,012 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:35,061 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:35,098 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:35,141 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:19:35,177 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:24,258 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 13:22:27,298 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,362 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,410 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,457 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,536 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,600 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,649 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,726 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,789 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:22:27,868 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,176 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,207 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,239 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,285 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,303 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,351 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,382 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,413 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,444 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:46:53,476 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,097 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,128 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,160 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,191 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,219 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,248 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,278 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,310 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,343 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:21,370 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,430 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,461 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,495 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,527 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,560 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,589 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,617 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,645 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,675 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:22,705 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:27,772 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:27,809 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:27,841 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:27,873 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,018 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,037 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,069 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,106 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,132 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,161 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,191 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,217 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,245 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:50:30,274 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,160 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,183 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,202 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,221 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,245 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,258 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,282 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,297 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,314 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:19,339 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,277 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,298 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,318 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,332 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,360 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,378 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,394 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,410 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,424 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 13:54:24,441 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,088 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,104 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,120 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,135 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,149 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,165 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,192 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,208 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,224 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:24,246 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,287 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,300 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,312 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,325 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,336 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,350 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,401 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,407 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,423 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:31,440 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,397 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,415 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,449 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,479 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,505 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,535 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,565 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,597 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,632 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:36,665 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,714 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,753 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,782 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,813 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,847 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,897 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,935 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:37,969 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:38,007 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:38,057 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,140 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,180 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,211 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,245 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,275 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,305 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,333 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,363 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,395 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:05:43,430 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,471 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,498 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,524 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,549 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,576 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,604 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,626 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,652 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,679 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:06:13,700 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:13,800 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:13,845 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:13,882 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:13,912 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:13,951 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:13,984 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:14,015 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:14,057 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:14,104 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:07:14,159 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,360 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,394 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,409 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,431 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,459 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,491 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,523 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,542 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,578 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:51,600 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,668 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,720 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,764 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,804 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,843 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,878 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,909 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,942 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:52,977 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:53,009 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,129 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,172 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,208 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,245 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,279 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,325 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,360 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,394 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,428 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:10:58,464 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,795 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,827 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,859 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,888 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,915 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,939 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,968 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:13,994 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:14,020 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:14,047 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,165 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,201 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,232 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,282 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,316 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,363 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,397 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,415 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,463 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:15,495 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,310 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,342 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,376 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,409 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,442 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,476 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,526 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,559 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,603 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:18,637 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,689 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,724 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,757 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,782 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,826 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,859 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,906 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,926 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:19,977 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:20,008 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,054 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,092 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,124 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,155 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,190 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,237 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,254 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,287 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,321 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:11:33,354 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,009 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,037 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,063 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,089 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,117 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,143 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,169 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,195 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,220 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:11,247 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,315 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,346 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,377 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,403 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,428 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,456 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,486 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,513 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,539 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:12,568 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,648 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,682 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,715 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,748 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,798 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,832 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,864 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,898 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,931 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:12:17,963 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:23,675 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 14:30:26,154 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,186 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,236 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,270 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,304 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,330 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,369 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,401 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,435 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:30:26,465 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,588 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,622 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,654 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,688 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,722 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,765 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,788 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,832 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,854 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:44:09,888 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,072 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,092 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,109 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,140 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,162 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,184 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,206 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,225 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,249 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:57,256 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,321 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,366 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,404 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,447 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,482 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,513 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,546 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,581 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,616 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:53:58,647 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,736 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,766 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,792 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,816 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,836 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,858 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,881 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,903 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,929 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:03,952 - app - ERROR - Dashboard error: Object of type Undefined is not JSON serializable
+2025-05-02 14:54:30,949 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 15:19:51,239 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 15:41:01,770 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 15:47:18,709 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 15:58:37,828 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 16:09:43,759 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 16:18:30,011 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 16:28:40,219 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 16:30:06,476 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 16:47:50,545 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 16:48:04,264 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 16:48:05,514 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 16:48:13,256 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 16:48:26,639 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 16:48:28,418 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 16:53:57,284 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 19:21:05,583 - app - ERROR - Index route error: Signature has expired
+2025-05-02 19:22:02,693 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:23:05,249 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:23:20,540 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:33:06,998 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-02 19:33:30,457 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:33:31,632 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:33:41,948 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:44:07,535 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:55:47,289 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 19:55:48,563 - app - ERROR - Projects route error: Object of type Undefined is not JSON serializable
+2025-05-02 20:09:58,737 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 09:51:29,803 - app - ERROR - Index route error: Signature has expired
+2025-05-03 10:01:45,677 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 10:19:54,747 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 10:39:04,249 - app.routes.projects - ERROR - Error creating project: (sqlite3.IntegrityError) NOT NULL constraint failed: projects.owner_id
+[SQL: INSERT INTO projects (name, description, status, start_date, end_date, created_at, updated_at, manager_id, owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('Test Project', None, 'active', '2025-05-03 00:00:00.000000', '2025-06-03 00:00:00.000000', '2025-05-03 02:39:04.228696', '2025-05-03 02:39:04.228696', 1, None)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-05-03 10:43:50,945 - app.routes.resources - ERROR - Error creating resource: 'resource_type' is an invalid keyword argument for Resource
+2025-05-03 11:06:47,151 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 11:07:23,005 - app.routes.risks - ERROR - Error getting risks: name 'TeamMember' is not defined
+2025-05-03 11:22:43,558 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 12:10:54,416 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 12:57:54,796 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 13:09:22,402 - app.routes.tasks - ERROR - Error deleting task: 'Project' object has no attribute 'is_accessible_by'
+2025-05-03 13:28:47,163 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 13:36:22,622 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 15:27:10,133 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 15:29:39,798 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 15:30:55,573 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 15:31:05,968 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 15:33:25,111 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 15:34:44,044 - app.routes.tasks - ERROR - Error getting task detail: expected token 'end of print statement', got ':'
+2025-05-03 18:36:00,419 - app.routes.tasks - ERROR - Error updating task: 'Project' object has no attribute 'calculate_progress'
+2025-05-03 23:53:08,532 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-03 23:54:28,385 - app.routes.tasks - ERROR - Error updating task: 'Project' object has no attribute 'calculate_progress'
+2025-05-04 00:01:48,323 - app.routes.tasks - ERROR - Error updating task: Session is already flushing
+2025-05-04 00:10:23,354 - app - ERROR - Dashboard data error: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE ? = projects.owner_id]
+[parameters: (3,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:10:31,164 - app.routes.main - ERROR - Error in tasks route
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such column: projects.progress
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 303, in tasks
+    projects = Project.query.all()
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2673, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2827, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2191, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:10:55,746 - app - ERROR - Dashboard data error: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE ? = projects.owner_id]
+[parameters: (3,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:11:05,094 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-04 00:11:07,193 - app - ERROR - Dashboard data error: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE ? = projects.owner_id]
+[parameters: (3,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:11:08,392 - app.routes.main - ERROR - Error in tasks route
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such column: projects.progress
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 303, in tasks
+    projects = Project.query.all()
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2673, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2827, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2191, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:11:43,934 - app - ERROR - Dashboard data error: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE ? = projects.owner_id]
+[parameters: (3,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:11:52,297 - app.routes.main - ERROR - Error in tasks route
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such column: projects.progress
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 303, in tasks
+    projects = Project.query.all()
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2673, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2827, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2191, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: projects.progress
+[SQL: SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-04 00:18:24,499 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-04 00:24:23,035 - app.routes.tasks - ERROR - Error rendering task detail page: expected token 'end of print statement', got ':'
+2025-05-04 00:24:38,989 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-04 00:31:24,223 - app.routes.tasks - ERROR - Error rendering task detail page: expected token 'end of print statement', got ':'
+2025-05-04 00:57:00,891 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-04 01:07:08,350 - app.routes.resources - ERROR - Error creating resource: 'created_by' is an invalid keyword argument for Resource
+2025-05-04 01:07:09,389 - app.routes.resources - ERROR - Error creating resource: 'created_by' is an invalid keyword argument for Resource
+2025-05-04 09:59:37,270 - app - ERROR - Index route error: Signature has expired
+2025-05-04 10:31:28,233 - app.routes.resources - ERROR - Error deleting resource: 'InstrumentedList' object has no attribute 'filter'
+2025-05-04 10:39:38,893 - app.routes.risks - ERROR - Error creating risk: 'category' is an invalid keyword argument for Risk
+2025-05-04 11:07:12,311 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-04 11:07:37,505 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-04 11:24:06,520 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-04 12:46:19,456 - app - ERROR - Index route error: Signature has expired
+2025-05-04 13:41:13,266 - app - ERROR - Projects route error: Could not build url for endpoint 'project.detail' with values ['project_id']. Did you mean 'projects.project_list' instead?
+2025-05-04 13:41:14,546 - app - ERROR - Projects route error: Could not build url for endpoint 'project.detail' with values ['project_id']. Did you mean 'projects.project_list' instead?
+2025-05-04 14:05:48,663 - app - ERROR - Index route error: Signature has expired
+2025-05-04 14:31:48,516 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 11:16:11,166 - app - ERROR - Index route error: Signature has expired
+2025-05-05 13:48:51,367 - app - ERROR - Index route error: Signature has expired
+2025-05-05 14:37:19,482 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 15:23:37,980 - app.routes.tasks - ERROR - Error adding task comment: 'created_by' is an invalid keyword argument for TaskComment
+2025-05-05 15:23:56,316 - app.routes.tasks - ERROR - 创建子任务失败: Subtask() takes no arguments
+2025-05-05 15:34:08,510 - app.routes.tasks - ERROR - Error adding task comment: 'created_by' is an invalid keyword argument for TaskComment
+2025-05-05 15:47:54,430 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 15:49:47,613 - app.routes.tasks - ERROR - Error adding task comment: 'created_by' is an invalid keyword argument for TaskComment
+2025-05-05 15:57:29,190 - app.routes.tasks - ERROR - 创建子任务失败: 'start_date' is an invalid keyword argument for Task
+2025-05-05 15:58:39,078 - app.routes.tasks - ERROR - Error adding task comment: 'created_by' is an invalid keyword argument for TaskComment
+2025-05-05 15:59:11,144 - app.routes.tasks - ERROR - Error in create_task_risk_front_path: 'category' is an invalid keyword argument for Risk
+2025-05-05 15:59:43,690 - app.routes.tasks - ERROR - Error adding task attachment: 'created_by' is an invalid keyword argument for TaskAttachment
+2025-05-05 16:03:08,875 - app.routes.tasks - ERROR - 创建子任务失败: 'start_date' is an invalid keyword argument for Task
+2025-05-05 16:03:29,082 - app.routes.tasks - ERROR - Error adding task comment: 'created_by' is an invalid keyword argument for TaskComment
+2025-05-05 16:03:44,807 - app.routes.tasks - ERROR - Error in create_task_risk_front_path: 'category' is an invalid keyword argument for Risk
+2025-05-05 16:04:03,791 - app.routes.tasks - ERROR - Error adding task attachment: 'created_by' is an invalid keyword argument for TaskAttachment
+2025-05-05 16:07:11,832 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 16:07:30,167 - app.routes.tasks - ERROR - 创建子任务失败: 'content' is an invalid keyword argument for TaskLog
+2025-05-05 16:07:44,630 - app.routes.tasks - ERROR - Error adding task comment: (sqlite3.IntegrityError) NOT NULL constraint failed: task_comments.user_id
+[SQL: INSERT INTO task_comments (task_id, user_id, content, created_at, updated_at) VALUES (?, ?, ?, ?, ?)]
+[parameters: (2, None, 'iiiiiiiii', '2025-05-05 08:07:44.629621', '2025-05-05 08:07:44.629621')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-05-05 16:08:07,952 - app.routes.tasks - ERROR - Error in create_task_risk_front_path: 'created_by' is an invalid keyword argument for Risk
+2025-05-05 16:08:23,955 - app.routes.tasks - ERROR - Error adding task attachment: (sqlite3.IntegrityError) NOT NULL constraint failed: task_attachments.file_type
+[SQL: INSERT INTO task_attachments (task_id, filename, file_path, file_type, size, description, uploader_id, uploaded_at, version, is_latest, parent_version_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (2, '20250326110710.jpg', 'D:\\tmp\\work\\app\\uploads\\tasks\\2\\20250326110710.jpg', None, None, None, None, '2025-05-05 08:08:23.952158', 1, 1, None)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-05-05 16:11:32,272 - app.routes.tasks - ERROR - 创建子任务失败: 'message' is an invalid keyword argument for TaskLog
+2025-05-05 16:11:58,518 - app.routes.tasks - ERROR - Error in create_task_risk_front_path: 'user_id' is an invalid keyword argument for RiskLog
+2025-05-05 16:19:28,747 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 16:20:24,767 - app.routes.tasks - ERROR - Error in create_task_risk_front_path: 'action' is an invalid keyword argument for RiskLog
+2025-05-05 16:23:20,874 - app.routes.tasks - ERROR - Error in create_task_risk_front_path: (sqlite3.IntegrityError) NOT NULL constraint failed: risks.severity
+[SQL: INSERT INTO risks (title, description, status, severity, probability, impact, mitigation_plan, contingency_plan, created_at, updated_at, project_id, owner_id, task_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('风险2111', '333', 'open', None, 'low', 'low', 'fffffff', None, '2025-05-05 08:23:20.872769', '2025-05-05 08:23:20.872769', 2, None, 2)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-05-05 16:34:30,577 - app.routes.projects - ERROR - Project detail route error: Entity namespace for "team_members" has no property "project_id"
+2025-05-05 16:34:40,229 - app.routes.projects - ERROR - Project detail route error: Entity namespace for "team_members" has no property "project_id"
+2025-05-05 16:34:46,943 - app.routes.projects - ERROR - Project detail route error: Entity namespace for "team_members" has no property "project_id"
+2025-05-05 16:41:31,591 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 16:42:00,561 - app.routes.projects - ERROR - Project detail route error: Could not build url for endpoint 'task_bp.task_detail' with values ['task_id']. Did you mean 'tasks.task_detail_api' instead?
+2025-05-05 16:44:24,302 - app.routes.projects - ERROR - Project detail route error: Could not build url for endpoint 'task_bp.task_detail' with values ['task_id']. Did you mean 'tasks.task_detail_api' instead?
+2025-05-05 16:48:55,394 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 16:49:10,921 - app.routes.projects - ERROR - Project detail route error: Could not build url for endpoint 'tasks_alt.task_detail' with values ['task_id']. Did you mean 'tasks_alt.task_detail_api' instead?
+2025-05-05 16:50:05,829 - app.routes.projects - ERROR - Project detail route error: Could not build url for endpoint 'tasks_alt.task_detail' with values ['task_id']. Did you mean 'tasks_alt.task_detail_api' instead?
+2025-05-05 16:54:02,808 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-05 17:06:48,820 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 17:09:26,582 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 17:12:08,624 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 17:15:16,377 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 17:31:52,706 - app - ERROR - Index route error: Missing JWT in headers or cookies (Missing Authorization Header; Missing cookie "access_token_cookie")
+2025-05-05 17:39:53,461 - app.routes.projects - ERROR - Error during pagination: 'Project.members' does not support object population - eager loading cannot be applied.
+2025-05-05 17:47:01,652 - app.routes.projects - ERROR - Error in project_list: Object of type Undefined is not JSON serializable
+2025-05-05 17:49:45,537 - app.routes.projects - ERROR - Error in project_list: 'Task' object has no attribute 'start_date'
+2025-05-05 17:59:19,117 - app - ERROR - 无认证路由处理错误: Could not build url for endpoint 'projects.get_project_debug_api' with values ['bypass_jwt', 'project_id']. Did you mean 'projects.get_project_api' instead?
+2025-05-06 08:59:41,830 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 08:59:49,254 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 08:59:55,651 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:00:53,987 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:01:04,730 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:01:08,261 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:01:12,900 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:01:20,458 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:02:07,121 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:02:40,586 - app - ERROR - 自动登录中间件出错: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-06 09:21:35,599 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 09:22:32,176 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 09:27:59,846 - app - ERROR - Login error: Invalid token type. Token must be a <class 'bytes'>
+2025-05-06 09:31:51,306 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 09:31:52,920 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 11:23:01,669 - app - ERROR - User 4 does not have admin privileges
+2025-05-06 11:47:58,696 - app.routes.reports - ERROR - Excel报表生成失败: No module named 'xlsxwriter'
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\reports.py", line 241, in generate_excel_report
+    writer = pd.ExcelWriter(buffer, engine='xlsxwriter')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\pandas\io\excel\_xlsxwriter.py", line 197, in __init__
+    from xlsxwriter import Workbook
+ModuleNotFoundError: No module named 'xlsxwriter'
+2025-05-06 11:47:58,699 - app.routes.reports - ERROR - 报表生成失败: No module named 'xlsxwriter'
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\reports.py", line 171, in generate_report
+    return generate_excel_report(project, report_type, start_date, end_date, assignee_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\routes\reports.py", line 241, in generate_excel_report
+    writer = pd.ExcelWriter(buffer, engine='xlsxwriter')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\pandas\io\excel\_xlsxwriter.py", line 197, in __init__
+    from xlsxwriter import Workbook
+ModuleNotFoundError: No module named 'xlsxwriter'
+2025-05-06 14:18:29,554 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-06 15:42:21,880 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-06 20:47:42,598 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-06 20:48:03,785 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 20:52:36,568 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 21:10:49,319 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 22:26:04,763 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 22:29:27,148 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-06 23:27:38,992 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-06 23:27:50,581 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-06 23:27:53,999 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-06 23:53:09,127 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-06 23:57:12,652 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-06 23:57:43,042 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-06 23:58:32,978 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-07 00:00:07,794 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-07 09:07:23,160 - app.seed_data - ERROR - Error creating test resource 1: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,160 - app.seed_data - ERROR - Error creating test resource 2: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,161 - app.seed_data - ERROR - Error creating test resource 3: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,161 - app.seed_data - ERROR - Error creating test resource 4: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,161 - app.seed_data - ERROR - Error creating test resource 5: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,162 - app.seed_data - ERROR - Error creating test resource 6: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,162 - app.seed_data - ERROR - Error creating test resource 7: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,162 - app.seed_data - ERROR - Error creating test resource 8: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,162 - app.seed_data - ERROR - Error creating test resource 9: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:07:23,163 - app.seed_data - ERROR - Error creating test resource 10: 'str' object has no attribute '_sa_instance_state'
+2025-05-07 09:08:50,960 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-07 09:09:36,811 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-07 09:09:46,727 - app - ERROR - Register page error: 'str' object is not callable
+2025-05-07 09:33:27,935 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-07 09:49:37,981 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-07 10:03:11,979 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 10:32:57,669 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 10:33:10,831 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 11:50:29,718 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 11:52:21,679 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 11:52:21,728 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 289, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 135, in top-level template code
+    {% block extra_js %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 382, in block 'extra_js'
+    tasks = {{ gantt_tasks|tojson }} || [];
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\filters.py", line 1702, in do_tojson
+    return htmlsafe_json_dumps(value, dumps=dumps, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 658, in htmlsafe_json_dumps
+    dumps(obj, **kwargs)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Undefined is not JSON serializable
+
+2025-05-07 11:52:50,381 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 11:52:50,383 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 289, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 135, in top-level template code
+    {% block extra_js %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 382, in block 'extra_js'
+    tasks = {{ gantt_tasks|tojson }} || [];
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\filters.py", line 1702, in do_tojson
+    return htmlsafe_json_dumps(value, dumps=dumps, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 658, in htmlsafe_json_dumps
+    dumps(obj, **kwargs)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Undefined is not JSON serializable
+
+2025-05-07 11:59:04,508 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 11:59:04,514 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 325, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 135, in top-level template code
+    {% block extra_js %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 382, in block 'extra_js'
+    tasks = {{ gantt_tasks|tojson }} || [];
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\filters.py", line 1702, in do_tojson
+    return htmlsafe_json_dumps(value, dumps=dumps, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 658, in htmlsafe_json_dumps
+    dumps(obj, **kwargs)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Undefined is not JSON serializable
+
+2025-05-07 13:43:29,298 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-07 14:02:06,336 - app.routes.main - ERROR - Error in projects: Object of type Undefined is not JSON serializable
+2025-05-07 14:02:06,343 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 325, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 135, in top-level template code
+    {% block extra_js %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 382, in block 'extra_js'
+    tasks = {{ gantt_tasks|tojson }} || [];
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\filters.py", line 1702, in do_tojson
+    return htmlsafe_json_dumps(value, dumps=dumps, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 658, in htmlsafe_json_dumps
+    dumps(obj, **kwargs)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Tools\python\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Undefined is not JSON serializable
+
+2025-05-07 14:11:00,239 - app.routes.projects - ERROR - Project detail route error: (sqlite3.OperationalError) no such column: tasks.start_date
+[SQL: SELECT tasks.id AS tasks_id, tasks.title AS tasks_title, tasks.description AS tasks_description, tasks.status AS tasks_status, tasks.priority AS tasks_priority, tasks.progress AS tasks_progress, tasks.start_date AS tasks_start_date, tasks.due_date AS tasks_due_date, tasks.created_at AS tasks_created_at, tasks.updated_at AS tasks_updated_at, tasks.project_id AS tasks_project_id, tasks.assignee_id AS tasks_assignee_id, tasks.created_by AS tasks_created_by, tasks.team_id AS tasks_team_id, tasks.parent_id AS tasks_parent_id 
+FROM tasks 
+WHERE tasks.project_id = ?]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-07 14:13:58,563 - app.routes.projects - ERROR - Project detail route error: (sqlite3.OperationalError) no such column: tasks.start_date
+[SQL: SELECT tasks.id AS tasks_id, tasks.title AS tasks_title, tasks.description AS tasks_description, tasks.status AS tasks_status, tasks.priority AS tasks_priority, tasks.progress AS tasks_progress, tasks.start_date AS tasks_start_date, tasks.due_date AS tasks_due_date, tasks.created_at AS tasks_created_at, tasks.updated_at AS tasks_updated_at, tasks.project_id AS tasks_project_id, tasks.assignee_id AS tasks_assignee_id, tasks.created_by AS tasks_created_by, tasks.team_id AS tasks_team_id, tasks.parent_id AS tasks_parent_id 
+FROM tasks 
+WHERE tasks.project_id = ?]
+[parameters: (1,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-07 14:17:08,947 - app.routes.projects - ERROR - Project detail route error: (sqlite3.OperationalError) no such column: tasks.start_date
+[SQL: SELECT tasks.id AS tasks_id, tasks.title AS tasks_title, tasks.description AS tasks_description, tasks.status AS tasks_status, tasks.priority AS tasks_priority, tasks.progress AS tasks_progress, tasks.start_date AS tasks_start_date, tasks.due_date AS tasks_due_date, tasks.created_at AS tasks_created_at, tasks.updated_at AS tasks_updated_at, tasks.project_id AS tasks_project_id, tasks.assignee_id AS tasks_assignee_id, tasks.created_by AS tasks_created_by, tasks.team_id AS tasks_team_id, tasks.parent_id AS tasks_parent_id 
+FROM tasks 
+WHERE tasks.project_id = ?]
+[parameters: (1,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-07 14:28:01,974 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-07 15:07:46,255 - app.utils.jwt_callbacks - ERROR - Missing token: Missing CSRF token
+2025-05-07 15:50:06,210 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-07 20:27:36,540 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-07 20:29:41,757 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-07 20:30:02,501 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-07 21:17:08,888 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-07 21:47:58,985 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-07 22:16:07,720 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-07 22:37:50,639 - app - ERROR - Exception on /api/tasks/2 [PUT]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app.<locals>.task_api_exempt_route() got an unexpected keyword argument 'task_id'
+2025-05-07 22:37:58,023 - app - ERROR - Exception on /api/tasks/2 [PUT]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app.<locals>.task_api_exempt_route() got an unexpected keyword argument 'task_id'
+2025-05-07 22:40:21,108 - app - ERROR - Exception on /api/tasks/1 [PUT]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 883, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 902, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1174, in make_response
+    raise TypeError(
+TypeError: The view function for 'task_api_exempt.task_api_exempt_route' did not return a valid response. The function either returned None or ended without a return statement.
+2025-05-07 22:43:16,386 - app - ERROR - Error in task_api_exempt_route: CSRF double submit tokens do not match
+2025-05-07 22:43:40,477 - app - ERROR - Error in task_api_exempt_route: CSRF double submit tokens do not match
+2025-05-07 22:51:57,014 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-07 22:52:52,806 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-07 22:53:37,452 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-07 22:55:22,142 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-08 14:15:40,738 - app.utils.jwt_callbacks - ERROR - Token expired
+2025-05-08 14:16:43,476 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-08 14:36:24,713 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-08 14:46:49,204 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-08 15:56:08,240 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-08 16:17:19,372 - app - ERROR - Exception on /api/users/3 [PUT]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app.<locals>.user_api_exempt_route() got an unexpected keyword argument 'user_id'
+2025-05-08 16:17:47,050 - app - ERROR - Exception on /api/users/8 [PUT]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app.<locals>.user_api_exempt_route() got an unexpected keyword argument 'user_id'
+2025-05-08 17:51:20,451 - app.routes.main - ERROR - Error in projects: 'AnonymousUserMixin' object has no attribute 'has_role'
+2025-05-08 17:51:20,454 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 336, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 52, in top-level template code
+    var isRegular = {{ 'true' if user_is_regular(current_user) else 'false' }};
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\utils\permissions.py", line 633, in user_is_regular
+    return user.has_role(ROLE_USER) and not user.has_role(ROLE_ADMIN) and not user.has_role(ROLE_PROJECT_MANAGER)
+          ^^^^^^^^^^^^^
+AttributeError: 'AnonymousUserMixin' object has no attribute 'has_role'
+
+2025-05-08 17:53:24,715 - app - ERROR - Login page error: 'AnonymousUserMixin' object has no attribute 'has_role'
+2025-05-09 09:06:34,151 - app.routes.main - ERROR - Error in projects: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+2025-05-09 09:06:34,156 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 336, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 216, in top-level template code
+    {% block header_buttons %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 163, in block 'header_buttons'
+    {% if not (current_user.has_permission('manage_project') or current_user.has_permission('manage_all_projects') or current_user.has_role('admin') or current_user.has_role('manager')) %}style="display:none"{% endif %}>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+
+2025-05-09 09:06:51,893 - app.routes.main - ERROR - Error in tasks: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+2025-05-09 09:07:09,626 - app.routes.main - ERROR - Error in users: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+2025-05-09 09:10:43,298 - app.routes.main - ERROR - Error in projects: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+2025-05-09 09:10:43,307 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 336, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 216, in top-level template code
+    {% block header_buttons %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 163, in block 'header_buttons'
+    {% if not (current_user.has_permission('manage_project') or current_user.has_permission('manage_all_projects') or current_user.has_role('admin') or current_user.has_role('manager')) %}style="display:none"{% endif %}>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+
+2025-05-09 09:10:49,997 - app.routes.main - ERROR - Error in projects: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+2025-05-09 09:10:49,999 - app.routes.main - ERROR - Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\main.py", line 336, in projects
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\tmp\work\app\templates\projects.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\tmp\work\app\templates\base.html", line 216, in top-level template code
+    {% block header_buttons %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\templates\projects.html", line 163, in block 'header_buttons'
+    {% if not (current_user.has_permission('manage_project') or current_user.has_permission('manage_all_projects') or current_user.has_role('admin') or current_user.has_role('manager')) %}style="display:none"{% endif %}>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+
+2025-05-09 09:10:52,079 - app.routes.main - ERROR - Error in tasks: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
+2025-05-09 10:17:26,890 - app.routes.main - ERROR - Error in users: expected token 'end of statement block', got 'if'
+2025-05-09 11:52:16,327 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing

@@ -1,0 +1,156 @@
+{
+    "processing": "处理中...",
+    "lengthMenu": "显示 _MENU_ 项结果",
+    "zeroRecords": "没有匹配结果",
+    "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+    "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+    "infoFiltered": "(由 _MAX_ 项结果过滤)",
+    "search": "搜索:",
+    "emptyTable": "表中数据为空",
+    "paginate": {
+        "first": "首页",
+        "previous": "上页",
+        "next": "下页",
+        "last": "末页"
+    },
+    "aria": {
+        "sortAscending": ": 以升序排列此列",
+        "sortDescending": ": 以降序排列此列"
+    },
+    "autoFill": {
+        "cancel": "取消",
+        "fill": "用 <i>%d</i> 填充所有单元格",
+        "fillHorizontal": "水平填充单元格",
+        "fillVertical": "垂直填充单元格"
+    },
+    "buttons": {
+        "collection": "集合 <span class=\"ui-button-icon-primary ui-icon ui-icon-triangle-1-s\"></span>",
+        "colvis": "列可见性",
+        "colvisRestore": "恢复列可见性",
+        "copy": "复制",
+        "copyKeys": "按 ctrl 或 u2318 + C 将表数据复制到系统剪贴板。<br><br>要取消，请单击此消息或按Escape键。",
+        "copySuccess": {
+            "1": "复制了 1 行到剪贴板",
+            "_": "复制了 %d 行到剪贴板"
+        },
+        "copyTitle": "复制到剪贴板",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+            "-1": "显示所有行",
+            "_": "显示 %d 行"
+        },
+        "pdf": "PDF",
+        "print": "打印"
+    },
+    "datetime": {
+        "hours": "时",
+        "minutes": "分",
+        "months": {
+            "0": "1月",
+            "1": "2月",
+            "10": "11月",
+            "11": "12月",
+            "2": "3月",
+            "3": "4月",
+            "4": "5月",
+            "5": "6月",
+            "6": "7月",
+            "7": "8月",
+            "8": "9月",
+            "9": "10月"
+        },
+        "next": "下一个",
+        "previous": "上一个",
+        "seconds": "秒",
+        "unknown": "未知",
+        "weekdays": [
+            "周日",
+            "周一",
+            "周二",
+            "周三",
+            "周四",
+            "周五",
+            "周六"
+        ]
+    },
+    "decimal": ".",
+    "editor": {
+        "close": "关闭",
+        "create": {
+            "button": "新建",
+            "submit": "创建",
+            "title": "创建新记录"
+        },
+        "edit": {
+            "button": "编辑",
+            "submit": "更新",
+            "title": "编辑记录"
+        },
+        "error": {
+            "system": "发生系统错误（更多信息）"
+        },
+        "multi": {
+            "info": "选定的多个项目包含不同的值。要编辑并将所有项目设置为相同的值，请单击或点击此处，否则它们将保持各自的原值。",
+            "noMulti": "此输入可以单独编辑，但不能作为群组的一部分进行编辑。",
+            "restore": "撤销更改",
+            "title": "多个值"
+        },
+        "remove": {
+            "button": "删除",
+            "confirm": {
+                "_": "您确定要删除 %d 行吗？",
+                "1": "您确定要删除 1 行吗？"
+            },
+            "submit": "删除",
+            "title": "删除记录"
+        }
+    },
+    "searchBuilder": {
+        "add": "添加条件",
+        "button": {
+            "0": "搜索生成器",
+            "_": "搜索生成器 (%d)"
+        },
+        "clearAll": "全部清除",
+        "condition": "条件",
+        "data": "数据",
+        "deleteTitle": "删除过滤规则",
+        "leftTitle": "组合条件",
+        "logicAnd": "与",
+        "logicOr": "或",
+        "rightTitle": "取消组合",
+        "title": {
+            "0": "搜索生成器",
+            "_": "搜索生成器 (%d)"
+        },
+        "value": "值"
+    },
+    "searchPanes": {
+        "clearMessage": "全部清除",
+        "collapse": {
+            "0": "搜索面板",
+            "_": "搜索面板 (%d)"
+        },
+        "count": "{total}",
+        "countFiltered": "{shown} ({total})",
+        "emptyPanes": "没有搜索面板",
+        "loadMessage": "正在加载搜索面板...",
+        "title": "激活的筛选条件 - %d"
+    },
+    "select": {
+        "cells": {
+            "1": "选择了 1 个单元格",
+            "_": "选择了 %d 个单元格"
+        },
+        "columns": {
+            "1": "选择了 1 列",
+            "_": "选择了 %d 列"
+        },
+        "rows": {
+            "1": "选择了 1 行",
+            "_": "选择了 %d 行"
+        }
+    },
+    "thousands": ","
+} 

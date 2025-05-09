@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>项目资源</h2>
+            {% if current_user.is_authenticated and (current_user.has_permission('manage_resources') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createResourceModal">
+                <i class="fa fa-plus"></i> 添加资源
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Resource List -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">资源清单</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>类型</th>
+                                <th>数量</th>
+                                <th>已分配</th>
+                                <th>使用率</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for resource in resources %}
+                            <tr>
+                                <td>{{ resource.name }}</td>
+                                <td>{{ resource.type }}</td>
+                                <td>{{ resource.quantity }} {{ resource.unit }}</td>
+                                <td>{{ resource.allocated_quantity }} {{ resource.unit }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" role="progressbar" 
+                                             data-width="{{ resource.utilization_rate }}"
+                                             aria-valuenow="{{ resource.utilization_rate }}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100">
+                                            {{ resource.utilization_rate }}%
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if resource.status == 'available' else 'warning' if resource.status == 'allocated' else 'danger' }}">
+                                        {{ '可用' if resource.status == 'available' else '已分配' if resource.status == 'allocated' else '耗尽' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary resource-action" 
+                                            data-action="view"
+                                            data-resource-id="{{ resource.id }}">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    {% if current_user.is_authenticated and (current_user.has_permission('manage_resources') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                                    <button class="btn btn-sm btn-outline-secondary resource-action" 
+                                            data-action="edit"
+                                            data-resource-id="{{ resource.id }}">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info resource-action" 
+                                            data-action="allocate"
+                                            data-resource-id="{{ resource.id }}">
+                                        <i class="fa fa-tasks"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger resource-action" 
+                                            data-action="delete"
+                                            data-resource-id="{{ resource.id }}">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resource Utilization Charts -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">资源使用趋势</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="utilizationChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">资源分配情况</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="allocationChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Resource Modal -->
+<div class="modal fade" id="createResourceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加新资源</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="create-resource-form">
+                    <div class="mb-3">
+                        <label class="form-label">资源名称</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">资源类型</label>
+                        <select class="form-select" name="type" required>
+                            <option value="human">人力资源</option>
+                            <option value="equipment">设备</option>
+                            <option value="material">材料</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">数量</label>
+                        <input type="number" class="form-control" name="quantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">单位</label>
+                        <input type="text" class="form-control" name="unit" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">单位成本</label>
+                        <input type="number" class="form-control" name="cost_per_unit" step="0.01">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">开始日期</label>
+                        <input type="date" class="form-control" name="start_date">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">结束日期</label>
+                        <input type="date" class="form-control" name="end_date">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitResource()">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+<script>
+// 初始化图表数据
+const utilizationData = {
+    labels: JSON.parse('{{ utilization_data.labels|tojson|safe }}'),
+    rates: JSON.parse('{{ utilization_data.rates|tojson|safe }}')
+};
+
+const allocationData = JSON.parse('{{ allocation_data|tojson|safe }}');
+
+// 资源操作处理
+document.addEventListener('DOMContentLoaded', function() {
+    const resourceActions = document.querySelectorAll('.resource-action');
+    resourceActions.forEach(button => {
+        button.addEventListener('click', function() {
+            const resourceId = this.dataset.resourceId;
+            const action = this.dataset.action;
+            
+            switch(action) {
+                case 'view':
+                    window.location.href = `/resources/${resourceId}/details`;
+                    break;
+                case 'edit':
+                    window.location.href = `/resources/${resourceId}/edit`;
+                    break;
+                case 'allocate':
+                    window.location.href = `/resources/${resourceId}/allocate`;
+                    break;
+            }
+        });
+    });
+});
+
+// Resource Utilization Chart
+const utilizationCtx = document.getElementById('utilizationChart').getContext('2d');
+new Chart(utilizationCtx, {
+    type: 'line',
+    data: {
+        labels: utilizationData.labels,
+        datasets: [{
+            label: '使用率',
+            data: utilizationData.rates,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
+
+// Resource Allocation Chart
+const allocationCtx = document.getElementById('allocationChart').getContext('2d');
+new Chart(allocationCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['可用', '已分配', '耗尽'],
+        datasets: [{
+            data: [
+                allocationData.available,
+                allocationData.allocated,
+                allocationData.depleted
+            ],
+            backgroundColor: [
+                'rgb(75, 192, 192)',
+                'rgb(255, 205, 86)',
+                'rgb(255, 99, 132)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+async function submitResource() {
+    const form = document.getElementById('create-resource-form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        const response = await fetch(`/api/projects/{{ project_id }}/resources`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('createResourceModal'));
+            modal.hide();
+            form.reset();
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert(error.error || '创建资源失败');
+        }
+    } catch (error) {
+        console.error('Error creating resource:', error);
+        alert('创建资源时发生错误');
+    }
+}
+
+// 自动刷新数据（每5分钟）
+setInterval(() => {
+    location.reload();
+}, 300000);
+
+// 初始化进度条样式
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+    });
+});
+</script>
+{% endblock %} 

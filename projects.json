@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "项目管理系统开发",
+    "description": "开发全功能项目管理系统，包括任务、资源和风险管理",
+    "status": "active",
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "manager": "系统管理员",
+    "progress": 65
+  },
+  {
+    "id": 2,
+    "name": "网站重构",
+    "description": "重构公司网站，优化用户体验和性能",
+    "status": "in_progress",
+    "start_date": "2023-03-15",
+    "end_date": "2023-08-30",
+    "manager": "张三",
+    "progress": 40
+  },
+  {
+    "id": 3,
+    "name": "移动应用开发",
+    "description": "开发Android和iOS移动应用",
+    "status": "planning",
+    "start_date": "2023-06-01",
+    "end_date": "2023-12-15",
+    "manager": "李四",
+    "progress": 10
+  },
+  {
+    "id": 4,
+    "name": "数据中心升级",
+    "description": "升级公司数据中心设备和软件",
+    "status": "completed",
+    "start_date": "2023-01-15",
+    "end_date": "2023-04-30",
+    "manager": "王五",
+    "progress": 100
+  }
+] 

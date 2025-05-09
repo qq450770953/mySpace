@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 项目管理系统</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-image: url("/static/images/background.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        #bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #f8f9fa; /* 备用背景色 */
+            background-image: url("/static/images/background.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .login-card {
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            z-index: 1;
+        }
+        
+        .login-header {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+    </style>
+    <!-- 预加载背景图片 -->
+    <link rel="preload" href="{{ url_for('static', filename='images/background.png') }}" as="image">
+    <link rel="preload" href="{{ url_for('static', filename='uploads/background.png') }}" as="image">
+</head>
+<body>
+<!-- 背景图容器 -->
+<div id="bg-container"></div>
+
+<div class="container">
+    <div class="login-card">
+        <div class="card">
+            <div class="card-header login-header">
+                <h3 class="text-center mb-0">项目管理系统</h3>
+            </div>
+            <div class="card-body">
+                <form id="loginForm">
+                    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                    <button type="submit" class="btn btn-primary w-100">登录</button>
+                </form>
+                <div class="login-footer">
+                    <a href="{{ url_for('auth.register_page') }}">没有账号？立即注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 背景图片元素，直接使用HTML -->
+<img id="bg-image" src="{{ url_for('static', filename='images/background.png') }}" 
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0;"
+     alt="背景图片">
+
+<!-- 先加载CSRF脚本，确保先于其他脚本 -->
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}?v=1.0.2"></script>
+<!-- 加载背景辅助脚本 -->
+<script src="{{ url_for('static', filename='js/background-helper.js') }}"></script>
+</body>
+</html> 

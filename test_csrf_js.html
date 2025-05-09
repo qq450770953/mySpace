@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试CSRF.js和Login.js兼容性</title>
+    <meta name="csrf-token" content="test-csrf-token">
+</head>
+<body>
+    <h1>测试CSRF.js和Login.js兼容性</h1>
+    <div id="result"></div>
+
+    <script>
+        // 全局函数，用于显示测试结果
+        function logResult(message, isError = false) {
+            const resultDiv = document.getElementById('result');
+            const p = document.createElement('p');
+            p.textContent = message;
+            p.style.color = isError ? 'red' : 'green';
+            resultDiv.appendChild(p);
+            console.log(message);
+        }
+        
+        // 测试变量是否被正确隔离
+        function testVariableIsolation() {
+            try {
+                // 尝试访问全局变量csrfToken，如果不存在则说明被正确隔离
+                if (typeof csrfToken === 'undefined') {
+                    logResult('✅ 变量隔离测试通过: csrfToken变量不在全局作用域');
+                } else {
+                    logResult('❌ 变量隔离测试失败: csrfToken变量仍存在于全局作用域', true);
+                }
+                
+                // 测试导出的函数是否可用
+                if (typeof window.getCsrfToken === 'function') {
+                    logResult('✅ 函数导出测试通过: getCsrfToken函数可用');
+                    
+                    // 测试函数是否正常工作
+                    const token = window.getCsrfToken();
+                    logResult(`getCsrfToken函数返回值: ${token || '无'}`);
+                } else {
+                    logResult('❌ 函数导出测试失败: getCsrfToken函数不可用', true);
+                }
+            } catch (error) {
+                logResult(`❌ 测试过程中出错: ${error.message}`, true);
+            }
+        }
+        
+        // 页面加载完成后运行测试
+        window.addEventListener('load', function() {
+            logResult('🔍 开始测试CSRF.js和Login.js兼容性...');
+            
+            // 延迟执行测试以确保所有脚本已加载
+            setTimeout(testVariableIsolation, 500);
+        });
+    </script>
+
+    <!-- 首先加载CSRF.js -->
+    <script src="/static/js/csrf.js"></script>
+    <!-- 然后加载login.js -->
+    <script src="/static/js/login.js"></script>
+</body>
+</html> 

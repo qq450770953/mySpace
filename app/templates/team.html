@@ -1,0 +1,805 @@
+{% extends "base.html" %}
+
+{% block title %}团队协作与资源管理{% endblock %}
+
+{% block styles %}
+<style>
+    .team-container {
+        padding: 20px;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .stat-title {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .team-member-card {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .member-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    .member-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .member-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .member-role {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .resource-chart {
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    
+    .message-card {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .message-content {
+        margin-bottom: 10px;
+    }
+    
+    .message-time {
+        color: #666;
+        font-size: 12px;
+    }
+    
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ff4444;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+    
+    .workload-chart {
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    
+    .workload-legend {
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+    }
+    
+    .workload-trend-chart {
+        height: 400px;
+        margin-bottom: 20px;
+    }
+    
+    .workload-trend-legend {
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+    }
+    
+    .workload-trend-legend .legend-item {
+        display: inline-block;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+    
+    .workload-trend-legend .legend-item i {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 5px;
+        border-radius: 2px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="team-container">
+    <div class="row">
+        <!-- 统计面板 -->
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-title">团队成员</div>
+                <div class="stat-value" id="member-count">0</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-title">活跃项目</div>
+                <div class="stat-value" id="active-projects">0</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-title">系统负载</div>
+                <div class="stat-value" id="system-load">0%</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-title">未读消息</div>
+                <div class="stat-value" id="unread-messages">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- 团队成员列表 -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">团队成员</h5>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                        添加成员
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="team-members-list">
+                        <!-- 团队成员将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 工作负载可视化 -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">工作负载分布</h5>
+                </div>
+                <div class="card-body">
+                    <div class="workload-chart" id="workload-chart"></div>
+                    <div class="workload-legend mt-3">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-success">空闲</span>
+                            <span class="text-warning">适中</span>
+                            <span class="text-danger">过载</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 工作负载趋势 -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">工作负载趋势</h5>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="changeTimeRange('week')">周</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="changeTimeRange('month')">月</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="changeTimeRange('quarter')">季度</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="workload-trend-chart" id="workload-trend-chart"></div>
+                    <div class="workload-trend-legend mt-3">
+                        <!-- 图例将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 团队消息 -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">团队消息</h5>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#sendMessageModal">
+                        发送消息
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="team-messages">
+                        <!-- 消息将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 资源监控 -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">资源监控</h5>
+                </div>
+                <div class="card-body">
+                    <div class="resource-chart" id="cpu-chart"></div>
+                    <div class="resource-chart" id="memory-chart"></div>
+                    <div class="resource-chart" id="disk-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加成员模态框 -->
+<div class="modal fade" id="addMemberModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加团队成员</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm">
+                    <div class="mb-3">
+                        <label class="form-label">选择用户</label>
+                        <select class="form-select" id="member-user" required>
+                            <!-- 用户列表将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">角色</label>
+                        <select class="form-select" id="member-role" required>
+                            <option value="manager">项目经理</option>
+                            <option value="developer">开发人员</option>
+                            <option value="tester">测试人员</option>
+                            <option value="designer">设计师</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">技能标签</label>
+                        <input type="text" class="form-control" id="member-skills" placeholder="输入技能标签，用逗号分隔">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addTeamMember()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 发送消息模态框 -->
+<div class="modal fade" id="sendMessageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">发送团队消息</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="sendMessageForm">
+                    <div class="mb-3">
+                        <label class="form-label">消息内容</label>
+                        <textarea class="form-control" id="message-content" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">消息类型</label>
+                        <select class="form-select" id="message-type">
+                            <option value="text">文本</option>
+                            <option value="file">文件</option>
+                            <option value="system">系统通知</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="file-upload-container" style="display: none;">
+                        <label class="form-label">上传文件</label>
+                        <input type="file" class="form-control" id="message-file">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="sendTeamMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑成员模态框 -->
+<div class="modal fade" id="editMemberModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑团队成员</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editMemberForm">
+                    <input type="hidden" id="edit-member-id">
+                    <div class="mb-3">
+                        <label class="form-label">角色</label>
+                        <select class="form-select" id="edit-member-role" required>
+                            <option value="manager">项目经理</option>
+                            <option value="developer">开发人员</option>
+                            <option value="tester">测试人员</option>
+                            <option value="designer">设计师</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">技能标签</label>
+                        <input type="text" class="form-control" id="edit-member-skills" placeholder="输入技能标签，用逗号分隔">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">工作负载</label>
+                        <input type="range" class="form-range" id="edit-member-workload" min="0" max="100" step="1">
+                        <div class="text-center" id="workload-value">0%</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updateTeamMember()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteMemberModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">确认删除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除这个团队成员吗？此操作不可撤销。</p>
+                <input type="hidden" id="delete-member-id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteMember()">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+    // 初始化图表
+    let cpuChart = echarts.init(document.getElementById('cpu-chart'));
+    let memoryChart = echarts.init(document.getElementById('memory-chart'));
+    let diskChart = echarts.init(document.getElementById('disk-chart'));
+    let workloadChart = echarts.init(document.getElementById('workload-chart'));
+    let workloadTrendChart = echarts.init(document.getElementById('workload-trend-chart'));
+
+    // 时间范围
+    let currentTimeRange = 'month';
+
+    // 更新工作负载图表
+    function updateWorkloadChart(members) {
+        const data = members.map(member => ({
+            name: member.user.name,
+            value: member.workload,
+            role: member.role
+        }));
+
+        workloadChart.setOption({
+            title: {
+                text: '团队成员工作负载',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    return `${params.name}<br/>
+                            角色: ${params.data.role}<br/>
+                            工作负载: ${params.value}%`;
+                }
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['空闲', '适中', '过载']
+            },
+            series: [{
+                name: '工作负载',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '18',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    {
+                        value: data.filter(m => m.value < 50).length,
+                        name: '空闲',
+                        itemStyle: { color: '#28a745' }
+                    },
+                    {
+                        value: data.filter(m => m.value >= 50 && m.value < 80).length,
+                        name: '适中',
+                        itemStyle: { color: '#ffc107' }
+                    },
+                    {
+                        value: data.filter(m => m.value >= 80).length,
+                        name: '过载',
+                        itemStyle: { color: '#dc3545' }
+                    }
+                ]
+            }]
+        });
+    }
+
+    // 更新工作负载趋势图
+    function updateWorkloadTrendChart(history) {
+        const dates = [...new Set(history.flatMap(member => member.data.map(d => d.date)))].sort();
+        const series = history.map(member => ({
+            name: member.name,
+            type: 'line',
+            smooth: true,
+            data: dates.map(date => {
+                const dataPoint = member.data.find(d => d.date === date);
+                return dataPoint ? dataPoint.workload : null;
+            }),
+            markLine: {
+                data: [
+                    { type: 'average', name: '平均值' },
+                    { yAxis: 80, name: '过载阈值' },
+                    { yAxis: 50, name: '适中阈值' }
+                ]
+            }
+        }));
+
+        workloadTrendChart.setOption({
+            title: {
+                text: '团队成员工作负载趋势',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function(params) {
+                    let result = params[0].axisValue + '<br/>';
+                    params.forEach(param => {
+                        result += `${param.seriesName}: ${param.value}%<br/>`;
+                    });
+                    return result;
+                }
+            },
+            legend: {
+                data: history.map(member => member.name),
+                type: 'scroll',
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dates
+            },
+            yAxis: {
+                type: 'value',
+                min: 0,
+                max: 100,
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+            },
+            series: series
+        });
+    }
+
+    // 加载团队成员
+    function loadTeamMembers() {
+        fetch('/api/teams/{{ project_id }}/members')
+            .then(response => response.json())
+            .then(data => {
+                const membersList = document.getElementById('team-members-list');
+                membersList.innerHTML = '';
+                document.getElementById('member-count').textContent = data.length;
+                
+                data.forEach(member => {
+                    const memberCard = document.createElement('div');
+                    memberCard.className = 'team-member-card';
+                    memberCard.innerHTML = `
+                        <div class="member-info">
+                            <img src="${member.user.avatar || '/static/images/default-avatar.png'}" 
+                                 class="member-avatar" alt="${member.user.name}">
+                            <div>
+                                <div class="member-name">${member.user.name}</div>
+                                <div class="member-role">${member.role}</div>
+                            </div>
+                            <div class="ms-auto">
+                                <button class="btn btn-sm btn-outline-primary me-2" 
+                                        onclick="editTeamMember(${member.id})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" 
+                                        onclick="deleteTeamMember(${member.id})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            ${member.skills.map(skill => `<span class="badge bg-secondary me-1">${skill}</span>`).join('')}
+                        </div>
+                        <div class="mt-2">
+                            <div class="progress">
+                                <div class="progress-bar ${member.workload >= 80 ? 'bg-danger' : member.workload >= 50 ? 'bg-warning' : 'bg-success'}" 
+                                     role="progressbar" 
+                                     style="width: ${member.workload}%" 
+                                     aria-valuenow="${member.workload}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    ${member.workload}%
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    membersList.appendChild(memberCard);
+                });
+
+                // 更新工作负载图表
+                updateWorkloadChart(data);
+            });
+    }
+
+    // 加载团队消息
+    function loadTeamMessages() {
+        fetch('/api/teams/{{ project_id }}/messages')
+            .then(response => response.json())
+            .then(data => {
+                const messagesContainer = document.getElementById('team-messages');
+                messagesContainer.innerHTML = '';
+                
+                data.forEach(message => {
+                    const messageCard = document.createElement('div');
+                    messageCard.className = 'message-card';
+                    messageCard.innerHTML = `
+                        <div class="message-content">${message.content}</div>
+                        <div class="message-time">
+                            ${message.sender.name} - ${new Date(message.created_at).toLocaleString()}
+                        </div>
+                    `;
+                    messagesContainer.appendChild(messageCard);
+                });
+            });
+    }
+
+    // 加载系统资源
+    function loadSystemResources() {
+        fetch('/api/system/resources')
+            .then(response => response.json())
+            .then(data => {
+                // 更新CPU使用率
+                document.getElementById('system-load').textContent = `${data.cpu.percent}%`;
+                
+                // 更新CPU图表
+                cpuChart.setOption({
+                    title: { text: 'CPU使用率' },
+                    tooltip: { trigger: 'axis' },
+                    series: [{
+                        type: 'gauge',
+                        data: [{ value: data.cpu.percent }]
+                    }]
+                });
+                
+                // 更新内存图表
+                memoryChart.setOption({
+                    title: { text: '内存使用率' },
+                    tooltip: { trigger: 'axis' },
+                    series: [{
+                        type: 'gauge',
+                        data: [{ value: data.memory.percent }]
+                    }]
+                });
+                
+                // 更新磁盘图表
+                diskChart.setOption({
+                    title: { text: '磁盘使用率' },
+                    tooltip: { trigger: 'axis' },
+                    series: [{
+                        type: 'gauge',
+                        data: [{ value: data.disk.percent }]
+                    }]
+                });
+            });
+    }
+
+    // 加载工作负载历史数据
+    function loadWorkloadHistory() {
+        fetch(`/api/teams/{{ project_id }}/workload-history?range=${currentTimeRange}`)
+            .then(response => response.json())
+            .then(data => {
+                updateWorkloadTrendChart(data);
+            });
+    }
+
+    // 切换时间范围
+    function changeTimeRange(range) {
+        currentTimeRange = range;
+        loadWorkloadHistory();
+    }
+
+    // 添加团队成员
+    function addTeamMember() {
+        const formData = {
+            user_id: document.getElementById('member-user').value,
+            role: document.getElementById('member-role').value,
+            skills: document.getElementById('member-skills').value.split(',').map(s => s.trim())
+        };
+        
+        fetch('/api/teams/{{ project_id }}/members', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            $('#addMemberModal').modal('hide');
+            loadTeamMembers();
+        });
+    }
+
+    // 发送团队消息
+    function sendTeamMessage() {
+        const formData = new FormData();
+        formData.append('content', document.getElementById('message-content').value);
+        formData.append('message_type', document.getElementById('message-type').value);
+        
+        const file = document.getElementById('message-file').files[0];
+        if (file) {
+            formData.append('file', file);
+        }
+        
+        fetch('/api/teams/{{ project_id }}/messages', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            $('#sendMessageModal').modal('hide');
+            loadTeamMessages();
+        });
+    }
+
+    // 编辑团队成员
+    function editTeamMember(memberId) {
+        fetch(`/api/teams/{{ project_id }}/members/${memberId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('edit-member-id').value = data.id;
+                document.getElementById('edit-member-role').value = data.role;
+                document.getElementById('edit-member-skills').value = data.skills.join(', ');
+                document.getElementById('edit-member-workload').value = data.workload;
+                document.getElementById('workload-value').textContent = `${data.workload}%`;
+                $('#editMemberModal').modal('show');
+            });
+    }
+
+    // 更新团队成员
+    function updateTeamMember() {
+        const memberId = document.getElementById('edit-member-id').value;
+        const formData = {
+            role: document.getElementById('edit-member-role').value,
+            skills: document.getElementById('edit-member-skills').value.split(',').map(s => s.trim()),
+            workload: parseInt(document.getElementById('edit-member-workload').value)
+        };
+        
+        fetch(`/api/teams/{{ project_id }}/members/${memberId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            $('#editMemberModal').modal('hide');
+            loadTeamMembers();
+        });
+    }
+
+    // 删除团队成员
+    function deleteTeamMember(memberId) {
+        document.getElementById('delete-member-id').value = memberId;
+        $('#deleteMemberModal').modal('show');
+    }
+
+    // 确认删除团队成员
+    function confirmDeleteMember() {
+        const memberId = document.getElementById('delete-member-id').value;
+        
+        fetch(`/api/teams/{{ project_id }}/members/${memberId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                $('#deleteMemberModal').modal('hide');
+                loadTeamMembers();
+            }
+        });
+    }
+
+    // 监听工作负载滑块变化
+    document.getElementById('edit-member-workload').addEventListener('input', function(e) {
+        document.getElementById('workload-value').textContent = `${e.target.value}%`;
+    });
+
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTeamMembers();
+        loadTeamMessages();
+        loadSystemResources();
+        loadWorkloadHistory();
+        
+        // 设置定时刷新
+        setInterval(loadSystemResources, 5000);
+        setInterval(loadWorkloadHistory, 60000); // 每分钟更新一次趋势图
+        
+        // 监听消息类型变化
+        document.getElementById('message-type').addEventListener('change', function(e) {
+            document.getElementById('file-upload-container').style.display = 
+                e.target.value === 'file' ? 'block' : 'none';
+        });
+
+        // 监听工作负载滑块变化
+        document.getElementById('edit-member-workload').addEventListener('input', function(e) {
+            document.getElementById('workload-value').textContent = `${e.target.value}%`;
+        });
+
+        // 监听窗口大小变化，调整图表大小
+        window.addEventListener('resize', function() {
+            workloadChart.resize();
+            workloadTrendChart.resize();
+            cpuChart.resize();
+            memoryChart.resize();
+            diskChart.resize();
+        });
+    });
+</script>
+{% endblock %} 

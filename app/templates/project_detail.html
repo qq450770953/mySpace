@@ -1,0 +1,656 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container mt-4">
+    <!-- 项目基本信息 -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">项目详情</h5>
+                    <div>
+                        <a href="{{ url_for('main.projects') }}" class="btn btn-sm btn-outline-secondary me-1">
+                            <i class="bi bi-arrow-left"></i> 返回项目列表
+                        </a>
+                        {% if not user_is_regular(current_user) %}
+                        <button type="button" class="btn btn-sm btn-primary edit-btn" id="editProjectBtn">
+                            <i class="bi bi-pencil"></i> 编辑项目
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="card-title">{{ project.name }}</h2>
+                    </div>
+                    <p class="card-text">{{ project.description }}</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>负责人：</strong>{{ project.manager.name }}</p>
+                            <p><strong>开始日期：</strong>{{ project.start_date.strftime('%Y-%m-%d') }}</p>
+                            <p><strong>结束日期：</strong>{{ project.end_date.strftime('%Y-%m-%d') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>状态：</strong>
+                                <span class="badge bg-{{ 'success' if project.status == 'active' else 'warning' if project.status == 'pending' else 'danger' }}">
+                                    {{ project.status }}
+                                </span>
+                            </p>
+                            <p><strong>进度：</strong></p>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" 
+                                aria-valuenow="{{ project.progress }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                     style="width: {{ project.progress }}%">
+                                    {{ project.progress }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">项目成员</h5>
+                    <div class="mb-3">
+                        {% if not user_is_regular(current_user) %}
+                        <button type="button" class="btn btn-sm btn-primary" id="addMemberBtn">
+                            <i class="fas fa-user-plus"></i> 添加成员
+                        </button>
+                        {% endif %}
+                    </div>
+                    <ul class="list-group">
+                        {% for member in project.members %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ member.name }}
+                            <div>
+                                <span class="badge bg-primary rounded-pill">{{ member.role }}</span>
+                                {% if not user_is_regular(current_user) %}
+                                <button class="btn btn-sm btn-danger delete-btn" data-action="remove" data-project-id="{{ project.id }}" data-member-id="{{ member.id }}">
+                                    <i class="fas fa-user-minus"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 任务管理 -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card my-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">项目任务</h5>
+                    {% if current_user.is_authenticated and (current_user.has_permission('manage_task') if hasattr(current_user, 'has_permission') else False or current_user.has_permission('manage_all_tasks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                    <button type="button" class="btn btn-sm btn-primary" id="addTaskBtn">
+                        <i class="bi bi-plus-lg"></i> 新建任务
+                    </button>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>任务名称</th>
+                                    <th>状态</th>
+                                    <th>优先级</th>
+                                    <th>负责人</th>
+                                    <th>截止日期</th>
+                                    <th>进度</th>
+                                    <th class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectTasksTableBody">
+                                <!-- 任务数据将通过JavaScript填充 -->
+                                <!-- 示例任务行 -->
+                                <tr class="task-loading">
+                                    <td colspan="7" class="text-center">
+                                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                            <span class="visually-hidden">加载中...</span>
+                                        </div>
+                                        加载项目任务...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 项目风险 -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card my-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">风险管理</h5>
+                    {% if current_user.is_authenticated and (current_user.has_permission('manage_risks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                    <button type="button" class="btn btn-sm btn-primary" id="addRiskBtn">
+                        <i class="bi bi-plus-lg"></i> 添加风险
+                    </button>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>风险名称</th>
+                                    <th>风险描述</th>
+                                    <th>风险等级</th>
+                                    <th>风险概率</th>
+                                    <th>风险影响</th>
+                                    <th>风险控制措施</th>
+                                    <th class="text-end">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riskList">
+                                {% for risk in project.risks %}
+                                <tr data-risk-id="{{ risk.id }}">
+                                    <td>{{ risk.name }}</td>
+                                    <td>{{ risk.description }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'danger' if risk.level == 'high' else 'warning' if risk.level == 'medium' else 'info' }}">
+                                            {{ risk.level }}
+                                        </span>
+                                    </td>
+                                    <td>{{ risk.probability }}</td>
+                                    <td>{{ risk.impact }}</td>
+                                    <td>{{ risk.control_measures }}</td>
+                                    <td class="text-end">
+                                        <div class="risk-operations">
+                                            {% if current_user.is_authenticated and (current_user.has_permission('manage_risks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                                            <button class="btn btn-sm btn-outline-primary edit-btn" data-action="edit" data-risk-id="{{ risk.id }}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger delete-btn" data-action="delete" data-risk-id="{{ risk.id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 资源分配 -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card my-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">资源分配</h5>
+                    {% if current_user.is_authenticated and (current_user.has_permission('manage_resources') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                    <button type="button" class="btn btn-sm btn-primary" id="addResourceBtn">
+                        <i class="bi bi-plus-lg"></i> 分配资源
+                    </button>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>资源名称</th>
+                                    <th>资源类型</th>
+                                    <th>分配给</th>
+                                    <th>分配日期</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resourceList">
+                                {% for resource in project.resources %}
+                                <tr data-resource-id="{{ resource.id }}">
+                                    <td>{{ resource.name }}</td>
+                                    <td>{{ resource.type }}</td>
+                                    <td>{{ resource.assigned_to }}</td>
+                                    <td>{{ resource.assigned_date.strftime('%Y-%m-%d') }}</td>
+                                    <td class="text-end">
+                                        <div class="resource-operations">
+                                            {% if current_user.is_authenticated and (current_user.has_permission('manage_resources') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                                            <button class="btn btn-sm btn-outline-primary edit-btn" data-action="edit" data-resource-id="{{ resource.id }}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger delete-btn" data-action="delete" data-resource-id="{{ resource.id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加成员模态框 -->
+<div class="modal fade" id="addMemberModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加项目成员</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm">
+                    <input type="hidden" name="project_id" value="{{ project.id }}">
+                    <div class="mb-3">
+                        <label class="form-label">选择成员</label>
+                        <select class="form-select" name="user_id" required>
+                            <option value="">选择成员...</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">角色</label>
+                        <select class="form-select" name="role" required>
+                            <option value="member">普通成员</option>
+                            <option value="developer">开发人员</option>
+                            <option value="tester">测试人员</option>
+                            <option value="designer">设计师</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="saveMember">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 任务编辑模态框 -->
+<div class="modal fade" id="taskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskModalTitle">新建任务</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <input type="hidden" id="taskId" name="id">
+                    <input type="hidden" name="project_id" value="{{ project.id }}">
+                    <div class="mb-3">
+                        <label class="form-label">任务名称</label>
+                        <input type="text" class="form-control" id="taskName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">任务描述</label>
+                        <textarea class="form-control" id="taskDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">负责人</label>
+                        <select class="form-select" id="taskAssignee" name="assignee_id" required>
+                            <option value="">选择负责人...</option>
+                            {% for member in project.members %}
+                            <option value="{{ member.id }}">{{ member.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">开始日期</label>
+                                <input type="date" class="form-control" id="taskStartDate" name="start_date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">结束日期</label>
+                                <input type="date" class="form-control" id="taskEndDate" name="end_date" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">优先级</label>
+                        <select class="form-select" id="taskPriority" name="priority" required>
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">状态</label>
+                        <select class="form-select" id="taskStatus" name="status" required>
+                            <option value="todo">待办</option>
+                            <option value="in_progress">进行中</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">进度</label>
+                        <input type="range" class="form-range" id="taskProgress" name="progress" min="0" max="100" step="1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="saveTask">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { taskUtils } from '/static/js/utils/index.js';
+    
+    // 初始化任务操作
+    taskUtils.initTaskOperations();
+    
+    // 为表格绑定事件委托处理
+    document.addEventListener('DOMContentLoaded', function() {
+        // 刷新表格行样式
+        const taskRows = document.querySelectorAll('#taskList tr');
+        taskRows.forEach(row => {
+            // 添加数据状态样式
+            const statusCell = row.querySelector('td:nth-child(6)');
+            if (statusCell) {
+                const status = statusCell.textContent.trim().toLowerCase();
+                row.classList.add('task-status-' + status.replace(' ', '-'));
+            }
+        });
+        
+        // 检查用户角色并隐藏按钮
+        if (typeof isRegularUser === 'function' && isRegularUser()) {
+            console.log('项目详情页：当前用户是普通用户，隐藏编辑按钮');
+            
+            // 隐藏所有编辑和删除按钮
+            document.querySelectorAll('[data-action="edit"], [data-action="delete"], [data-action="remove"]').forEach(function(btn) {
+                btn.style.display = 'none';
+            });
+            
+            // 隐藏新建任务按钮
+            document.querySelectorAll('[data-bs-target="#taskModal"], [data-bs-target="#addMemberModal"]').forEach(function(btn) {
+                btn.style.display = 'none';
+            });
+            
+            // 在表格中仅保留查看按钮
+            document.querySelectorAll('.task-operations').forEach(function(container) {
+                container.querySelectorAll('button').forEach(function(btn) {
+                    // 如果不是查看按钮，则隐藏
+                    if (!btn.innerHTML.includes('fa-eye')) {
+                        btn.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // 初始化任务模态框事件处理
+        initTaskModalEvents();
+    });
+    
+    // 初始化任务模态框事件处理
+    function initTaskModalEvents() {
+        // 获取任务模态框元素和添加任务按钮
+        const taskModal = document.getElementById('taskModal');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        
+        if (taskModal && addTaskBtn) {
+            console.log('初始化任务模态框事件处理');
+            
+            // 监听添加任务按钮点击事件
+            addTaskBtn.addEventListener('click', function() {
+                prepareTaskModal();
+            });
+            
+            // 监听模态框显示事件
+            taskModal.addEventListener('show.bs.modal', function() {
+                prepareTaskModal();
+            });
+            
+            // 绑定保存按钮事件
+            const saveTaskBtn = document.getElementById('saveTask');
+            if (saveTaskBtn) {
+                saveTaskBtn.addEventListener('click', saveTaskHandler);
+            }
+        }
+    }
+    
+    // 准备任务模态框
+    function prepareTaskModal() {
+        console.log('准备任务模态框...');
+        
+        // 获取表单和项目ID
+        const taskForm = document.getElementById('taskForm');
+        const projectIdInput = taskForm ? taskForm.querySelector('input[name="project_id"]') : null;
+        
+        if (taskForm) {
+            // 重置表单
+            taskForm.reset();
+            
+            // 设置默认日期值
+            const today = new Date().toISOString().split('T')[0];
+            const startDateInput = document.getElementById('taskStartDate');
+            const endDateInput = document.getElementById('taskEndDate');
+            
+            if (startDateInput) startDateInput.value = today;
+            if (endDateInput) {
+                // 设置默认结束日期为一周后
+                const nextWeek = new Date();
+                nextWeek.setDate(nextWeek.getDate() + 7);
+                endDateInput.value = nextWeek.toISOString().split('T')[0];
+            }
+            
+            // 加载负责人列表
+            loadProjectMembersAsAssignees(projectIdInput ? projectIdInput.value : null);
+        }
+    }
+    
+    // 加载项目成员作为负责人
+    function loadProjectMembersAsAssignees(projectId) {
+        if (!projectId) {
+            console.error('缺少项目ID，无法加载项目成员');
+            return;
+        }
+        
+        const assigneeSelect = document.getElementById('taskAssignee');
+        if (!assigneeSelect) {
+            console.error('未找到任务负责人选择器');
+            return;
+        }
+        
+        console.log(`加载项目 ${projectId} 的成员作为负责人候选...`);
+        
+        // 显示加载中状态
+        assigneeSelect.innerHTML = '<option value="">加载中...</option>';
+        assigneeSelect.disabled = true;
+        
+        // 获取项目成员
+        fetch(`/api/projects/${projectId}/members?bypass_jwt=true`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`获取项目成员失败: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(members => {
+                console.log('获取到项目成员:', members);
+                
+                // 清空现有选项
+                assigneeSelect.innerHTML = '';
+                
+                // 添加默认选项
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- 选择负责人 --';
+                assigneeSelect.appendChild(defaultOption);
+                
+                // 添加成员选项
+                if (Array.isArray(members)) {
+                    members.forEach(member => {
+                        const option = document.createElement('option');
+                        option.value = member.id;
+                        option.textContent = member.name || `成员 #${member.id}`;
+                        assigneeSelect.appendChild(option);
+                    });
+                    
+                    console.log(`已加载 ${members.length} 个项目成员作为负责人候选`);
+                } else {
+                    console.warn('服务器返回的成员数据不是数组格式');
+                }
+                
+                // 启用选择器
+                assigneeSelect.disabled = false;
+            })
+            .catch(error => {
+                console.error('加载项目成员失败:', error);
+                
+                // 尝试使用备选方式加载用户列表
+                fetch('/api/users?bypass_jwt=true')
+                    .then(response => response.json())
+                    .then(users => {
+                        console.log('使用备选方式获取用户列表:', users);
+                        
+                        // 清空现有选项
+                        assigneeSelect.innerHTML = '';
+                        
+                        // 添加默认选项
+                        const defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.textContent = '-- 选择负责人 --';
+                        assigneeSelect.appendChild(defaultOption);
+                        
+                        // 添加用户选项
+                        if (Array.isArray(users)) {
+                            users.forEach(user => {
+                                const option = document.createElement('option');
+                                option.value = user.id;
+                                option.textContent = user.name || user.username || `用户 #${user.id}`;
+                                assigneeSelect.appendChild(option);
+                            });
+                        }
+                        
+                        // 启用选择器
+                        assigneeSelect.disabled = false;
+                    })
+                    .catch(e => {
+                        console.error('备选方式获取用户列表也失败:', e);
+                        
+                        // 恢复正常状态
+                        assigneeSelect.innerHTML = '<option value="">-- 无法加载负责人 --</option>';
+                        assigneeSelect.disabled = false;
+                    });
+            });
+    }
+    
+    // 保存任务处理函数
+    function saveTaskHandler() {
+        const taskForm = document.getElementById('taskForm');
+        if (!taskForm) return;
+        
+        if (!taskForm.checkValidity()) {
+            console.log('表单验证失败');
+            taskForm.reportValidity();
+            return;
+        }
+        
+        // 收集表单数据
+        const formData = new FormData(taskForm);
+        const taskData = Object.fromEntries(formData.entries());
+        
+        console.log('提交任务数据:', taskData);
+        
+        // 发送保存请求
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(taskData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.message || '保存任务失败');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('保存任务成功:', data);
+            
+            // 关闭模态框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('taskModal'));
+            if (modal) modal.hide();
+            
+            // 刷新页面或更新任务列表
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        })
+        .catch(error => {
+            console.error('保存任务失败:', error);
+            alert(`保存任务失败: ${error.message}`);
+        });
+    }
+</script>
+
+<script>
+// 使用JavaScript生成任务行并添加权限控制
+function renderTaskRow(task) {
+    // 创建一个变量接收模板变量值
+    const userCanEdit = {% if not user_is_regular(current_user) %}true{% else %}false{% endif %};
+    
+    return `
+        <tr data-task-id="${task.id}">
+            <td>${task.title}</td>
+            <td>${task.status_display || task.status}</td>
+            <td>
+                <span class="badge ${task.priority === 'high' ? 'bg-danger' : task.priority === 'medium' ? 'bg-warning' : 'bg-info'}">
+                    ${task.priority}
+                </span>
+            </td>
+            <td>${task.assignee_name || '未分配'}</td>
+            <td>${task.due_date || '-'}</td>
+            <td>
+                <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: ${task.progress || 0}%"></div>
+                </div>
+                <small class="text-muted">${task.progress || 0}%</small>
+            </td>
+            <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                    <a href="/tasks/${task.id}/view?bypass_jwt=true" class="btn btn-outline-primary">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    ${userCanEdit ? `
+                    <button type="button" class="btn btn-outline-secondary edit-task-btn" data-task-id="${task.id}">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger delete-task-btn" data-task-id="${task.id}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    ` : ''}
+                </div>
+            </td>
+        </tr>
+    `;
+}
+</script>
+{% endblock %} 

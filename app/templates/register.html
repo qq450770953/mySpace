@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- 预加载背景图片 -->
+    <link rel="preload" href="{{ url_for('static', filename='images/background.png') }}" as="image">
+    <link rel="preload" href="{{ url_for('static', filename='uploads/background.png') }}" as="image">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background-image: url("/static/images/background.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        #bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url("/static/images/background.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+<!-- 背景图容器 -->
+<div id="bg-container"></div>
+
+<!-- 背景图片元素，直接使用HTML -->
+<img id="bg-image" src="{{ url_for('static', filename='images/background.png') }}" 
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0;"
+     alt="背景图片">
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Register</h3>
+                </div>
+                <div class="card-body">
+                    <form id="registerForm" method="POST" action="/register">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/login">Already have an account? Login here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 加载背景辅助脚本 -->
+<script src="{{ url_for('static', filename='js/background-helper.js') }}"></script>
+
+<script>
+    // 注册表单提交
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        const errorAlert = document.getElementById('errorAlert');
+        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+        
+        // 验证密码匹配
+        if (password !== confirmPassword) {
+            errorAlert.textContent = 'Passwords do not match';
+            errorAlert.style.display = 'block';
+            return;
+        }
+        
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ 
+                    username, 
+                    email, 
+                    password,
+                    confirm_password: confirmPassword,
+                    name: username,
+                    csrf_token: csrfToken
+                })
+            });
+            
+            // 检查响应类型
+            const contentType = response.headers.get('content-type');
+            
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // 注册成功，显示成功消息并重定向到登录页
+                    alert('Registration successful! Please login with your credentials.');
+                    window.location.href = '/login';
+                } else {
+                    // 显示错误信息
+                    errorAlert.textContent = data.error || 'Registration failed';
+                    errorAlert.style.display = 'block';
+                }
+            } else {
+                // 非JSON响应，可能是服务器端渲染的错误页面
+                if (response.ok) {
+                    // 如果成功，重定向到登录页
+                    window.location.href = '/login';
+                } else {
+                    errorAlert.textContent = 'Registration failed, please try again';
+                    errorAlert.style.display = 'block';
+                }
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            errorAlert.textContent = 'An error occurred during registration';
+            errorAlert.style.display = 'block';
+        }
+    });
+</script>
+</body>
+</html> 

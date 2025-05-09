@@ -1,0 +1,671 @@
+{% extends "base.html" %}
+
+{% block title %}项目报表{% endblock %}
+
+{% block header %}项目报表{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>项目报表</h2>
+                <div>
+                    <button class="btn btn-primary" onclick="generateReport('pdf')">
+                        <i class="bi bi-file-pdf"></i> 生成PDF报表
+                    </button>
+                    <button class="btn btn-success" onclick="generateReport('excel')">
+                        <i class="bi bi-file-excel"></i> 生成Excel报表
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报表筛选条件 -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="report-filter-form" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">项目选择</label>
+                            <select class="form-select" name="project_id" required>
+                                <option value="">请选择项目</option>
+                                {% for project in projects %}
+                                <option value="{{ project.id }}">{{ project.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">开始日期</label>
+                            <input type="date" class="form-control" name="start_date" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">结束日期</label>
+                            <input type="date" class="form-control" name="end_date" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">责任人</label>
+                            <select class="form-select" name="assignee_id">
+                                <option value="">全部</option>
+                                {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">报表类型</label>
+                            <select class="form-select" name="report_type" required>
+                                <option value="summary">项目概览</option>
+                                <option value="progress">进度详情</option>
+                                <option value="resource">资源使用</option>
+                                <option value="performance">绩效分析</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="button" class="btn btn-primary" onclick="updateReportPreview()">
+                                <i class="bi bi-search"></i> 查询
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报表预览 -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">报表预览</h5>
+                </div>
+                <div class="card-body">
+                    <div id="report-preview">
+                        <!-- 报表内容将通过AJAX动态加载 -->
+                        <div class="text-center text-muted">
+                            <i class="bi bi-file-earmark-text fa-3x mb-3"></i>
+                            <p>请选择项目和筛选条件，然后点击查询按钮生成报表预览</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 报表生成进度模态框 -->
+<div class="modal fade" id="reportProgressModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">正在生成报表</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" style="width: 0%"></div>
+                </div>
+                <p class="text-center mt-3" id="progress-text">准备数据中...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('report-filter-form');
+    
+    // 设置默认日期：今天的日期
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    
+    // 设置默认的开始日期为30天前
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const formattedThirtyDaysAgo = thirtyDaysAgo.toISOString().split('T')[0];
+    
+    document.querySelector('input[name="start_date"]').value = formattedThirtyDaysAgo;
+    document.querySelector('input[name="end_date"]').value = formattedToday;
+    
+    // 检查项目下拉菜单中是否有项目数据
+    const projectSelect = document.querySelector('select[name="project_id"]');
+    if (projectSelect) {
+        console.log('项目选择菜单已找到');
+        const projectOptions = projectSelect.querySelectorAll('option');
+        console.log(`项目选项数量: ${projectOptions.length - 1}`); // 减去"请选择项目"选项
+        
+        // 如果除了"请选择项目"外没有其他选项，则从API加载项目列表
+        if (projectOptions.length <= 1) {
+            console.log('没有项目选项，尝试通过API加载项目');
+            loadProjectsFromAPI();
+        }
+        
+        // 项目选择变更时，自动加载该项目的起止日期
+        projectSelect.addEventListener('change', function() {
+            const selectedProjectId = this.value;
+            if (selectedProjectId) {
+                console.log(`已选择项目ID: ${selectedProjectId}`);
+                // 从项目列表中查找选中的项目
+                {% for project in projects %}
+                if ("{{ project.id }}" === selectedProjectId) {
+                    const startDate = "{{ project.start_date }}";
+                    const endDate = "{{ project.end_date }}" || formattedToday;
+                    console.log(`项目起止日期: ${startDate} - ${endDate}`);
+                    
+                    if (startDate) {
+                        document.querySelector('input[name="start_date"]').value = startDate;
+                    }
+                    if (endDate) {
+                        document.querySelector('input[name="end_date"]').value = endDate;
+                    }
+                }
+                {% endfor %}
+            }
+        });
+    } else {
+        console.error('未找到项目选择菜单');
+    }
+});
+
+// 从API加载项目列表
+async function loadProjectsFromAPI() {
+    try {
+        const response = await fetchWithCsrf('/api/auth/reports/projects?bypass_jwt=true');
+        if (!response.ok) {
+            throw new Error('加载项目列表失败');
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            const projectSelect = document.querySelector('select[name="project_id"]');
+            const defaultOption = projectSelect.querySelector('option');
+            
+            // 清空现有选项（保留默认选项）
+            projectSelect.innerHTML = '';
+            projectSelect.appendChild(defaultOption);
+            
+            // 添加项目选项
+            result.data.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name || `项目 #${project.id}`;
+                
+                // 存储起止日期为自定义属性
+                if (project.start_date) {
+                    option.setAttribute('data-start-date', project.start_date);
+                }
+                if (project.end_date) {
+                    option.setAttribute('data-end-date', project.end_date);
+                }
+                
+                projectSelect.appendChild(option);
+            });
+            
+            console.log(`通过API加载了 ${result.data.length} 个项目`);
+            
+            // 更新项目选择事件处理
+            projectSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption) {
+                    const startDate = selectedOption.getAttribute('data-start-date');
+                    const endDate = selectedOption.getAttribute('data-end-date');
+                    
+                    if (startDate) {
+                        document.querySelector('input[name="start_date"]').value = startDate;
+                    }
+                    if (endDate) {
+                        document.querySelector('input[name="end_date"]').value = endDate;
+                    }
+                }
+            });
+        } else {
+            console.error('API返回错误:', result.error || '未知错误');
+        }
+    } catch (error) {
+        console.error('加载项目列表失败:', error);
+    }
+}
+
+// 更新报表预览
+async function updateReportPreview() {
+    const form = document.getElementById('report-filter-form');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // 显示加载中状态
+    document.getElementById('report-preview').innerHTML = `
+        <div class="text-center p-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-2">正在加载报表数据...</p>
+        </div>
+    `;
+    
+    try {
+        // 添加CSRF令牌和bypass_jwt参数
+        const response = await fetchWithCsrf(`/api/auth/reports/preview?bypass_jwt=true`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            
+            // 创建报表内容
+            let previewHtml = '';
+            
+            // 处理基础信息
+            const projectName = document.querySelector(`select[name="project_id"] option[value="${data.project_id}"]`).textContent;
+            previewHtml += `
+                <div class="mb-4">
+                    <h4 class="mb-3">${projectName} - ${getReportTypeName(data.report_type)}</h4>
+                    <p>报表期间: ${data.start_date} 至 ${data.end_date}</p>
+                </div>
+            `;
+            
+            // 如果还没有实际的API数据，显示模拟的报表内容
+            if (!result.data || Object.keys(result.data).length === 0) {
+                previewHtml += getReportTemplate(data.report_type, projectName);
+            } else {
+                // 使用实际的API返回数据渲染报表
+                previewHtml += renderReportData(result.data, data.report_type);
+            }
+            
+            document.getElementById('report-preview').innerHTML = previewHtml;
+        } else {
+            throw new Error('预览生成失败');
+        }
+    } catch (error) {
+        console.error('Error generating preview:', error);
+        document.getElementById('report-preview').innerHTML = `
+            <div class="alert alert-danger">
+                报表预览生成失败: ${error.message}
+            </div>
+        `;
+    }
+}
+
+// 获取报表类型名称
+function getReportTypeName(type) {
+    const types = {
+        'summary': '项目概览',
+        'progress': '进度详情',
+        'resource': '资源使用',
+        'performance': '绩效分析'
+    };
+    return types[type] || type;
+}
+
+// 获取报表模板 (模拟数据)
+function getReportTemplate(type, projectName) {
+    switch (type) {
+        case 'summary':
+            return `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">项目完成度</div>
+                            <div class="card-body">
+                                <div class="progress" style="height: 30px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">任务状态分布</div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>已完成</span>
+                                    <span>10</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>进行中</span>
+                                    <span>15</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>待处理</span>
+                                    <span>5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">风险状态</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="alert alert-danger">
+                                    <h5>高风险</h5>
+                                    <h2>2</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-warning">
+                                    <h5>中风险</h5>
+                                    <h2>3</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-success">
+                                    <h5>低风险</h5>
+                                    <h2>1</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        case 'progress':
+            return `
+                <div class="card mb-4">
+                    <div class="card-header">任务完成趋势</div>
+                    <div class="card-body">
+                        <div style="height: 200px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <p class="text-muted">此处将显示任务完成趋势图表</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">任务列表</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>任务名称</th>
+                                        <th>负责人</th>
+                                        <th>开始日期</th>
+                                        <th>截止日期</th>
+                                        <th>状态</th>
+                                        <th>进度</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>需求分析</td>
+                                        <td>张三</td>
+                                        <td>2023-01-01</td>
+                                        <td>2023-01-15</td>
+                                        <td><span class="badge bg-success">已完成</span></td>
+                                        <td>100%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>系统设计</td>
+                                        <td>李四</td>
+                                        <td>2023-01-16</td>
+                                        <td>2023-02-15</td>
+                                        <td><span class="badge bg-primary">进行中</span></td>
+                                        <td>75%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>前端开发</td>
+                                        <td>王五</td>
+                                        <td>2023-02-01</td>
+                                        <td>2023-03-15</td>
+                                        <td><span class="badge bg-primary">进行中</span></td>
+                                        <td>60%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        case 'resource':
+            return `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">人力资源分配</div>
+                            <div class="card-body">
+                                <div style="height: 200px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                    <p class="text-muted">此处将显示人力资源分配饼图</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">部门参与度</div>
+                            <div class="card-body">
+                                <div style="height: 200px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                    <p class="text-muted">此处将显示部门参与度条形图</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">资源使用情况</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>资源名称</th>
+                                        <th>类型</th>
+                                        <th>分配时间</th>
+                                        <th>使用率</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>开发团队A</td>
+                                        <td>人力资源</td>
+                                        <td>2023-01-01 ~ 2023-03-31</td>
+                                        <td>85%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>测试服务器</td>
+                                        <td>设备资源</td>
+                                        <td>2023-01-15 ~ 2023-04-15</td>
+                                        <td>60%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>设计工具许可证</td>
+                                        <td>软件资源</td>
+                                        <td>2023-01-01 ~ 2023-12-31</td>
+                                        <td>40%</td>
+                                        <td><span class="badge bg-warning">过剩</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        case 'performance':
+            return `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">团队成员效率</div>
+                            <div class="card-body">
+                                <div style="height: 200px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                    <p class="text-muted">此处将显示团队成员效率雷达图</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">任务完成及时率</div>
+                            <div class="card-body">
+                                <div style="height: 200px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                    <p class="text-muted">此处将显示任务完成及时率图表</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">团队成员贡献</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>成员</th>
+                                        <th>已完成任务</th>
+                                        <th>进行中任务</th>
+                                        <th>平均完成时间</th>
+                                        <th>及时率</th>
+                                        <th>质量评分</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>张三</td>
+                                        <td>12</td>
+                                        <td>3</td>
+                                        <td>3.5天</td>
+                                        <td>95%</td>
+                                        <td>4.8/5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>李四</td>
+                                        <td>8</td>
+                                        <td>4</td>
+                                        <td>4.2天</td>
+                                        <td>85%</td>
+                                        <td>4.5/5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>王五</td>
+                                        <td>10</td>
+                                        <td>2</td>
+                                        <td>3.8天</td>
+                                        <td>90%</td>
+                                        <td>4.7/5</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        default:
+            return `<div class="alert alert-info">选择报表类型以查看详细信息</div>`;
+    }
+}
+
+// 渲染实际的报表数据 (当API实现后使用)
+function renderReportData(data, type) {
+    // 此函数将在API实现后使用实际数据渲染报表
+    // 目前返回模板数据
+    return getReportTemplate(type);
+}
+
+// 生成报表
+async function generateReport(format) {
+    const form = document.getElementById('report-filter-form');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data.format = format;
+    
+    // 显示进度模态框
+    const progressModal = new bootstrap.Modal(document.getElementById('reportProgressModal'));
+    progressModal.show();
+    
+    // 启动进度条动画
+    startProgress();
+    
+    try {
+        // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+        const response = await fetchWithCsrf(`/api/auth/reports/generate?bypass_jwt=true`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        // 停止进度条
+        stopProgress();
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // 获取项目名称用于文件名
+            const projectName = document.querySelector(`select[name="project_id"] option[value="${data.project_id}"]`).textContent;
+            a.download = `${projectName}_${getReportTypeName(data.report_type)}_${new Date().toISOString().split('T')[0]}.${format}`;
+            
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+            progressModal.hide();
+        } else {
+            throw new Error('报表生成失败');
+        }
+    } catch (error) {
+        console.error('Error generating report:', error);
+        alert('报表生成失败: ' + error.message);
+        stopProgress();
+        progressModal.hide();
+    }
+}
+
+// 模拟报表生成进度
+let progressInterval;
+function startProgress() {
+    const progressBar = document.querySelector('#reportProgressModal .progress-bar');
+    const progressText = document.getElementById('progress-text');
+    let progress = 0;
+    
+    progressInterval = setInterval(() => {
+        progress += 5;
+        if (progress > 100) {
+            clearInterval(progressInterval);
+            return;
+        }
+        
+        progressBar.style.width = `${progress}%`;
+        if (progress < 30) {
+            progressText.textContent = '准备数据中...';
+        } else if (progress < 60) {
+            progressText.textContent = '生成图表中...';
+        } else if (progress < 90) {
+            progressText.textContent = '格式化文档中...';
+        } else {
+            progressText.textContent = '即将完成...';
+        }
+    }, 200);
+}
+
+// 停止进度模拟
+function stopProgress() {
+    clearInterval(progressInterval);
+}
+</script>
+{% endblock %} 

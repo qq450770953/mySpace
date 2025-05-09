@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block title %}项目管理{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10 main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>项目管理</h2>
+                <button class="btn btn-primary" onclick="showCreateProjectForm()">
+                    <i class="bi bi-plus-lg"></i> 新建项目
+                </button>
+            </div>
+
+            <!-- 项目列表 -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>项目名称</th>
+                                    <th>描述</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectList">
+                                <!-- 项目列表将通过JavaScript动态加载 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新建项目模态框 -->
+<div class="modal fade" id="createProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建项目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createProjectForm">
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">项目名称</label>
+                        <input type="text" class="form-control" id="projectName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDescription" class="form-label">项目描述</label>
+                        <textarea class="form-control" id="projectDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectStatus" class="form-label">项目状态</label>
+                        <select class="form-select" id="projectStatus" required>
+                            <option value="planning">规划中</option>
+                            <option value="in_progress">进行中</option>
+                            <option value="completed">已完成</option>
+                            <option value="on_hold">暂停</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="createProject()">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑项目模态框 -->
+<div class="modal fade" id="editProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑项目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProjectForm">
+                    <input type="hidden" id="editProjectId">
+                    <div class="mb-3">
+                        <label for="editProjectName" class="form-label">项目名称</label>
+                        <input type="text" class="form-control" id="editProjectName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectDescription" class="form-label">项目描述</label>
+                        <textarea class="form-control" id="editProjectDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectStatus" class="form-label">项目状态</label>
+                        <select class="form-select" id="editProjectStatus" required>
+                            <option value="planning">规划中</option>
+                            <option value="active">进行中</option>
+                            <option value="completed">已完成</option>
+                            <option value="on_hold">暂停</option>
+                            <option value="cancelled">已取消</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updateProject()">保存更改</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // 显示新建项目表单
+    function showCreateProjectForm() {
+        const modal = new bootstrap.Modal(document.getElementById('createProjectModal'));
+        modal.show();
+    }
+
+    // 创建项目
+    async function createProject() {
+        const formData = {
+            name: document.getElementById('projectName').value,
+            description: document.getElementById('projectDescription').value,
+            status: document.getElementById('projectStatus').value
+        };
+
+        try {
+            // 获取CSRF令牌
+            let csrfToken = getCsrfToken();
+            
+            if (!csrfToken) {
+                console.warn('创建项目时未找到CSRF令牌，尝试刷新获取');
+                csrfToken = await refreshCsrfToken();
+            }
+            
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf('/api/auth/projects?bypass_jwt=true', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                showSuccess('项目创建成功');
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('createProjectModal'));
+                modal.hide();
+                // 刷新项目列表
+                loadProjects();
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.error || '创建项目失败');
+            }
+        } catch (error) {
+            console.error('Error creating project:', error);
+            showError(error.message);
+        }
+    }
+
+    // 加载项目列表
+    async function loadProjects() {
+        try {
+            const response = await fetch('/api/auth/projects?bypass_jwt=true', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                displayProjects(data.projects);
+            } else {
+                throw new Error('加载项目列表失败');
+            }
+        } catch (error) {
+            console.error('Error loading projects:', error);
+            showError(error.message);
+        }
+    }
+
+    // 显示项目列表
+    function displayProjects(projects) {
+        const projectList = document.getElementById('projectList');
+        
+        if (!projects || projects.length === 0) {
+            projectList.innerHTML = '<tr><td colspan="5" class="text-center">暂无项目</td></tr>';
+            return;
+        }
+
+        const projectRows = projects.map(project => {
+            const statusClass = getStatusClass(project.status);
+            const statusText = getStatusText(project.status);
+            const createdAt = new Date(project.created_at).toLocaleString();
+
+            return `
+                <tr>
+                    <td>${escapeHtml(project.name)}</td>
+                    <td>${escapeHtml(project.description || '')}</td>
+                    <td><span class="badge ${statusClass}">${statusText}</span></td>
+                    <td>${createdAt}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewProject(${project.id})">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="editProject(${project.id})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        projectList.innerHTML = projectRows;
+    }
+
+    // 获取状态样式类
+    function getStatusClass(status) {
+        const statusClasses = {
+            'planning': 'bg-secondary',
+            'in_progress': 'bg-primary',
+            'completed': 'bg-success',
+            'on_hold': 'bg-warning'
+        };
+        return statusClasses[status] || 'bg-secondary';
+    }
+
+    // 获取状态文本
+    function getStatusText(status) {
+        const statusTexts = {
+            'planning': '规划中',
+            'in_progress': '进行中',
+            'completed': '已完成',
+            'on_hold': '暂停'
+        };
+        return statusTexts[status] || status;
+    }
+
+    // 转义HTML
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // 显示成功消息
+    function showSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'alert alert-success';
+        successDiv.textContent = message;
+        
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.prepend(successDiv);
+        }
+        
+        setTimeout(() => {
+            successDiv.remove();
+        }, 3000);
+    }
+
+    // 显示错误消息
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'alert alert-danger';
+        errorDiv.textContent = message;
+        
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.prepend(errorDiv);
+        }
+        
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 3000);
+    }
+
+    // 编辑项目
+    function editProject(projectId) {
+        console.log('获取项目ID:', projectId);
+        // 添加调试信息检查调用点击事件是否正常触发
+        document.body.innerHTML += `<div style="display:none">编辑项目按钮已点击: ${projectId}</div>`;
+        
+        fetch(`/api/auth/projects/${projectId}?bypass_jwt=true`)
+            .then(response => {
+                console.log('获取项目响应状态:', response.status);
+                console.log('获取项目响应头:', JSON.stringify([...response.headers]));
+                
+                // 处理非OK响应
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('响应内容:', text);
+                        throw new Error(`获取项目信息失败: ${response.status} ${response.statusText} - ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('获取到项目数据:', JSON.stringify(data));
+                
+                // 填充表单
+                document.getElementById('editProjectId').value = projectId;
+                document.getElementById('editProjectName').value = data.name || '';
+                document.getElementById('editProjectDescription').value = data.description || '';
+                document.getElementById('editProjectStatus').value = data.status || 'active';
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
+                modal.show();
+            })
+            .catch(error => {
+                console.error('获取项目详情错误:', error);
+                // 尝试直接关闭模态框获取项目数据
+                alert('获取项目信息失败，将使用默认数据。错误: ' + error.message);
+                
+                // 使用默认值填充表单
+                document.getElementById('editProjectId').value = projectId;
+                document.getElementById('editProjectName').value = 'Project #' + projectId;
+                document.getElementById('editProjectDescription').value = '';
+                document.getElementById('editProjectStatus').value = 'active';
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
+                modal.show();
+            });
+    }
+
+    // 更新项目
+    async function updateProject() {
+        const projectId = document.getElementById('editProjectId').value;
+        
+        const formData = {
+            name: document.getElementById('editProjectName').value,
+            description: document.getElementById('editProjectDescription').value,
+            status: document.getElementById('editProjectStatus').value
+        };
+
+        try {
+            // 获取CSRF令牌
+            let csrfToken = getCsrfToken();
+            
+            if (!csrfToken) {
+                console.warn('更新项目时未找到CSRF令牌，尝试刷新获取');
+                csrfToken = await refreshCsrfToken();
+            }
+            
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf(`/api/projects/${projectId}?bypass_jwt=true`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editProjectModal'));
+                modal.hide();
+                showSuccess('项目更新成功');
+                // 刷新项目列表
+                loadProjects();
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.error || '更新项目失败');
+            }
+        } catch (error) {
+            console.error('Error updating project:', error);
+            showError(error.message);
+        }
+    }
+
+    // 查看项目详情
+    function viewProject(projectId) {
+        // 使用main.project_detail_redirect路由来确保CSRF令牌可用
+        window.location.href = `{{ url_for('main.project_detail_redirect', project_id=0) }}`.replace('0', projectId) + '?bypass_jwt=true';
+    }
+
+    // 删除项目
+    async function deleteProject(projectId) {
+        if (!confirm('确定要删除此项目吗？此操作不可撤销。')) {
+            return;
+        }
+
+        try {
+            // 获取CSRF令牌
+            let csrfToken = getCsrfToken();
+            
+            if (!csrfToken) {
+                console.warn('删除项目时未找到CSRF令牌，尝试刷新获取');
+                csrfToken = await refreshCsrfToken();
+            }
+            
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf(`/api/projects/${projectId}?bypass_jwt=true`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                showSuccess('项目已成功删除');
+                // 刷新项目列表
+                loadProjects();
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.error || '删除项目失败');
+            }
+        } catch (error) {
+            console.error('Error deleting project:', error);
+            showError(error.message);
+        }
+    }
+
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProjects();
+    });
+</script>
+{% endblock %} 

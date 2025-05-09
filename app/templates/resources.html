@@ -1,0 +1,638 @@
+{% extends "base.html" %}
+
+{% block title %}资源管理{% endblock %}
+
+{% block header %}资源管理{% endblock %}
+
+{% block header_buttons %}
+<div class="btn-group me-2">
+    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newResourceModal">
+        <i class="bi bi-plus-circle"></i> 新建资源
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportResources()">
+        <i class="bi bi-download"></i> 导出
+    </button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">资源列表</h5>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newResourceModal">
+                        <i class="bi bi-plus-circle"></i> 新建资源
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="resourceList" class="resource-list">
+                        <!-- 资源列表将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 资源分配视图 -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">资源分配</h5>
+    </div>
+    <div class="card-body">
+        <div class="resource-allocation">
+            <div class="timeline">
+                <div class="timeline-header">
+                    <div class="resource-name">资源</div>
+                    <div class="timeline-dates">
+                        {% for date in timeline_dates %}
+                        <div class="timeline-date">{{ date }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="timeline-body">
+                    {% for resource in resources %}
+                    <div class="timeline-row">
+                        <div class="resource-name">{{ resource.name }}</div>
+                        <div class="timeline-cells">
+                            {% for date in timeline_dates %}
+                            <div class="timeline-cell {% if date >= resource.start_date and date <= resource.end_date %}allocated{% endif %}"
+                                 data-resource-id="{{ resource.id }}"
+                                 data-date="{{ date }}">
+                                {% if date >= resource.start_date and date <= resource.end_date %}
+                                <div class="allocation-info">
+                                    <span class="project-name">{{ resource.project_name }}</span>
+                                    <span class="assignee">{{ resource.assignee }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新建资源模态框 -->
+<div class="modal fade" id="newResourceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建资源</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="resourceForm">
+                    <div class="mb-3">
+                        <label for="resourceName" class="form-label">资源名称</label>
+                        <input type="text" class="form-control" id="resourceName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="resourceType" class="form-label">资源类型</label>
+                        <select class="form-select" id="resourceType">
+                            <option value="1">人力资源</option>
+                            <option value="2">设备资源</option>
+                            <option value="3">材料资源</option>
+                            <option value="4">其他资源</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="capacity" class="form-label">容量</label>
+                        <input type="number" class="form-control" id="capacity" value="1" min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="unit" class="form-label">单位</label>
+                        <input type="text" class="form-control" id="unit" value="个">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cost" class="form-label">单位成本</label>
+                        <input type="number" class="form-control" id="cost" value="0" min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="resourceDescription" class="form-label">资源描述</label>
+                        <textarea class="form-control" id="resourceDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveResource()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .resource-allocation {
+        overflow-x: auto;
+    }
+    
+    .timeline {
+        min-width: 800px;
+    }
+    
+    .timeline-header {
+        display: flex;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .resource-name {
+        width: 150px;
+        padding: 10px;
+        font-weight: bold;
+    }
+    
+    .timeline-dates {
+        display: flex;
+        flex: 1;
+    }
+    
+    .timeline-date {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        border-left: 1px solid #dee2e6;
+    }
+    
+    .timeline-body {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .timeline-row {
+        display: flex;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .timeline-cells {
+        display: flex;
+        flex: 1;
+    }
+    
+    .timeline-cell {
+        flex: 1;
+        min-height: 50px;
+        border-left: 1px solid #dee2e6;
+        position: relative;
+    }
+    
+    .timeline-cell.allocated {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    .allocation-info {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 0.8rem;
+    }
+    
+    .project-name {
+        display: block;
+        font-weight: bold;
+    }
+    
+    .assignee {
+        display: block;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 初始化变量
+    let editingResourceId = null; // 当前正在编辑的资源ID，为null表示新建资源
+    
+    // 初始化模态框功能
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取所有"新建资源"按钮
+        const newResourceBtns = document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#newResourceModal"]');
+        newResourceBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 重置编辑状态
+                editingResourceId = null;
+                
+                // 重置表单
+                document.getElementById('resourceForm').reset();
+                
+                // 重置模态框标题
+                const modalTitle = document.querySelector('#newResourceModal .modal-title');
+                if (modalTitle) {
+                    modalTitle.textContent = '新建资源';
+                }
+                
+                // 直接显示模态框
+                const modal = document.getElementById('newResourceModal');
+                if (modal) {
+                    modal.style.display = 'block';
+                    modal.classList.add('show');
+                    document.body.classList.add('modal-open');
+                    
+                    // 添加背景遮罩
+                    let backdrop = document.querySelector('.modal-backdrop');
+                    if (!backdrop) {
+                        backdrop = document.createElement('div');
+                        backdrop.className = 'modal-backdrop fade show';
+                        document.body.appendChild(backdrop);
+                    }
+                }
+            });
+        });
+        
+        // 获取模态框中的关闭按钮
+        const closeBtns = document.querySelectorAll('#newResourceModal .btn-close, #newResourceModal [data-bs-dismiss="modal"]');
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = document.getElementById('newResourceModal');
+                if (modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        
+                        // 移除背景遮罩
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+                        
+                        // 重置编辑状态
+                        editingResourceId = null;
+                    }, 300);
+                }
+            });
+        });
+        
+        initializeResourceTimeline();
+        loadResources(); // 加载资源数据
+    });
+    
+    // 初始化资源时间线
+    function initializeResourceTimeline() {
+        document.querySelectorAll('.timeline-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const resourceId = this.getAttribute('data-resource-id');
+                const date = this.getAttribute('data-date');
+                if (resourceId && date) {
+                    viewResourceAllocation(resourceId, date);
+                }
+            });
+        });
+    }
+    
+    // 收集表单数据
+    function gatherFormData() {
+        const form = document.getElementById('resourceForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return null;
+        }
+        
+        return {
+            name: document.getElementById('resourceName').value,
+            type_id: document.getElementById('resourceType').value || 1,
+            capacity: document.getElementById('capacity').value || 1,
+            unit: document.getElementById('unit').value || '个',
+            description: document.getElementById('resourceDescription').value || '',
+            cost_per_unit: document.getElementById('cost').value || 0
+        };
+    }
+    
+    // 保存资源信息
+    async function saveResource() {
+        try {
+            const formData = gatherFormData();
+            
+            console.log('提交资源数据:', formData);
+            
+            // 使用正确的API路径
+            let url = '/api/resources?bypass_jwt=true';
+            
+            console.log('提交资源到URL:', url);
+            
+            // 检查是否为更新，如果是则使用PUT请求
+            let method = 'POST';
+            
+            if (editingResourceId) {
+                url = `/api/resources/${editingResourceId}?bypass_jwt=true`;
+                method = 'PUT';
+            }
+            
+            // 获取CSRF令牌
+            let csrfToken = getCsrfToken();
+            
+            if (!csrfToken) {
+                console.warn('创建资源时未找到CSRF令牌，尝试刷新获取');
+                csrfToken = await refreshCsrfToken();
+            }
+            
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            // 检查响应类型
+            const contentType = response.headers.get('content-type');
+            console.log('Content type:', contentType);
+            
+            if (!response.ok) {
+                // 获取原始响应文本
+                const errorText = await response.text();
+                console.error('错误响应原文:', errorText.substring(0, 200));
+                
+                if (contentType && contentType.includes('application/json')) {
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(errorText);
+                        throw new Error(errorData.error || '创建资源失败');
+                    } catch (e) {
+                        throw new Error('创建资源失败: ' + errorText.substring(0, 100) + '...');
+                    }
+                } else {
+                    throw new Error('创建资源失败: 服务器返回了错误的数据类型');
+                }
+            }
+            
+            // 获取原始响应文本
+            const responseText = await response.text();
+            console.log('响应原文:', responseText.substring(0, 200));
+            
+            let result;
+            if (contentType && contentType.includes('application/json')) {
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('JSON解析失败:', e);
+                    throw new Error('服务器返回的数据格式不正确');
+                }
+            } else {
+                console.error('服务器没有返回JSON数据，而是返回了:', contentType);
+                throw new Error('服务器返回了错误的数据类型');
+            }
+            
+            console.log('资源创建成功:', result);
+            
+            // 获取操作类型消息（新建或更新）
+            const successMessage = editingResourceId ? '资源更新成功！' : '资源创建成功！';
+            
+            // 关闭模态框
+            const modal = document.getElementById('newResourceModal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    
+                    // 移除背景遮罩
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
+                    
+                    // 重置编辑状态
+                    editingResourceId = null;
+                    
+                    // 刷新资源列表
+                    loadResources();
+                    
+                    // 显示成功消息
+                    showAlert('success', successMessage);
+                }, 300);
+            } else {
+                // 重置编辑状态
+                editingResourceId = null;
+                
+                // 刷新资源列表
+                loadResources();
+                
+                // 显示成功消息
+                showAlert('success', successMessage);
+            }
+            
+        } catch (error) {
+            console.error('创建资源错误:', error);
+            showAlert('danger', error.message || '创建资源失败，请重试');
+        }
+    }
+    
+    // 查看资源详情
+    function viewResource(resourceId) {
+        alert('查看资源 ID: ' + resourceId);
+        // 实现查看资源详情逻辑
+    }
+    
+    // 查看资源分配
+    function viewResourceAllocation(resourceId, date) {
+        alert(`查看资源 ID: ${resourceId} 在 ${date} 的分配情况`);
+        // 实现资源分配查看逻辑
+    }
+    
+    // 编辑资源
+    async function editResource(resourceId) {
+        try {
+            editingResourceId = resourceId;
+            
+            // 获取资源详情
+            const response = await fetch(`/api/resources/${resourceId}?bypass_jwt=true`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`获取资源详情失败: ${response.status}`);
+            }
+            
+            const resource = await response.json();
+            
+            // 填充表单
+            document.getElementById('resourceName').value = resource.name || '';
+            document.getElementById('resourceType').value = resource.type_id || 1;
+            document.getElementById('capacity').value = resource.capacity || 1;
+            document.getElementById('unit').value = resource.unit || '个';
+            document.getElementById('cost').value = resource.cost_per_unit || 0;
+            document.getElementById('resourceDescription').value = resource.description || '';
+            
+            // 更新模态框标题
+            const modalTitle = document.querySelector('#newResourceModal .modal-title');
+            if (modalTitle) {
+                modalTitle.textContent = '编辑资源';
+            }
+            
+            // 显示模态框
+            const modal = document.getElementById('newResourceModal');
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                document.body.classList.add('modal-open');
+                
+                // 添加背景遮罩
+                let backdrop = document.querySelector('.modal-backdrop');
+                if (!backdrop) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'modal-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                }
+            }
+        } catch (error) {
+            console.error('加载资源详情失败:', error);
+            showAlert('danger', error.message || '加载资源详情失败');
+        }
+    }
+    
+    // 删除资源
+    async function deleteResource(resourceId) {
+        if (confirm('确定要删除这个资源吗？')) {
+            try {
+                let url = `/api/resources/${resourceId}?bypass_jwt=true`;
+                
+                // 获取CSRF令牌
+                let csrfToken = getCsrfToken();
+                
+                if (!csrfToken) {
+                    console.warn('删除资源时未找到CSRF令牌，尝试刷新获取');
+                    csrfToken = await refreshCsrfToken();
+                }
+                
+                // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+                const response = await fetchWithCsrf(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    loadResources(); // 重新加载资源列表，而不是刷新整个页面
+                    showAlert('success', '资源删除成功');
+                } else {
+                    const error = await response.json();
+                    showAlert('danger', '删除资源失败: ' + (error.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('删除资源时出错:', error);
+                showAlert('danger', '删除资源时出现异常: ' + error.message);
+            }
+        }
+    }
+    
+    // 导出资源
+    function exportResources() {
+        window.location.href = '/api/resources/export?bypass_jwt=true';
+    }
+    
+    // 加载资源列表
+    async function loadResources() {
+        try {
+            // 使用正确的API路径 - 确保不会有重定向
+            const url = '/api/resources?bypass_jwt=true';
+            console.log('Fetching resources from:', url);
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            });
+            
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`加载资源列表失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('Resources data:', data);
+            
+            // 刷新资源列表
+            const resourceList = document.getElementById('resourceList');
+            if (resourceList) {
+                resourceList.innerHTML = '';
+                
+                if (data.resources && data.resources.length > 0) {
+                    data.resources.forEach(resource => {
+                        const resourceItem = document.createElement('div');
+                        resourceItem.className = 'resource-item';
+                        resourceItem.innerHTML = `
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">${resource.name}</h5>
+                                    <p class="card-text">${resource.description || '无描述'}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="badge bg-primary">${resource.status || '正常'}</span>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-2" onclick="viewResource(${resource.id})">查看</button>
+                                            <button class="btn btn-sm btn-outline-secondary me-2" onclick="editResource(${resource.id})">编辑</button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteResource(${resource.id})">删除</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        resourceList.appendChild(resourceItem);
+                    });
+                } else {
+                    resourceList.innerHTML = '<div class="alert alert-info">暂无资源数据</div>';
+                }
+            }
+            
+        } catch (error) {
+            console.error('加载资源列表错误:', error);
+            showAlert('danger', '加载资源列表失败，请重试');
+        }
+    }
+    
+    // 显示提示消息
+    function showAlert(type, message) {
+        const alertContainer = document.getElementById('alertContainer');
+        if (!alertContainer) {
+            const container = document.createElement('div');
+            container.id = 'alertContainer';
+            container.style.position = 'fixed';
+            container.style.top = '20px';
+            container.style.right = '20px';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+        }
+        
+        const alertElement = document.createElement('div');
+        alertElement.className = `alert alert-${type} alert-dismissible fade show`;
+        alertElement.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        document.getElementById('alertContainer').appendChild(alertElement);
+        
+        // 5秒后自动关闭
+        setTimeout(() => {
+            alertElement.classList.remove('show');
+            setTimeout(() => {
+                alertElement.remove();
+            }, 150);
+        }, 5000);
+    }
+</script>
+{% endblock %} 

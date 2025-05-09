@@ -1,0 +1,1092 @@
+2025-05-09 14:06:45,314 - werkzeug - INFO -  * Restarting with stat
+2025-05-09 14:06:47,281 - app - INFO - File logging handler initialized successfully
+2025-05-09 14:06:47,281 - app - INFO - File logging handler initialized successfully
+2025-05-09 14:06:47,308 - app - INFO - Console logging handler initialized successfully
+2025-05-09 14:06:47,308 - app - INFO - Console logging handler initialized successfully
+2025-05-09 14:06:47,308 - app - INFO - Console logging handler initialized successfully
+2025-05-09 14:06:47,309 - app - INFO - Application logging configuration completed
+2025-05-09 14:06:47,309 - app - INFO - Application logging configuration completed
+2025-05-09 14:06:47,309 - app - INFO - Application logging configuration completed
+2025-05-09 14:06:47,311 - app - INFO - Development configuration initialized
+2025-05-09 14:06:47,311 - app - INFO - Development configuration initialized
+2025-05-09 14:06:47,313 - app - INFO - Development configuration initialized
+2025-05-09 14:06:47,463 - app - INFO - Logging setup completed successfully
+2025-05-09 14:06:47,463 - app - INFO - Logging setup completed successfully
+2025-05-09 14:06:47,464 - app - INFO - Logging setup completed successfully
+2025-05-09 14:06:48,930 - app - INFO - ÒÑ×¢²áµÄÂ·ÓÉ:
+2025-05-09 14:06:48,931 - app - INFO - ÒÑ×¢²áµÄÂ·ÓÉ:
+2025-05-09 14:06:48,931 - app - INFO - ÒÑ×¢²áµÄÂ·ÓÉ:
+2025-05-09 14:06:48,934 - app - INFO - Â·ÓÉ: /static/<path:filename> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: static
+2025-05-09 14:06:48,934 - app - INFO - Â·ÓÉ: /static/<path:filename> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: static
+2025-05-09 14:06:48,934 - app - INFO - Â·ÓÉ: /static/<path:filename> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: static
+2025-05-09 14:06:48,936 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS', 'POST'} - ÖÕ¶Ë: user_api_exempt.user_api_exempt_route
+2025-05-09 14:06:48,936 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'POST', 'DELETE', 'PUT'} - ÖÕ¶Ë: user_api_exempt.user_api_exempt_route
+2025-05-09 14:06:48,936 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'POST', 'GET', 'HEAD'} - ÖÕ¶Ë: user_api_exempt.user_api_exempt_route
+2025-05-09 14:06:48,938 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS', 'POST'} - ÖÕ¶Ë: user_api_exempt.user_api_exempt_route
+2025-05-09 14:06:48,938 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'POST', 'DELETE', 'PUT'} - ÖÕ¶Ë: user_api_exempt.user_api_exempt_route
+2025-05-09 14:06:48,938 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'POST', 'GET', 'HEAD'} - ÖÕ¶Ë: user_api_exempt.user_api_exempt_route
+2025-05-09 14:06:48,940 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies/<int:dependency_id>/gantt - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,940 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies/<int:dependency_id>/gantt - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,940 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies/<int:dependency_id>/gantt - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,942 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/gantt - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,942 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/gantt - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,944 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/gantt - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,945 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,945 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,946 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,948 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,948 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt/data - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,950 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,951 - app - INFO - Â·ÓÉ: /api/tasks/<int:task_id>/no_csrf - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'POST', 'DELETE', 'PUT'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,950 - app - INFO - Â·ÓÉ: /api/tasks/<int:task_id>/no_csrf - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS', 'POST'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,952 - app - INFO - Â·ÓÉ: /api/tasks/<int:task_id>/no_csrf - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'POST', 'GET', 'HEAD'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,953 - app - INFO - Â·ÓÉ: /api/tasks/<int:task_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'POST', 'DELETE', 'PUT'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,953 - app - INFO - Â·ÓÉ: /api/tasks/<int:task_id> - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS', 'POST'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,954 - app - INFO - Â·ÓÉ: /api/tasks/<int:task_id> - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'POST', 'GET', 'HEAD'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,955 - app - INFO - Â·ÓÉ: /tasks/dependencies/gantt - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,955 - app - INFO - Â·ÓÉ: /tasks/dependencies/gantt - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,956 - app - INFO - Â·ÓÉ: /tasks/dependencies/gantt - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,958 - app - INFO - Â·ÓÉ: /api/tasks - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'POST', 'DELETE', 'PUT'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,958 - app - INFO - Â·ÓÉ: /api/tasks - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS', 'POST'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,959 - app - INFO - Â·ÓÉ: /api/tasks - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'POST', 'GET', 'HEAD'} - ÖÕ¶Ë: task_api_exempt.task_api_exempt_route
+2025-05-09 14:06:48,960 - app - INFO - Â·ÓÉ: /login - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.login_page
+2025-05-09 14:06:48,960 - app - INFO - Â·ÓÉ: /login - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.login_page
+2025-05-09 14:06:48,962 - app - INFO - Â·ÓÉ: /login - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.login_page
+2025-05-09 14:06:48,962 - app - INFO - Â·ÓÉ: /login - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.login
+2025-05-09 14:06:48,962 - app - INFO - Â·ÓÉ: /login - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.login
+2025-05-09 14:06:48,965 - app - INFO - Â·ÓÉ: /login - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.login
+2025-05-09 14:06:48,965 - app - INFO - Â·ÓÉ: /register - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.register_page
+2025-05-09 14:06:48,965 - app - INFO - Â·ÓÉ: /register - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.register_page
+2025-05-09 14:06:48,968 - app - INFO - Â·ÓÉ: /register - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.register_page
+2025-05-09 14:06:48,968 - app - INFO - Â·ÓÉ: /register - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.register
+2025-05-09 14:06:48,968 - app - INFO - Â·ÓÉ: /register - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.register
+2025-05-09 14:06:48,970 - app - INFO - Â·ÓÉ: /logout - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'POST'} - ÖÕ¶Ë: auth.logout
+2025-05-09 14:06:48,970 - app - INFO - Â·ÓÉ: /register - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.register
+2025-05-09 14:06:48,970 - app - INFO - Â·ÓÉ: /logout - ·½·¨: {'GET', 'HEAD', 'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.logout
+2025-05-09 14:06:48,972 - app - INFO - Â·ÓÉ: /logout - ·½·¨: {'GET', 'POST', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.logout
+2025-05-09 14:06:48,972 - app - INFO - Â·ÓÉ: /refresh - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.refresh
+2025-05-09 14:06:48,972 - app - INFO - Â·ÓÉ: /refresh - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.refresh
+2025-05-09 14:06:48,975 - app - INFO - Â·ÓÉ: /refresh - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.refresh
+2025-05-09 14:06:48,975 - app - INFO - Â·ÓÉ: /profile - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.profile
+2025-05-09 14:06:48,976 - app - INFO - Â·ÓÉ: /profile - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.profile
+2025-05-09 14:06:48,977 - app - INFO - Â·ÓÉ: /profile - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.profile
+2025-05-09 14:06:48,978 - app - INFO - Â·ÓÉ: /profile - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.update_profile
+2025-05-09 14:06:48,980 - app - INFO - Â·ÓÉ: /profile - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_profile
+2025-05-09 14:06:48,980 - app - INFO - Â·ÓÉ: /profile - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_profile
+2025-05-09 14:06:48,980 - app - INFO - Â·ÓÉ: /users - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_users
+2025-05-09 14:06:48,983 - app - INFO - Â·ÓÉ: /users - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_users
+2025-05-09 14:06:48,983 - app - INFO - Â·ÓÉ: /users - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_users
+2025-05-09 14:06:48,983 - app - INFO - Â·ÓÉ: /users/<int:user_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_user_by_id
+2025-05-09 14:06:48,984 - app - INFO - Â·ÓÉ: /users/<int:user_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_by_id
+2025-05-09 14:06:48,985 - app - INFO - Â·ÓÉ: /users/<int:user_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_by_id
+2025-05-09 14:06:48,985 - app - INFO - Â·ÓÉ: /update_user/<int:user_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.update_user
+2025-05-09 14:06:48,986 - app - INFO - Â·ÓÉ: /update_user/<int:user_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_user
+2025-05-09 14:06:48,986 - app - INFO - Â·ÓÉ: /update_user/<int:user_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_user
+2025-05-09 14:06:48,987 - app - INFO - Â·ÓÉ: /roles - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_roles
+2025-05-09 14:06:48,988 - app - INFO - Â·ÓÉ: /roles - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_roles
+2025-05-09 14:06:48,989 - app - INFO - Â·ÓÉ: /permissions - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_permissions
+2025-05-09 14:06:48,989 - app - INFO - Â·ÓÉ: /roles - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_roles
+2025-05-09 14:06:48,990 - app - INFO - Â·ÓÉ: /permissions - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_permissions
+2025-05-09 14:06:48,991 - app - INFO - Â·ÓÉ: /permissions - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_permission
+2025-05-09 14:06:48,991 - app - INFO - Â·ÓÉ: /permissions - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_permissions
+2025-05-09 14:06:48,994 - app - INFO - Â·ÓÉ: /permissions - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_permission
+Ë: auth.get_permission
+2025-05-09 14:06:48,994 - app - INFO - Â·ÓÉ: /permissions - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.create_permission
+2025-05-09 14:06:48,996 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.update_permission
+2025-05-09 14:06:48,996 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_permission
+2025-05-09 14:06:48,996 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_permission
+2025-05-09 14:06:48,999 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: auth.delete_permission
+2025-05-09 14:06:48,999 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_permission
+2025-05-09 14:06:48,999 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_permission
+2025-05-09 14:06:49,001 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.delete_permission
+2025-05-09 14:06:49,001 - app - INFO - Â·ÓÉ: /roles - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_role
+2025-05-09 14:06:49,002 - app - INFO - Â·ÓÉ: /permissions/<int:permission_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.delete_permission
+2025-05-09 14:06:49,002 - app - INFO - Â·ÓÉ: /roles - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_role
+2025-05-09 14:06:49,003 - app - INFO - Â·ÓÉ: /roles/<int:role_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_role
+2025-05-09 14:06:49,003 - app - INFO - Â·ÓÉ: /roles - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.create_role
+2025-05-09 14:06:49,005 - app - INFO - Â·ÓÉ: /roles/<int:role_id>/permissions - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.update_role_permissions
+2025-05-09 14:06:49,006 - app - INFO - Â·ÓÉ: /roles/<int:role_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_role
+2025-05-09 14:06:49,007 - app - INFO - Â·ÓÉ: /roles/<int:role_id>/permissions - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_role_permissions
+2025-05-09 14:06:49,007 - app - INFO - Â·ÓÉ: /roles/<int:role_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: auth.delete_role
+2025-05-09 14:06:49,008 - app - INFO - Â·ÓÉ: /roles/<int:role_id>/permissions - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_role_permissions
+2025-05-09 14:06:49,009 - app - INFO - Â·ÓÉ: /roles/<int:role_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.delete_role
+2025-05-09 14:06:49,009 - app - INFO - Â·ÓÉ: /dashboard - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.dashboard
+2025-05-09 14:06:49,011 - app - INFO - Â·ÓÉ: /roles/<int:role_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.delete_role
+2025-05-09 14:06:49,013 - app - INFO - Â·ÓÉ: /dashboard - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.dashboard
+ auth.dashboard_redirect
+2025-05-09 14:06:49,014 - app - INFO - Â·ÓÉ: /dashboard - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.dashboard
+2025-05-09 14:06:49,015 - app - INFO - Â·ÓÉ: /create_test_user - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_test_user
+2025-05-09 14:06:49,015 - app - INFO - Â·ÓÉ: /dashboard/redirect - ·½·¨: {'GET', 'HEAD', 'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.dashboard_redirect
+2025-05-09 14:06:49,017 - app - INFO - Â·ÓÉ: /dashboard/redirect - ·½·¨: {'GET', 'POST', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.dashboard_redirect
+2025-05-09 14:06:49,017 - app - INFO - Â·ÓÉ: /check - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.check_auth
+2025-05-09 14:06:49,017 - app - INFO - Â·ÓÉ: /create_test_user - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_test_user
+2025-05-09 14:06:49,018 - app - INFO - Â·ÓÉ: /create_test_user - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.create_test_user
+2025-05-09 14:06:49,019 - app - INFO - Â·ÓÉ: /check - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.check_auth
+2025-05-09 14:06:49,019 - app - INFO - Â·ÓÉ: /create_test_project - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_test_project
+2025-05-09 14:06:49,021 - app - INFO - Â·ÓÉ: /check - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.check_auth
+2025-05-09 14:06:49,022 - app - INFO - Â·ÓÉ: /logout_all - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.logout_all
+2025-05-09 14:06:49,022 - app - INFO - Â·ÓÉ: /create_test_project - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_test_project
+2025-05-09 14:06:49,024 - app - INFO - Â·ÓÉ: /create_test_project - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.create_test_project
+2025-05-09 14:06:49,024 - app - INFO - Â·ÓÉ: /dashboard/data - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.dashboard_data
+2025-05-09 14:06:49,025 - app - INFO - Â·ÓÉ: /logout_all - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.logout_all
+2025-05-09 14:06:49,026 - app - INFO - Â·ÓÉ: /logout_all - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.logout_all
+2025-05-09 14:06:49,027 - app - INFO - Â·ÓÉ: /check_token - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.check_token
+2025-05-09 14:06:49,027 - app - INFO - Â·ÓÉ: /dashboard/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.dashboard_data
+2025-05-09 14:06:49,030 - app - INFO - Â·ÓÉ: /create_user - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_user
+2025-05-09 14:06:49,030 - app - INFO - Â·ÓÉ: /dashboard/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.dashboard_data
+2025-05-09 14:06:49,030 - app - INFO - Â·ÓÉ: /check_token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.check_token
+2025-05-09 14:06:49,032 - app - INFO - Â·ÓÉ: /check_token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.check_token
+2025-05-09 14:06:49,032 - app - INFO - Â·ÓÉ: /user_info - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_user_info
+2025-05-09 14:06:49,034 - app - INFO - Â·ÓÉ: /create_user - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.create_user
+2025-05-09 14:06:49,034 - app - INFO - Â·ÓÉ: /create_user - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.create_user
+2025-05-09 14:06:49,034 - app - INFO - Â·ÓÉ: /user/<int:user_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: auth.delete_user
+2025-05-09 14:06:49,035 - app - INFO - Â·ÓÉ: /user_info - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_info
+2025-05-09 14:06:49,036 - app - INFO - Â·ÓÉ: /user_info - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_info
+2025-05-09 14:06:49,036 - app - INFO - Â·ÓÉ: /users/<int:user_id>/roles - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_user_roles
+2025-05-09 14:06:49,037 - app - INFO - Â·ÓÉ: /user/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.delete_user
+2025-05-09 14:06:49,039 - app - INFO - Â·ÓÉ: /users/<int:user_id>/roles - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.update_user_roles
+2025-05-09 14:06:49,039 - app - INFO - Â·ÓÉ: /user/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.delete_user
+2025-05-09 14:06:49,040 - app - INFO - Â·ÓÉ: /users/<int:user_id>/roles - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_roles
+2025-05-09 14:06:49,041 - app - INFO - Â·ÓÉ: /users/<int:user_id>/notifications - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_user_notifications
+2025-05-09 14:06:49,041 - app - INFO - Â·ÓÉ: /users/<int:user_id>/roles - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_roles
+2025-05-09 14:06:49,042 - app - INFO - Â·ÓÉ: /users/<int:user_id>/roles - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_user_roles
+2025-05-09 14:06:49,043 - app - INFO - Â·ÓÉ: /notifications/<int:notification_id>/read - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.mark_notification_as_read
+2025-05-09 14:06:49,044 - app - INFO - Â·ÓÉ: /users/<int:user_id>/roles - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.update_user_roles
+2025-05-09 14:06:49,044 - app - INFO - Â·ÓÉ: /users/<int:user_id>/notifications - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_notifications
+2025-05-09 14:06:49,045 - app - INFO - Â·ÓÉ: /notifications/read_all - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.mark_all_notifications_as_read
+2025-05-09 14:06:49,046 - app - INFO - Â·ÓÉ: /users/<int:user_id>/notifications - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_notifications
+2025-05-09 14:06:49,047 - app - INFO - Â·ÓÉ: /notifications/<int:notification_id>/read - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.mark_notification_as_read
+2025-05-09 14:06:49,047 - app - INFO - Â·ÓÉ: /change-password - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.change_password
+2025-05-09 14:06:49,049 - app - INFO - Â·ÓÉ: /notifications/<int:notification_id>/read - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.mark_notification_as_read
+2025-05-09 14:06:49,049 - app - INFO - Â·ÓÉ: /notifications/read_all - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.mark_all_notifications_as_read
+2025-05-09 14:06:49,050 - app - INFO - Â·ÓÉ: /reset-password - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.reset_password_page
+2025-05-09 14:06:49,051 - app - INFO - Â·ÓÉ: /notifications/read_all - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.mark_all_notifications_as_read
+2025-05-09 14:06:49,051 - app - INFO - Â·ÓÉ: /change-password - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.change_password
+2025-05-09 14:06:49,052 - app - INFO - Â·ÓÉ: /verify-email/confirm - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.verify_email_confirm_page
+2025-05-09 14:06:49,053 - app - INFO - Â·ÓÉ: /change-password - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.change_password
+2025-05-09 14:06:49,053 - app - INFO - Â·ÓÉ: /reset-password - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.reset_password_page
+2025-05-09 14:06:49,054 - app - INFO - Â·ÓÉ: /auth/csrf-token - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_csrf_token
+2025-05-09 14:06:49,054 - app - INFO - Â·ÓÉ: /reset-password - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.reset_password_page
+2025-05-09 14:06:49,055 - app - INFO - Â·ÓÉ: /verify-email/confirm - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.verify_email_confirm_page
+2025-05-09 14:06:49,056 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: auth.api_update_user
+2025-05-09 14:06:49,056 - app - INFO - Â·ÓÉ: /verify-email/confirm - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.verify_email_confirm_page
+2025-05-09 14:06:49,058 - app - INFO - Â·ÓÉ: /auth/csrf-token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_csrf_token
+2025-05-09 14:06:49,058 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: auth.api_delete_user
+2025-05-09 14:06:49,059 - app - INFO - Â·ÓÉ: /auth/csrf-token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_csrf_token
+2025-05-09 14:06:49,059 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.api_update_user
+2025-05-09 14:06:49,061 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.api_get_users
+2025-05-09 14:06:49,063 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.api_update_user
+2025-05-09 14:06:49,063 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.api_delete_user
+2025-05-09 14:06:49,065 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.api_create_user
+2025-05-09 14:06:49,065 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: auth.api_delete_user
+2025-05-09 14:06:49,065 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.api_get_users
+2025-05-09 14:06:49,067 - app - INFO - Â·ÓÉ: /auth/users/<int:user_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_user_details
+2025-05-09 14:06:49,067 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.api_get_users
+2025-05-09 14:06:49,067 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: auth.api_create_user
+2025-05-09 14:06:49,069 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'DELETE', 'PUT'} - ÖÕ¶Ë: auth.api_user_operations
+2025-05-09 14:06:49,070 - app - INFO - Â·ÓÉ: /api/users - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: auth.api_create_user
+2025-05-09 14:06:49,070 - app - INFO - Â·ÓÉ: /auth/users/<int:user_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_details
+2025-05-09 14:06:49,071 - app - INFO - Â·ÓÉ: /auth/user-csrf-token - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: auth.get_user_csrf_token
+2025-05-09 14:06:49,072 - app - INFO - Â·ÓÉ: /auth/users/<int:user_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_details
+2025-05-09 14:06:49,072 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS'} - ÖÕ¶Ë: auth.api_user_operations
+2025-05-09 14:06:49,073 - app - INFO - Â·ÓÉ: /main/ - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.index
+2025-05-09 14:06:49,074 - app - INFO - Â·ÓÉ: /api/users/<int:user_id> - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'GET', 'HEAD'} - ÖÕ¶Ë: auth.api_user_operations
+2025-05-09 14:06:49,074 - app - INFO - Â·ÓÉ: /auth/user-csrf-token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_csrf_token
+2025-05-09 14:06:49,075 - app - INFO - Â·ÓÉ: /main/dashboard - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.dashboard
+2025-05-09 14:06:49,076 - app - INFO - Â·ÓÉ: /main/ - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.index
+2025-05-09 14:06:49,076 - app - INFO - Â·ÓÉ: /auth/user-csrf-token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: auth.get_user_csrf_token
+2025-05-09 14:06:49,077 - app - INFO - Â·ÓÉ: /main/check_token - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.check_token
+2025-05-09 14:06:49,080 - app - INFO - Â·ÓÉ: /main/ - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.index
+2025-05-09 14:06:49,080 - app - INFO - Â·ÓÉ: /main/dashboard - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.dashboard
+2025-05-09 14:06:49,082 - app - INFO - Â·ÓÉ: /main/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.projects
+2025-05-09 14:06:49,083 - app - INFO - Â·ÓÉ: /main/dashboard - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.dashboard
+2025-05-09 14:06:49,083 - app - INFO - Â·ÓÉ: /main/check_token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.check_token
+2025-05-09 14:06:49,084 - app - INFO - Â·ÓÉ: /main/tasks - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.tasks
+2025-05-09 14:06:49,085 - app - INFO - Â·ÓÉ: /main/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.projects
+2025-05-09 14:06:49,085 - app - INFO - Â·ÓÉ: /main/check_token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.check_token
+2025-05-09 14:06:49,086 - app - INFO - Â·ÓÉ: /main/risks - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.risks
+2025-05-09 14:06:49,087 - app - INFO - Â·ÓÉ: /main/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.projects
+2025-05-09 14:06:49,087 - app - INFO - Â·ÓÉ: /main/tasks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.tasks
+2025-05-09 14:06:49,089 - app - INFO - Â·ÓÉ: /main/reports - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.reports
+2025-05-09 14:06:49,090 - app - INFO - Â·ÓÉ: /main/tasks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.tasks
+2025-05-09 14:06:49,090 - app - INFO - Â·ÓÉ: /main/risks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.risks
+2025-05-09 14:06:49,091 - app - INFO - Â·ÓÉ: /main/resources - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.resources
+2025-05-09 14:06:49,092 - app - INFO - Â·ÓÉ: /main/risks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.risks
+2025-05-09 14:06:49,093 - app - INFO - Â·ÓÉ: /main/profile - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.profile
+2025-05-09 14:06:49,092 - app - INFO - Â·ÓÉ: /main/reports - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.reports
+2025-05-09 14:06:49,095 - app - INFO - Â·ÓÉ: /main/reports - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.reports
+2025-05-09 14:06:49,096 - app - INFO - Â·ÓÉ: /main/system/status - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.system_status
+2025-05-09 14:06:49,096 - app - INFO - Â·ÓÉ: /main/resources - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.resources
+2025-05-09 14:06:49,097 - app - INFO - Â·ÓÉ: /main/resources - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.resources
+2025-05-09 14:06:49,099 - app - INFO - Â·ÓÉ: /main/api/dashboard/data - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.get_dashboard_data
+2025-05-09 14:06:49,099 - app - INFO - Â·ÓÉ: /main/profile - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.profile
+2025-05-09 14:06:49,100 - app - INFO - Â·ÓÉ: /main/profile - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.profile
+2025-05-09 14:06:49,101 - app - INFO - Â·ÓÉ: /main/test - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.test_route
+2025-05-09 14:06:49,101 - app - INFO - Â·ÓÉ: /main/system/status - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.system_status
+2025-05-09 14:06:49,102 - app - INFO - Â·ÓÉ: /main/projects/detail/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.project_detail_redirect
+2025-05-09 14:06:49,102 - app - INFO - Â·ÓÉ: /main/system/status - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.system_status
+2025-05-09 14:06:49,104 - app - INFO - Â·ÓÉ: /main/api/dashboard/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.get_dashboard_data
+2025-05-09 14:06:49,105 - app - INFO - Â·ÓÉ: /main/api/dashboard/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.get_dashboard_data
+2025-05-09 14:06:49,104 - app - INFO - Â·ÓÉ: /main/users - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.users
+2025-05-09 14:06:49,105 - app - INFO - Â·ÓÉ: /main/test - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.test_route
+2025-05-09 14:06:49,106 - app - INFO - Â·ÓÉ: /main/test - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.test_route
+2025-05-09 14:06:49,107 - app - INFO - Â·ÓÉ: /main/debug/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.debug_projects
+2025-05-09 14:06:49,107 - app - INFO - Â·ÓÉ: /main/projects/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.project_detail_redirect
+2025-05-09 14:06:49,109 - app - INFO - Â·ÓÉ: /main/projects/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.project_detail_redirect
+2025-05-09 14:06:49,109 - app - INFO - Â·ÓÉ: /main/simple/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.simple_projects
+2025-05-09 14:06:49,110 - app - INFO - Â·ÓÉ: /main/users - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.users
+2025-05-09 14:06:49,111 - app - INFO - Â·ÓÉ: /main/users - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.users
+2025-05-09 14:06:49,111 - app - INFO - Â·ÓÉ: /main/static-test - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.static_test
+2025-05-09 14:06:49,112 - app - INFO - Â·ÓÉ: /main/debug/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.debug_projects
+2025-05-09 14:06:49,113 - app - INFO - Â·ÓÉ: /main/debug/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.debug_projects
+2025-05-09 14:06:49,113 - app - INFO - Â·ÓÉ: /main/print-projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.print_projects
+2025-05-09 14:06:49,114 - app - INFO - Â·ÓÉ: /main/simple/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.simple_projects
+2025-05-09 14:06:49,116 - app - INFO - Â·ÓÉ: /main/bypass-projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.bypass_projects
+2025-05-09 14:06:49,116 - app - INFO - Â·ÓÉ: /main/simple/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.simple_projects
+2025-05-09 14:06:49,118 - app - INFO - Â·ÓÉ: /main/static-test - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.static_test
+2025-05-09 14:06:49,119 - app - INFO - Â·ÓÉ: /main/static-test - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.static_test
+2025-05-09 14:06:49,119 - app - INFO - Â·ÓÉ: /main/debug-projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: main.debug_projects_api
+2025-05-09 14:06:49,120 - app - INFO - Â·ÓÉ: /main/print-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.print_projects
+2025-05-09 14:06:49,121 - app - INFO - Â·ÓÉ: /projects/list - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.project_list
+2025-05-09 14:06:49,121 - app - INFO - Â·ÓÉ: /main/print-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.print_projects
+2025-05-09 14:06:49,122 - app - INFO - Â·ÓÉ: /main/bypass-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.bypass_projects
+2025-05-09 14:06:49,123 - app - INFO - Â·ÓÉ: /projects/ - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_projects
+2025-05-09 14:06:49,123 - app - INFO - Â·ÓÉ: /main/bypass-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.bypass_projects
+2025-05-09 14:06:49,124 - app - INFO - Â·ÓÉ: /main/debug-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.debug_projects_api
+2025-05-09 14:06:49,125 - app - INFO - Â·ÓÉ: /projects/ - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: projects.create_project
+2025-05-09 14:06:49,126 - app - INFO - Â·ÓÉ: /main/debug-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: main.debug_projects_api
+2025-05-09 14:06:49,127 - app - INFO - Â·ÓÉ: /projects/list - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.project_list
+2025-05-09 14:06:49,128 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_project
+2025-05-09 14:06:49,129 - app - INFO - Â·ÓÉ: /projects/list - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.project_list
+2025-05-09 14:06:49,129 - app - INFO - Â·ÓÉ: /projects/ - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_projects
+2025-05-09 14:06:49,130 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: projects.update_project
+2025-05-09 14:06:49,131 - app - INFO - Â·ÓÉ: /projects/ - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_projects
+2025-05-09 14:06:49,131 - app - INFO - Â·ÓÉ: /projects/ - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: projects.create_project
+2025-05-09 14:06:49,132 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: projects.delete_project
+2025-05-09 14:06:49,133 - app - INFO - Â·ÓÉ: /projects/ - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: projects.create_project
+2025-05-09 14:06:49,133 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project
+2025-05-09 14:06:49,135 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_project_members
+2025-05-09 14:06:49,136 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project
+2025-05-09 14:06:49,136 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: projects.update_project
+2025-05-09 14:06:49,137 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: projects.add_project_member
+2025-05-09 14:06:49,138 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: projects.update_project
+2025-05-09 14:06:49,138 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: projects.delete_project
+2025-05-09 14:06:49,139 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members/<int:user_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: projects.remove_project_member
+2025-05-09 14:06:49,140 - app - INFO - Â·ÓÉ: /projects/<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: projects.delete_project
+2025-05-09 14:06:49,140 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_members
+2025-05-09 14:06:49,142 - app - INFO - Â·ÓÉ: /projects/detail/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.detail
+2025-05-09 14:06:49,143 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: projects.add_project_member
+embers
+2025-05-09 14:06:49,145 - app - INFO - Â·ÓÉ: /projects/api/detail/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.detail_api
+2025-05-09 14:06:49,147 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: projects.add_project_member
+2025-05-09 14:06:49,147 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: projects.remove_project_member
+2025-05-09 14:06:49,148 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_project_api
+2025-05-09 14:06:49,149 - app - INFO - Â·ÓÉ: /projects/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.detail
+2025-05-09 14:06:49,149 - app - INFO - Â·ÓÉ: /projects/<int:project_id>/members/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: projects.remove_project_member
+2025-05-09 14:06:49,151 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: projects.update_project_api
+2025-05-09 14:06:49,151 - app - INFO - Â·ÓÉ: /projects/api/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.detail_api
+2025-05-09 14:06:49,152 - app - INFO - Â·ÓÉ: /projects/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.detail
+2025-05-09 14:06:49,152 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: projects.delete_project_api
+2025-05-09 14:06:49,153 - app - INFO - Â·ÓÉ: /projects/api/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.detail_api
+2025-05-09 14:06:49,153 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_api
+2025-05-09 14:06:49,155 - app - INFO - Â·ÓÉ: /projects/api/auth/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_projects_api
+2025-05-09 14:06:49,156 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_api
+2025-05-09 14:06:49,157 - app - INFO - Â·ÓÉ: /projects/api/auth/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_project_auth_api
+2025-05-09 14:06:49,158 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: projects.delete_project_api
+2025-05-09 14:06:49,158 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: projects.update_project_api
+2025-05-09 14:06:49,159 - app - INFO - Â·ÓÉ: /projects/api/noauth/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'DELETE', 'PUT'} - ÖÕ¶Ë: projects.get_project_noauth
+2025-05-09 14:06:49,161 - app - INFO - Â·ÓÉ: /projects/api/auth/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_projects_api
+2025-05-09 14:06:49,161 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: projects.delete_project_api
+2025-05-09 14:06:49,162 - app - INFO - Â·ÓÉ: /projects/api/auth/projects - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: projects.create_project_auth
+2025-05-09 14:06:49,163 - app - INFO - Â·ÓÉ: /projects/api/auth/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_auth_api
+2025-05-09 14:06:49,164 - app - INFO - Â·ÓÉ: /projects/api/auth/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_projects_api
+2025-05-09 14:06:49,164 - app - INFO - Â·ÓÉ: /projects/api/project-managers - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_project_managers
+2025-05-09 14:06:49,165 - app - INFO - Â·ÓÉ: /projects/api/noauth/projects/<int:project_id> - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_noauth
+2025-05-09 14:06:49,167 - app - INFO - Â·ÓÉ: /projects/api/auth/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_auth_api
+2025-05-09 14:06:49,167 - app - INFO - Â·ÓÉ: /projects/api/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_all_projects_api
+2025-05-09 14:06:49,168 - app - INFO - Â·ÓÉ: /projects/api/auth/projects - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: projects.create_project_auth
+2025-05-09 14:06:49,169 - app - INFO - Â·ÓÉ: /projects/api/noauth/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'GET', 'HEAD'} - ÖÕ¶Ë: projects.get_project_noauth
+2025-05-09 14:06:49,169 - app - INFO - Â·ÓÉ: /projects/api/active-projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_active_projects_api
+2025-05-09 14:06:49,170 - app - INFO - Â·ÓÉ: /projects/api/project-managers - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_managers
+2025-05-09 14:06:49,171 - app - INFO - Â·ÓÉ: /projects/api/auth/projects - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: projects.create_project_auth
+2025-05-09 14:06:49,171 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id>/members - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: projects.get_project_members_api
+2025-05-09 14:06:49,173 - app - INFO - Â·ÓÉ: /projects/api/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_all_projects_api
+2025-05-09 14:06:49,175 - app - INFO - Â·ÓÉ: /list - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.project_list
+2025-05-09 14:06:49,173 - app - INFO - Â·ÓÉ: /projects/api/project-managers - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_managers
+2025-05-09 14:06:49,176 - app - INFO - Â·ÓÉ: /projects/api/active-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_active_projects_api
+2025-05-09 14:06:49,176 - app - INFO - Â·ÓÉ: / - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_projects
+2025-05-09 14:06:49,177 - app - INFO - Â·ÓÉ: /projects/api/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_all_projects_api
+2025-05-09 14:06:49,179 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_members_api
+2025-05-09 14:06:49,180 - app - INFO - Â·ÓÉ: / - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: project_root.create_project
+2025-05-09 14:06:49,180 - app - INFO - Â·ÓÉ: /projects/api/active-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_active_projects_api
+2025-05-09 14:06:49,181 - app - INFO - Â·ÓÉ: /list - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.project_list
+2025-05-09 14:06:49,182 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_project
+2025-05-09 14:06:49,182 - app - INFO - Â·ÓÉ: /projects/api/projects/<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: projects.get_project_members_api
+2025-05-09 14:06:49,183 - app - INFO - Â·ÓÉ: / - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_projects
+2025-05-09 14:06:49,183 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: project_root.update_project
+2025-05-09 14:06:49,185 - app - INFO - Â·ÓÉ: /list - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.project_list
+2025-05-09 14:06:49,186 - app - INFO - Â·ÓÉ: / - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: project_root.create_project
+2025-05-09 14:06:49,186 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: project_root.delete_project
+2025-05-09 14:06:49,187 - app - INFO - Â·ÓÉ: / - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_projects
+2025-05-09 14:06:49,188 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project
+2025-05-09 14:06:49,188 - app - INFO - Â·ÓÉ: /<int:project_id>/members - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_project_members
+2025-05-09 14:06:49,190 - app - INFO - Â·ÓÉ: / - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: project_root.create_project
+2025-05-09 14:06:49,191 - app - INFO - Â·ÓÉ: /<int:project_id>/members - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: project_root.add_project_member
+2025-05-09 14:06:49,191 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: project_root.update_project
+2025-05-09 14:06:49,193 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project
+2025-05-09 14:06:49,194 - app - INFO - Â·ÓÉ: /<int:project_id>/members/<int:user_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: project_root.remove_project_member
+2025-05-09 14:06:49,194 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: project_root.delete_project
+2025-05-09 14:06:49,196 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: project_root.update_project
+2025-05-09 14:06:49,196 - app - INFO - Â·ÓÉ: /detail/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.detail
+2025-05-09 14:06:49,197 - app - INFO - Â·ÓÉ: /<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_members
+2025-05-09 14:06:49,198 - app - INFO - Â·ÓÉ: /<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: project_root.delete_project
+2025-05-09 14:06:49,198 - app - INFO - Â·ÓÉ: /api/detail/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.detail_api
+2025-05-09 14:06:49,199 - app - INFO - Â·ÓÉ: /<int:project_id>/members - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: project_root.add_project_member
+2025-05-09 14:06:49,201 - app - INFO - Â·ÓÉ: /<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_members
+2025-05-09 14:06:49,201 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_project_api
+2025-05-09 14:06:49,202 - app - INFO - Â·ÓÉ: /<int:project_id>/members/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: project_root.remove_project_member
+2025-05-09 14:06:49,203 - app - INFO - Â·ÓÉ: /<int:project_id>/members - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: project_root.add_project_member
+2025-05-09 14:06:49,203 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: project_root.update_project_api
+2025-05-09 14:06:49,204 - app - INFO - Â·ÓÉ: /detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.detail
+2025-05-09 14:06:49,204 - app - INFO - Â·ÓÉ: /<int:project_id>/members/<int:user_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: project_root.remove_project_member
+2025-05-09 14:06:49,206 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: project_root.delete_project_api
+2025-05-09 14:06:49,207 - app - INFO - Â·ÓÉ: /api/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.detail_api
+2025-05-09 14:06:49,208 - app - INFO - Â·ÓÉ: /detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.detail
+2025-05-09 14:06:49,208 - app - INFO - Â·ÓÉ: /api/auth/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_projects_api
+2025-05-09 14:06:49,209 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_api
+2025-05-09 14:06:49,209 - app - INFO - Â·ÓÉ: /api/detail/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.detail_api
+2025-05-09 14:06:49,211 - app - INFO - Â·ÓÉ: /api/auth/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_project_auth_api
+2025-05-09 14:06:49,212 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: project_root.update_project_api
+2025-05-09 14:06:49,212 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_api
+2025-05-09 14:06:49,214 - app - INFO - Â·ÓÉ: /api/noauth/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET', 'DELETE', 'PUT'} - ÖÕ¶Ë: project_root.get_project_noauth
+2025-05-09 14:06:49,214 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: project_root.delete_project_api
+2025-05-09 14:06:49,214 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: project_root.update_project_api
+2025-05-09 14:06:49,216 - app - INFO - Â·ÓÉ: /api/auth/projects - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: project_root.create_project_auth
+2025-05-09 14:06:49,216 - app - INFO - Â·ÓÉ: /api/auth/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_projects_api
+2025-05-09 14:06:49,216 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: project_root.delete_project_api
+2025-05-09 14:06:49,218 - app - INFO - Â·ÓÉ: /api/project-managers - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_project_managers
+2025-05-09 14:06:49,218 - app - INFO - Â·ÓÉ: /api/auth/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_auth_api
+2025-05-09 14:06:49,218 - app - INFO - Â·ÓÉ: /api/auth/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_projects_api
+2025-05-09 14:06:49,221 - app - INFO - Â·ÓÉ: /api/projects - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_all_projects_api
+2025-05-09 14:06:49,221 - app - INFO - Â·ÓÉ: /api/noauth/projects/<int:project_id> - ·½·¨: {'DELETE', 'GET', 'HEAD', 'PUT', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_noauth
+2025-05-09 14:06:49,221 - app - INFO - Â·ÓÉ: /api/auth/projects/<int:project_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_auth_api
+2025-05-09 14:06:49,223 - app - INFO - Â·ÓÉ: /api/auth/projects - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: project_root.create_project_auth
+rojects_api
+2025-05-09 14:06:49,223 - app - INFO - Â·ÓÉ: /api/noauth/projects/<int:project_id> - ·½·¨: {'OPTIONS', 'PUT', 'DELETE', 'GET', 'HEAD'} - ÖÕ¶Ë: project_root.get_project_noauth
+2025-05-09 14:06:49,225 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id>/members - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: project_root.get_project_members_api
+2025-05-09 14:06:49,225 - app - INFO - Â·ÓÉ: /api/auth/projects - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: project_root.create_project_auth
+2025-05-09 14:06:49,229 - app - INFO - Â·ÓÉ: /tasks/ - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_tasks
+2025-05-09 14:06:49,229 - app - INFO - Â·ÓÉ: /api/project-managers - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_managers
+2025-05-09 14:06:49,229 - app - INFO - Â·ÓÉ: /api/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_all_projects_api
+2025-05-09 14:06:49,231 - app - INFO - Â·ÓÉ: /tasks/ - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_task
+2025-05-09 14:06:49,231 - app - INFO - Â·ÓÉ: /api/projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_all_projects_api
+2025-05-09 14:06:49,231 - app - INFO - Â·ÓÉ: /api/active-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_active_projects_api
+2025-05-09 14:06:49,233 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task
+2025-05-09 14:06:49,233 - app - INFO - Â·ÓÉ: /api/active-projects - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_active_projects_api
+2025-05-09 14:06:49,233 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_members_api
+2025-05-09 14:06:49,235 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: tasks.update_task
+2025-05-09 14:06:49,235 - app - INFO - Â·ÓÉ: /api/projects/<int:project_id>/members - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: project_root.get_project_members_api
+2025-05-09 14:06:49,235 - app - INFO - Â·ÓÉ: /tasks/ - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_tasks
+2025-05-09 14:06:49,237 - app - INFO - Â·ÓÉ: /tasks/ - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_tasks
+2025-05-09 14:06:49,237 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: tasks.delete_task
+2025-05-09 14:06:49,237 - app - INFO - Â·ÓÉ: /tasks/ - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_task
+2025-05-09 14:06:49,239 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/comments - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_comments
+2025-05-09 14:06:49,239 - app - INFO - Â·ÓÉ: /tasks/ - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.create_task
+2025-05-09 14:06:49,239 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task
+2025-05-09 14:06:49,242 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/comments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_comment
+2025-05-09 14:06:49,242 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task
+2025-05-09 14:06:49,242 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task
+2025-05-09 14:06:49,245 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_attachments
+2025-05-09 14:06:49,245 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task
+k
+2025-05-09 14:06:49,247 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/comments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_comments
+2025-05-09 14:06:49,247 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_attachment
+2025-05-09 14:06:49,247 - app - INFO - Â·ÓÉ: /tasks/<int:task_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: tasks.delete_task
+2025-05-09 14:06:49,249 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/comments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_comments
+
+2025-05-09 14:06:49,249 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/comments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_comment
+2025-05-09 14:06:49,252 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/comments - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_task_comment
+2025-05-09 14:06:49,252 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/subtasks - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_subtasks
+2025-05-09 14:06:49,252 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/attachments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_attachments
+2025-05-09 14:06:49,254 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/attachments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_attachments
+2025-05-09 14:06:49,254 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_attachment
+2025-05-09 14:06:49,254 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/subtasks - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_subtask
+2025-05-09 14:06:49,256 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/attachments - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_task_attachment
+2025-05-09 14:06:49,256 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/resources - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_resources
+2025-05-09 14:06:49,256 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_dependencies
+2025-05-09 14:06:49,258 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/resources - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_resources
+2025-05-09 14:06:49,258 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_dependency
+2025-05-09 14:06:49,258 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/subtasks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_subtasks
+2025-05-09 14:06:49,260 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/subtasks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_subtasks
+2025-05-09 14:06:49,260 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/logs - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_logs
+2025-05-09 14:06:49,260 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/subtasks - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_subtask
+2025-05-09 14:06:49,263 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/subtasks - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.create_subtask
+2025-05-09 14:06:49,263 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/logs - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_log
+2025-05-09 14:06:49,264 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_dependencies
+2025-05-09 14:06:49,265 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_dependencies
+2025-05-09 14:06:49,265 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.gantt_chart
+2025-05-09 14:06:49,267 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_dependency
+2025-05-09 14:06:49,268 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_dependency
+2025-05-09 14:06:49,269 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt/data - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_gantt_data
+2025-05-09 14:06:49,269 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/logs - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_logs
+2025-05-09 14:06:49,270 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/gantt - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: tasks.update_gantt_task
+2025-05-09 14:06:49,270 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/logs - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_logs
+2025-05-09 14:06:49,271 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/logs - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_log
+2025-05-09 14:06:49,272 - app - INFO - Â·ÓÉ: /tasks/dependencies/gantt - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_gantt_dependency
+2025-05-09 14:06:49,272 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/logs - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_task_log
+2025-05-09 14:06:49,273 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.gantt_chart
+2025-05-09 14:06:49,274 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies/<int:dependency_id>/gantt - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: tasks.delete_gantt_dependency
+2025-05-09 14:06:49,274 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.gantt_chart
+2025-05-09 14:06:49,275 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_gantt_data
+2025-05-09 14:06:49,277 - app - INFO - Â·ÓÉ: /tasks/project/<int:project_id>/gantt/data - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_gantt_data
+2025-05-09 14:06:49,276 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/status - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: tasks.update_task_status
+2025-05-09 14:06:49,277 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/gantt - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_gantt_task
+2025-05-09 14:06:49,279 - app - INFO - Â·ÓÉ: /tasks/api/tasks/dependencies - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_dependency
+2025-05-09 14:06:49,279 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/gantt - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_gantt_task
+2025-05-09 14:06:49,279 - app - INFO - Â·ÓÉ: /tasks/dependencies/gantt - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_gantt_dependency
+2025-05-09 14:06:49,283 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/detail - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.task_detail_api
+¶Ë: tasks.delete_gantt_dependency
+2025-05-09 14:06:49,283 - app - INFO - Â·ÓÉ: /tasks/dependencies/gantt - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.create_gantt_dependency
+2025-05-09 14:06:49,285 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/detail - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.task_detail_api_auth
+2025-05-09 14:06:49,285 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/status - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_status
+2025-05-09 14:06:49,285 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/dependencies/<int:dependency_id>/gantt - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: tasks.delete_gantt_dependency
+2025-05-09 14:06:49,287 - app - INFO - Â·ÓÉ: /tasks/api/tasks/dependencies - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_dependency
+2025-05-09 14:06:49,287 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/view - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.task_detail_page
+2025-05-09 14:06:49,287 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/status - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_status
+2025-05-09 14:06:49,290 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/edit - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.edit_task_page
+2025-05-09 14:06:49,290 - app - INFO - Â·ÓÉ: /tasks/api/tasks/dependencies - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_task_dependency
+2025-05-09 14:06:49,290 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/detail - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_detail_api
+2025-05-09 14:06:49,292 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_attachment_auth
+2025-05-09 14:06:49,292 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/detail - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_detail_api_auth
+2025-05-09 14:06:49,292 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/detail - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_detail_api
+2025-05-09 14:06:49,294 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments/<int:attachment_id>/download - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.download_attachment_auth
+2025-05-09 14:06:49,295 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/detail - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_detail_api_auth
+2025-05-09 14:06:49,295 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/view - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_detail_page
+2025-05-09 14:06:49,297 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.upload_attachment
+2025-05-09 14:06:49,297 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/view - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_detail_page
+2025-05-09 14:06:49,297 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/edit - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.edit_task_page
+2025-05-09 14:06:49,300 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/download - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.download_attachment
+2025-05-09 14:06:49,300 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/edit - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.edit_task_page
+2025-05-09 14:06:49,300 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_attachment_auth
+2025-05-09 14:06:49,302 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id> - ·½·¨: {'OPTIONS', 'DELETE'} - ÖÕ¶Ë: tasks.delete_attachment
+2025-05-09 14:06:49,302 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_task_attachment_auth
+2025-05-09 14:06:49,302 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments/<int:attachment_id>/download - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.download_attachment_auth
+2025-05-09 14:06:49,304 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/versions - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.upload_new_version
+2025-05-09 14:06:49,304 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments/<int:attachment_id>/download - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.download_attachment_auth
+2025-05-09 14:06:49,304 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.upload_attachment
+2025-05-09 14:06:49,306 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/versions - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_attachment_versions
+2025-05-09 14:06:49,306 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.upload_attachment
+2025-05-09 14:06:49,306 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/download - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.download_attachment
+2025-05-09 14:06:49,308 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/risks - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.task_risks_front_path
+2025-05-09 14:06:49,308 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/download - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.download_attachment
+2025-05-09 14:06:49,308 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: tasks.delete_attachment
+2025-05-09 14:06:49,312 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/risks - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_task_risk_front_path
+2025-05-09 14:06:49,312 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id> - ·½·¨: {'DELETE', 'OPTIONS'} - ÖÕ¶Ë: tasks.delete_attachment
+2025-05-09 14:06:49,312 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/versions - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.upload_new_version
+2025-05-09 14:06:49,314 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_progress
+tasks.upload_new_version
+2025-05-09 14:06:49,314 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/versions - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_attachment_versions
+2025-05-09 14:06:49,316 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.update_task_progress
+2025-05-09 14:06:49,316 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/attachments/<int:attachment_id>/versions - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_attachment_versions
+2025-05-09 14:06:49,316 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/risks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_risks_front_path
+2025-05-09 14:06:49,319 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress/approve - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.approve_task_progress
+2025-05-09 14:06:49,319 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/risks - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_task_risk_front_path
+2025-05-09 14:06:49,319 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/risks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_risks_front_path
+2025-05-09 14:06:49,321 - app - INFO - Â·ÓÉ: /tasks/list - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.task_list
+2025-05-09 14:06:49,321 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_progress
+2025-05-09 14:06:49,321 - app - INFO - Â·ÓÉ: /tasks/<int:task_id>/risks - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.create_task_risk_front_path
+2025-05-09 14:06:49,323 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/logs - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_logs_auth
+2025-05-09 14:06:49,323 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.update_task_progress
+2025-05-09 14:06:49,323 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_progress
+2025-05-09 14:06:49,326 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress/approve - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.approve_task_progress
+2025-05-09 14:06:49,326 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/subtasks - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_subtasks_auth
+2025-05-09 14:06:49,327 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_progress
+2025-05-09 14:06:49,329 - app - INFO - Â·ÓÉ: /tasks/list - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_list
+2025-05-09 14:06:49,329 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/comments - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_comments_auth
+2025-05-09 14:06:49,329 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/progress/approve - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.approve_task_progress
+2025-05-09 14:06:49,331 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/logs - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_logs_auth
+2025-05-09 14:06:49,331 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_attachments_auth
+2025-05-09 14:06:49,331 - app - INFO - Â·ÓÉ: /tasks/list - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.task_list
+2025-05-09 14:06:49,333 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/logs - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_logs_auth
+2025-05-09 14:06:49,333 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/subtasks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_subtasks_auth
+2025-05-09 14:06:49,333 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/risks - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_task_risks_auth
+2025-05-09 14:06:49,335 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/subtasks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_subtasks_auth
+2025-05-09 14:06:49,335 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/comments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_comments_auth
+2025-05-09 14:06:49,335 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/risks - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_task_risk_auth
+2025-05-09 14:06:49,337 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/comments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_comments_auth
+2025-05-09 14:06:49,338 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_attachments_auth
+2025-05-09 14:06:49,338 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/comments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_comment_auth
+2025-05-09 14:06:49,341 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id> - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: tasks.api_update_task
+2025-05-09 14:06:49,341 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/attachments - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_attachments_auth
+2025-05-09 14:06:49,341 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/risks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_risks_auth
+2025-05-09 14:06:49,343 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/update_bypass - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: tasks.update_task_bypass_csrf
+2025-05-09 14:06:49,343 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/risks - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.create_task_risk_auth
+2025-05-09 14:06:49,343 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/risks - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_task_risks_auth
+2025-05-09 14:06:49,345 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/comments - ·½·¨: {'OPTIONS', 'POST'} - ÖÕ¶Ë: tasks.add_task_comment_auth
+2025-05-09 14:06:49,345 - app - INFO - Â·ÓÉ: /tasks/get-csrf-token - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.get_csrf_token
+2025-05-09 14:06:49,345 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/risks - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.create_task_risk_auth
+2025-05-09 14:06:49,348 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.api_update_task
+2025-05-09 14:06:49,348 - app - INFO - Â·ÓÉ: /tasks/api/auth/tasks/<int:task_id>/comments - ·½·¨: {'POST', 'OPTIONS'} - ÖÕ¶Ë: tasks.add_task_comment_auth
+2025-05-09 14:06:49,348 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/no_csrf - ·½·¨: {'OPTIONS', 'PUT'} - ÖÕ¶Ë: tasks.update_task_no_csrf
+2025-05-09 14:06:49,350 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/update_bypass - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_bypass_csrf
+2025-05-09 14:06:49,350 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id> - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.api_update_task
+2025-05-09 14:06:49,350 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/detail - ·½·¨: {'OPTIONS', 'HEAD', 'GET'} - ÖÕ¶Ë: tasks.api_tasks_detail
+2025-05-09 14:06:49,352 - app - INFO - Â·ÓÉ: /tasks/get-csrf-token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_csrf_token
+2025-05-09 14:06:49,352 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/update_bypass - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_bypass_csrf
+2025-05-09 14:06:49,354 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/no_csrf - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_no_csrf
+2025-05-09 14:06:49,354 - app - INFO - Â·ÓÉ: /tasks/get-csrf-token - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.get_csrf_token
+2025-05-09 14:06:49,357 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/detail - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.api_tasks_detail
+2025-05-09 14:06:49,357 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/no_csrf - ·½·¨: {'PUT', 'OPTIONS'} - ÖÕ¶Ë: tasks.update_task_no_csrf
+2025-05-09 14:06:49,359 - app - INFO - Â·ÓÉ: /tasks/api/tasks/<int:task_id>/detail - ·½·¨: {'GET', 'HEAD', 'OPTIONS'} - ÖÕ¶Ë: tasks.api_tasks_detail
+2025-05-09 14:06:49,402 - app - WARNING - team_bp Î´¶¨Òå»òÎÞ·¨µ¼Èë
+2025-05-09 14:06:49,409 - app - WARNING - team_bp Î´¶¨Òå»òÎÞ·¨µ¼Èë
+2025-05-09 14:06:49,409 - app - WARNING - team_bp Î´¶¨Òå»òÎÞ·¨µ¼Èë
+2025-05-09 14:06:49,589 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,589 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,594 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,597 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,597 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,600 - sqlalchemy.engine.Engine - INFO - [generated in 0.00365s] ('manage_users', 1, 0)
+2025-05-09 14:06:49,600 - sqlalchemy.engine.Engine - INFO - [generated in 0.00368s] ('manage_users', 1, 0)
+2025-05-09 14:06:49,600 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,603 - sqlalchemy.engine.Engine - INFO - [generated in 0.00408s] ('manage_users', 1, 0)
+2025-05-09 14:06:49,603 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_users
+2025-05-09 14:06:49,604 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_users
+2025-05-09 14:06:49,609 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,608 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_users
+2025-05-09 14:06:49,609 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,612 - sqlalchemy.engine.Engine - INFO - [cached since 0.01476s ago] ('manage_roles', 1, 0)
+2025-05-09 14:06:49,613 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,613 - sqlalchemy.engine.Engine - INFO - [cached since 0.01548s ago] ('manage_roles', 1, 0)
+2025-05-09 14:06:49,615 - sqlalchemy.engine.Engine - INFO - [cached since 0.01533s ago] ('manage_roles', 1, 0)
+2025-05-09 14:06:49,615 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_roles
+2025-05-09 14:06:49,615 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_roles
+2025-05-09 14:06:49,620 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,618 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_roles
+2025-05-09 14:06:49,620 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,622 - sqlalchemy.engine.Engine - INFO - [cached since 0.02531s ago] ('manage_all_projects', 1, 0)
+2025-05-09 14:06:49,622 - sqlalchemy.engine.Engine - INFO - [cached since 0.02567s ago] ('manage_all_projects', 1, 0)
+2025-05-09 14:06:49,622 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,625 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_all_projects
+2025-05-09 14:06:49,625 - sqlalchemy.engine.Engine - INFO - [cached since 0.02555s ago] ('manage_all_projects', 1, 0)
+2025-05-09 14:06:49,625 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_all_projects
+2025-05-09 14:06:49,628 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,628 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_all_projects
+2025-05-09 14:06:49,628 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,630 - sqlalchemy.engine.Engine - INFO - [cached since 0.03386s ago] ('manage_project', 1, 0)
+2025-05-09 14:06:49,630 - sqlalchemy.engine.Engine - INFO - [cached since 0.03382s ago] ('manage_project', 1, 0)
+2025-05-09 14:06:49,631 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,632 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_project
+2025-05-09 14:06:49,633 - sqlalchemy.engine.Engine - INFO - [cached since 0.03341s ago] ('manage_project', 1, 0)
+2025-05-09 14:06:49,633 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_project
+2025-05-09 14:06:49,636 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,635 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_project
+2025-05-09 14:06:49,636 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,637 - sqlalchemy.engine.Engine - INFO - [cached since 0.04048s ago] ('manage_all_tasks', 1, 0)
+2025-05-09 14:06:49,638 - sqlalchemy.engine.Engine - INFO - [cached since 0.04087s ago] ('manage_all_tasks', 1, 0)
+2025-05-09 14:06:49,638 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,640 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_all_tasks
+2025-05-09 14:06:49,640 - sqlalchemy.engine.Engine - INFO - [cached since 0.04066s ago] ('manage_all_tasks', 1, 0)
+2025-05-09 14:06:49,640 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_all_tasks
+2025-05-09 14:06:49,643 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,643 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_all_tasks
+2025-05-09 14:06:49,643 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,644 - sqlalchemy.engine.Engine - INFO - [cached since 0.04785s ago] ('manage_task', 1, 0)
+2025-05-09 14:06:49,645 - sqlalchemy.engine.Engine - INFO - [cached since 0.04814s ago] ('manage_task', 1, 0)
+2025-05-09 14:06:49,645 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,646 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_task
+2025-05-09 14:06:49,647 - sqlalchemy.engine.Engine - INFO - [cached since 0.04765s ago] ('manage_task', 1, 0)
+2025-05-09 14:06:49,647 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_task
+2025-05-09 14:06:49,649 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,649 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,649 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_task
+2025-05-09 14:06:49,651 - sqlalchemy.engine.Engine - INFO - [cached since 0.05432s ago] ('view_project', 1, 0)
+2025-05-09 14:06:49,651 - sqlalchemy.engine.Engine - INFO - [cached since 0.05451s ago] ('view_project', 1, 0)
+2025-05-09 14:06:49,652 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,652 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,655 - sqlalchemy.engine.Engine - INFO - [cached since 0.05441s ago] ('view_project', 1, 0)
+2025-05-09 14:06:49,654 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,656 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,658 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,657 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,659 - sqlalchemy.engine.Engine - INFO - [cached since 0.06182s ago] ('view_task', 1, 0)
+2025-05-09 14:06:49,659 - sqlalchemy.engine.Engine - INFO - [cached since 0.06208s ago] ('view_task', 1, 0)
+2025-05-09 14:06:49,660 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,661 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,661 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,662 - sqlalchemy.engine.Engine - INFO - [cached since 0.06255s ago] ('view_task', 1, 0)
+2025-05-09 14:06:49,663 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,664 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,664 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,665 - sqlalchemy.engine.Engine - INFO - [cached since 0.0687s ago] ('manage_resources', 1, 0)
+2025-05-09 14:06:49,666 - sqlalchemy.engine.Engine - INFO - [cached since 0.06911s ago] ('manage_resources', 1, 0)
+2025-05-09 14:06:49,667 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,667 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_resources
+2025-05-09 14:06:49,668 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_resources
+2025-05-09 14:06:49,668 - sqlalchemy.engine.Engine - INFO - [cached since 0.06874s ago] ('manage_resources', 1, 0)
+2025-05-09 14:06:49,670 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,671 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,670 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_resources
+2025-05-09 14:06:49,672 - sqlalchemy.engine.Engine - INFO - [cached since 0.07558s ago] ('manage_risks', 1, 0)
+2025-05-09 14:06:49,672 - sqlalchemy.engine.Engine - INFO - [cached since 0.07619s ago] ('manage_risks', 1, 0)
+2025-05-09 14:06:49,674 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,675 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_risks
+2025-05-09 14:06:49,676 - sqlalchemy.engine.Engine - INFO - [cached since 0.07649s ago] ('manage_risks', 1, 0)
+2025-05-09 14:06:49,676 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_risks
+2025-05-09 14:06:49,678 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,679 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,678 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: manage_risks
+2025-05-09 14:06:49,679 - sqlalchemy.engine.Engine - INFO - [cached since 0.08274s ago] ('view_reports', 1, 0)
+2025-05-09 14:06:49,681 - sqlalchemy.engine.Engine - INFO - [cached since 0.08358s ago] ('view_reports', 1, 0)
+2025-05-09 14:06:49,681 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,681 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,683 - sqlalchemy.engine.Engine - INFO - [cached since 0.08292s ago] ('view_reports', 1, 0)
+2025-05-09 14:06:49,683 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,684 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,685 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,686 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,686 - sqlalchemy.engine.Engine - INFO - [cached since 0.08934s ago] ('create_task', 1, 0)
+2025-05-09 14:06:49,688 - sqlalchemy.engine.Engine - INFO - [cached since 0.09098s ago] ('create_task', 1, 0)
+2025-05-09 14:06:49,688 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,688 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: create_task
+2025-05-09 14:06:49,691 - sqlalchemy.engine.Engine - INFO - [cached since 0.09113s ago] ('create_task', 1, 0)
+2025-05-09 14:06:49,691 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: create_task
+2025-05-09 14:06:49,692 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,694 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: create_task
+2025-05-09 14:06:49,694 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,694 - sqlalchemy.engine.Engine - INFO - [cached since 0.09744s ago] ('create_project', 1, 0)
+2025-05-09 14:06:49,696 - sqlalchemy.engine.Engine - INFO - [cached since 0.09872s ago] ('create_project', 1, 0)
+2025-05-09 14:06:49,696 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,697 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: create_project
+2025-05-09 14:06:49,698 - sqlalchemy.engine.Engine - INFO - [cached since 0.09809s ago] ('create_project', 1, 0)
+2025-05-09 14:06:49,698 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: create_project
+2025-05-09 14:06:49,699 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,700 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: create_project
+2025-05-09 14:06:49,701 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,701 - sqlalchemy.engine.Engine - INFO - [cached since 0.1047s ago] ('assign_task', 1, 0)
+2025-05-09 14:06:49,703 - sqlalchemy.engine.Engine - INFO - [cached since 0.1056s ago] ('assign_task', 1, 0)
+2025-05-09 14:06:49,703 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,704 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: assign_task
+2025-05-09 14:06:49,705 - sqlalchemy.engine.Engine - INFO - [cached since 0.1051s ago] ('assign_task', 1, 0)
+2025-05-09 14:06:49,705 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: assign_task
+2025-05-09 14:06:49,707 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,707 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,707 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: assign_task
+2025-05-09 14:06:49,709 - sqlalchemy.engine.Engine - INFO - [cached since 0.1124s ago] ('change_project_status', 1, 0)
+2025-05-09 14:06:49,710 - sqlalchemy.engine.Engine - INFO - [cached since 0.1127s ago] ('change_project_status', 1, 0)
+2025-05-09 14:06:49,711 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,711 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: change_project_status
+2025-05-09 14:06:49,712 - sqlalchemy.engine.Engine - INFO - [cached since 0.1126s ago] ('change_project_status', 1, 0)
+2025-05-09 14:06:49,712 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: change_project_status
+2025-05-09 14:06:49,713 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,713 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,713 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: change_project_status
+2025-05-09 14:06:49,717 - sqlalchemy.engine.Engine - INFO - [cached since 0.1197s ago] ('change_task_status', 1, 0)
+2025-05-09 14:06:49,717 - sqlalchemy.engine.Engine - INFO - [cached since 0.1193s ago] ('change_task_status', 1, 0)
+2025-05-09 14:06:49,717 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions 
+WHERE permissions.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,718 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: change_task_status
+2025-05-09 14:06:49,718 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: change_task_status
+2025-05-09 14:06:49,718 - sqlalchemy.engine.Engine - INFO - [cached since 0.1196s ago] ('change_task_status', 1, 0)
+2025-05-09 14:06:49,721 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,721 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,722 - app.utils.permissions - INFO - ¸üÐÂÈ¨ÏÞ: change_task_status
+2025-05-09 14:06:49,724 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,724 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,724 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,727 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions
+2025-05-09 14:06:49,727 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions
+2025-05-09 14:06:49,727 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,729 - sqlalchemy.engine.Engine - INFO - [generated in 0.00210s] ()
+2025-05-09 14:06:49,730 - sqlalchemy.engine.Engine - INFO - [generated in 0.00224s] ()
+2025-05-09 14:06:49,730 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions
+2025-05-09 14:06:49,732 - sqlalchemy.engine.Engine - INFO - [generated in 0.00168s] ()
+2025-05-09 14:06:49,734 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,734 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,736 - sqlalchemy.engine.Engine - INFO - [generated in 0.00236s] ('admin', 1, 0)
+2025-05-09 14:06:49,736 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,736 - sqlalchemy.engine.Engine - INFO - [generated in 0.00240s] ('admin', 1, 0)
+2025-05-09 14:06:49,738 - sqlalchemy.engine.Engine - INFO - [generated in 0.00260s] ('admin', 1, 0)
+2025-05-09 14:06:49,738 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: admin
+2025-05-09 14:06:49,739 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: admin
+2025-05-09 14:06:49,741 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: admin
+2025-05-09 14:06:49,744 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,742 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,747 - sqlalchemy.engine.Engine - INFO - [generated in 0.00307s] (1,)
+2025-05-09 14:06:49,746 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,747 - sqlalchemy.engine.Engine - INFO - [generated in 0.00371s] (1,)
+2025-05-09 14:06:49,749 - sqlalchemy.engine.Engine - INFO - [generated in 0.00296s] (1,)
+2025-05-09 14:06:49,749 - app.utils.permissions - INFO - Îª¹ÜÀíÔ±½ÇÉ«Ìí¼ÓËùÓÐÈ¨ÏÞ: 16¸ö
+2025-05-09 14:06:49,750 - app.utils.permissions - INFO - Îª¹ÜÀíÔ±½ÇÉ«Ìí¼ÓËùÓÐÈ¨ÏÞ: 16¸ö
+2025-05-09 14:06:49,752 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,752 - app.utils.permissions - INFO - Îª¹ÜÀíÔ±½ÇÉ«Ìí¼ÓËùÓÐÈ¨ÏÞ: 16¸ö
+2025-05-09 14:06:49,752 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,754 - sqlalchemy.engine.Engine - INFO - [cached since 0.021s ago] ('manager', 1, 0)
+2025-05-09 14:06:49,754 - sqlalchemy.engine.Engine - INFO - [cached since 0.02076s ago] ('manager', 1, 0)
+2025-05-09 14:06:49,754 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,758 - sqlalchemy.engine.Engine - INFO - [cached since 0.02128s ago] ('manager', 1, 0)
+2025-05-09 14:06:49,758 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: manager
+2025-05-09 14:06:49,758 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: manager
+2025-05-09 14:06:49,759 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: manager
+2025-05-09 14:06:49,760 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,760 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,762 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,762 - sqlalchemy.engine.Engine - INFO - [cached since 0.01948s ago] (2,)
+2025-05-09 14:06:49,762 - sqlalchemy.engine.Engine - INFO - [cached since 0.01896s ago] (2,)
+2025-05-09 14:06:49,763 - sqlalchemy.engine.Engine - INFO - [cached since 0.0181s ago] (2,)
+2025-05-09 14:06:49,765 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_project
+2025-05-09 14:06:49,763 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_project
+2025-05-09 14:06:49,766 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_project
+2025-05-09 14:06:49,767 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_task
+2025-05-09 14:06:49,767 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_task
+2025-05-09 14:06:49,768 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_task
+2025-05-09 14:06:49,769 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,769 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,770 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,773 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,773 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,773 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,775 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_resources
+2025-05-09 14:06:49,775 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_resources
+2025-05-09 14:06:49,776 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_resources
+2025-05-09 14:06:49,777 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_risks
+2025-05-09 14:06:49,777 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_risks
+2025-05-09 14:06:49,778 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: manage_risks
+2025-05-09 14:06:49,779 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,779 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,780 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,782 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: create_project
+2025-05-09 14:06:49,782 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: create_project
+2025-05-09 14:06:49,783 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: create_project
+2025-05-09 14:06:49,784 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: create_task
+2025-05-09 14:06:49,785 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: create_task
+2025-05-09 14:06:49,785 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: create_task
+2025-05-09 14:06:49,786 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: assign_task
+2025-05-09 14:06:49,787 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: assign_task
+2025-05-09 14:06:49,787 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: assign_task
+2025-05-09 14:06:49,790 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: change_project_status
+2025-05-09 14:06:49,791 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: change_project_status
+2025-05-09 14:06:49,791 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: change_project_status
+2025-05-09 14:06:49,792 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: change_task_status
+2025-05-09 14:06:49,793 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: change_task_status
+2025-05-09 14:06:49,793 - app.utils.permissions - INFO - Îª½ÇÉ« manager Ìí¼ÓÈ¨ÏÞ: change_task_status
+2025-05-09 14:06:49,795 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,797 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,795 - sqlalchemy.engine.Engine - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at 
+FROM roles 
+WHERE roles.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,797 - sqlalchemy.engine.Engine - INFO - [cached since 0.06311s ago] ('user', 1, 0)
+2025-05-09 14:06:49,798 - sqlalchemy.engine.Engine - INFO - [cached since 0.06435s ago] ('user', 1, 0)
+2025-05-09 14:06:49,798 - sqlalchemy.engine.Engine - INFO - [cached since 0.06222s ago] ('user', 1, 0)
+2025-05-09 14:06:49,799 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: user
+2025-05-09 14:06:49,800 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: user
+2025-05-09 14:06:49,800 - app.utils.permissions - INFO - ¸üÐÂ½ÇÉ«: user
+2025-05-09 14:06:49,801 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,802 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,804 - sqlalchemy.engine.Engine - INFO - [cached since 0.05959s ago] (5,)
+2025-05-09 14:06:49,802 - sqlalchemy.engine.Engine - INFO - SELECT permissions.id AS permissions_id, permissions.name AS permissions_name, permissions.description AS permissions_description, permissions.created_at AS permissions_created_at 
+FROM permissions, role_permissions 
+WHERE ? = role_permissions.role_id AND permissions.id = role_permissions.permission_id
+2025-05-09 14:06:49,805 - sqlalchemy.engine.Engine - INFO - [cached since 0.0618s ago] (5,)
+2025-05-09 14:06:49,806 - sqlalchemy.engine.Engine - INFO - [cached since 0.05936s ago] (5,)
+2025-05-09 14:06:49,806 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,808 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,808 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_project
+2025-05-09 14:06:49,808 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,810 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,810 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_task
+2025-05-09 14:06:49,812 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,813 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,814 - app.utils.permissions - INFO - Îª½ÇÉ« user Ìí¼ÓÈ¨ÏÞ: view_reports
+2025-05-09 14:06:49,815 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,816 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,816 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,817 - app.utils.permissions - INFO - ½ÇÉ«ºÍÈ¨ÏÞ³õÊ¼»¯Íê³É
+2025-05-09 14:06:49,819 - __main__ - INFO - ½ÇÉ«ºÍÈ¨ÏÞ³õÊ¼»¯³É¹¦
+2025-05-09 14:06:49,818 - app.utils.permissions - INFO - ½ÇÉ«ºÍÈ¨ÏÞ³õÊ¼»¯Íê³É
+2025-05-09 14:06:49,820 - __main__ - INFO - ½ÇÉ«ºÍÈ¨ÏÞ³õÊ¼»¯³É¹¦
+2025-05-09 14:06:49,818 - app.utils.permissions - INFO - ½ÇÉ«ºÍÈ¨ÏÞ³õÊ¼»¯Íê³É
+2025-05-09 14:06:49,820 - __main__ - INFO - ½ÇÉ«ºÍÈ¨ÏÞ³õÊ¼»¯³É¹¦
+2025-05-09 14:06:49,819 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,820 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,821 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,823 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.name AS users_name, users.password_hash AS users_password_hash, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,824 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.name AS users_name, users.password_hash AS users_password_hash, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,825 - sqlalchemy.engine.Engine - INFO - [generated in 0.00197s] ('system', 1, 0)
+2025-05-09 14:06:49,825 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.name AS users_name, users.password_hash AS users_password_hash, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,827 - sqlalchemy.engine.Engine - INFO - [generated in 0.00197s] ('system', 1, 0)
+2025-05-09 14:06:49,828 - sqlalchemy.engine.Engine - INFO - [generated in 0.00219s] ('system', 1, 0)
+2025-05-09 14:06:49,829 - sqlalchemy.engine.Engine - INFO - SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE projects.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,830 - sqlalchemy.engine.Engine - INFO - SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE projects.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,831 - sqlalchemy.engine.Engine - INFO - [generated in 0.00184s] ('Test Project', 1, 0)
+2025-05-09 14:06:49,831 - sqlalchemy.engine.Engine - INFO - SELECT projects.id AS projects_id, projects.name AS projects_name, projects.description AS projects_description, projects.status AS projects_status, projects.start_date AS projects_start_date, projects.end_date AS projects_end_date, projects.progress AS projects_progress, projects.created_at AS projects_created_at, projects.updated_at AS projects_updated_at, projects.manager_id AS projects_manager_id, projects.owner_id AS projects_owner_id 
+FROM projects 
+WHERE projects.name = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,832 - sqlalchemy.engine.Engine - INFO - [generated in 0.00187s] ('Test Project', 1, 0)
+2025-05-09 14:06:49,833 - sqlalchemy.engine.Engine - INFO - [generated in 0.00185s] ('Test Project', 1, 0)
+2025-05-09 14:06:49,833 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,834 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,835 - __main__ - INFO - Êý¾Ý¿â³õÊ¼»¯Íê³É
+2025-05-09 14:06:49,835 - __main__ - INFO - Êý¾Ý¿â³õÊ¼»¯Íê³É
+2025-05-09 14:06:49,835 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,837 - __main__ - INFO - Êý¾Ý¿â³õÊ¼»¯Íê³É
+2025-05-09 14:06:49,835 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,836 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,837 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,837 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.name AS users_name, users.password_hash AS users_password_hash, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,838 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.name AS users_name, users.password_hash AS users_password_hash, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,840 - sqlalchemy.engine.Engine - INFO - [cached since 0.01662s ago] ('system', 1, 0)
+2025-05-09 14:06:49,840 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.name AS users_name, users.password_hash AS users_password_hash, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?
+2025-05-09 14:06:49,840 - sqlalchemy.engine.Engine - INFO - [cached since 0.01538s ago] ('system', 1, 0)
+2025-05-09 14:06:49,842 - sqlalchemy.engine.Engine - INFO - [cached since 0.01681s ago] ('system', 1, 0)
+2025-05-09 14:06:49,849 - sqlalchemy.engine.Engine - INFO - INSERT INTO resource_usages (user_id, cpu_usage, memory_usage, disk_usage, network_usage, recorded_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-05-09 14:06:49,849 - sqlalchemy.engine.Engine - INFO - INSERT INTO resource_usages (user_id, cpu_usage, memory_usage, disk_usage, network_usage, recorded_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-05-09 14:06:49,850 - sqlalchemy.engine.Engine - INFO - INSERT INTO resource_usages (user_id, cpu_usage, memory_usage, disk_usage, network_usage, recorded_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-05-09 14:06:49,852 - sqlalchemy.engine.Engine - INFO - [generated in 0.00311s] (2, 20.6, 53.4, 10.9, 0.0, '2025-05-09 06:06:49.848394')
+2025-05-09 14:06:49,852 - sqlalchemy.engine.Engine - INFO - [generated in 0.00289s] (2, 20.6, 53.4, 10.9, 0.0, '2025-05-09 06:06:49.848394')
+2025-05-09 14:06:49,853 - sqlalchemy.engine.Engine - INFO - [generated in 0.00246s] (2, 20.5, 53.4, 10.9, 0.0, '2025-05-09 06:06:49.849461')
+2025-05-09 14:06:49,858 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,864 - __main__ - INFO - ÏµÍ³×ÊÔ´¼ì²éÍê³É
+2025-05-09 14:06:49,865 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,866 - sqlalchemy.engine.Engine - INFO - DELETE FROM resource_usages WHERE resource_usages.recorded_at < ?
+2025-05-09 14:06:49,868 - sqlalchemy.engine.Engine - INFO - [generated in 0.00185s] ('2025-04-09 06:06:49.864107',)
+2025-05-09 14:06:49,872 - sqlalchemy.engine.Engine - INFO - DELETE FROM system_alerts WHERE system_alerts.is_resolved = 1 AND system_alerts.created_at < ?
+2025-05-09 14:06:49,873 - sqlalchemy.engine.Engine - INFO - [generated in 0.00156s] ('2025-05-02 06:06:49.870695',)
+2025-05-09 14:06:49,875 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,875 - __main__ - INFO - ¾ÉÊý¾ÝÇåÀíÍê³É
+2025-05-09 14:06:49,890 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,894 - __main__ - INFO - ÏµÍ³×ÊÔ´¼ì²éÍê³É
+2025-05-09 14:06:49,895 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,895 - werkzeug - WARNING -  * Debugger is active!
+2025-05-09 14:06:49,898 - sqlalchemy.engine.Engine - INFO - DELETE FROM resource_usages WHERE resource_usages.recorded_at < ?
+2025-05-09 14:06:49,900 - sqlalchemy.engine.Engine - INFO - [generated in 0.00169s] ('2025-04-09 06:06:49.895907',)
+2025-05-09 14:06:49,901 - werkzeug - INFO -  * Debugger PIN: 670-037-726
+2025-05-09 14:06:49,902 - sqlalchemy.engine.Engine - INFO - DELETE FROM system_alerts WHERE system_alerts.is_resolved = 1 AND system_alerts.created_at < ?
+2025-05-09 14:06:49,904 - sqlalchemy.engine.Engine - INFO - [generated in 0.00170s] ('2025-05-02 06:06:49.902350',)
+2025-05-09 14:06:49,905 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,907 - __main__ - INFO - ¾ÉÊý¾ÝÇåÀíÍê³É
+2025-05-09 14:06:49,912 - werkzeug - WARNING -  * Debugger is active!
+2025-05-09 14:06:49,917 - werkzeug - INFO -  * Debugger PIN: 670-037-726
+2025-05-09 14:06:49,920 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,926 - __main__ - INFO - ÏµÍ³×ÊÔ´¼ì²éÍê³É
+2025-05-09 14:06:49,926 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-05-09 14:06:49,928 - sqlalchemy.engine.Engine - INFO - DELETE FROM resource_usages WHERE resource_usages.recorded_at < ?
+2025-05-09 14:06:49,930 - sqlalchemy.engine.Engine - INFO - [generated in 0.00185s] ('2025-04-09 06:06:49.926508',)
+2025-05-09 14:06:49,932 - sqlalchemy.engine.Engine - INFO - DELETE FROM system_alerts WHERE system_alerts.is_resolved = 1 AND system_alerts.created_at < ?
+2025-05-09 14:06:49,934 - sqlalchemy.engine.Engine - INFO - [generated in 0.00166s] ('2025-05-02 06:06:49.932586',)
+2025-05-09 14:06:49,935 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-05-09 14:06:49,938 - __main__ - INFO - ¾ÉÊý¾ÝÇåÀíÍê³É
+2025-05-09 14:06:49,944 - werkzeug - WARNING -  * Debugger is active!
+2025-05-09 14:06:49,949 - werkzeug - INFO -  * Debugger PIN: 670-037-726

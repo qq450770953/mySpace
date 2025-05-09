@@ -1,0 +1,40 @@
+/*!
+ * Bootstrap Icons v1.7.2 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2021 The Bootstrap Authors
+ * Copyright 2019-2021 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ */
+
+@font-face {
+  font-display: block;
+  font-family: "bootstrap-icons";
+  src: url("./fonts/bootstrap-icons.woff2") format("woff2"),
+    url("./fonts/bootstrap-icons.woff") format("woff");
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bi-speedometer2::before { content: "\f4a9"; }
+.bi-folder::before { content: "\f1e9"; }
+.bi-list-task::before { content: "\f2c1"; }
+.bi-people::before { content: "\f4d5"; }
+.bi-calendar::before { content: "\f1a9"; }
+.bi-plus-circle::before { content: "\f4a5"; }
+.bi-share::before { content: "\f4a7"; }
+.bi-download::before { content: "\f1da"; }
+.bi-gear::before { content: "\f1f1"; }
+.bi-person::before { content: "\f4d4"; }
+.bi-box-arrow-right::before { content: "\f12a"; }

@@ -1,0 +1,1697 @@
+{% extends "base.html" %}
+
+{% block title %}项目管理{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frappe-gantt.min.css') }}">
+<style>
+    .task-progress {
+        height: 10px;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        margin-top: 5px;
+        overflow: hidden;
+    }
+    
+    .task-progress-bar {
+        height: 100%;
+        background-color: #4a85e5;
+    }
+    
+    .priority-1 {
+        border-left: 5px solid #28a745 !important;
+    }
+    
+    .priority-2 {
+        border-left: 5px solid #ffc107 !important;
+    }
+    
+    .priority-3 {
+        border-left: 5px solid #dc3545 !important;
+    }
+    
+    .bar-wrapper {
+        cursor: pointer;
+    }
+
+    /* 添加自定义样式优化甘特图显示 */
+    #ganttChart {
+        height: 400px;
+        overflow: auto;
+        background-color: white;
+    }
+
+    .gantt-container {
+        position: relative;
+        background-color: white;
+    }
+
+    /* 修复甘特图黑色背景问题 */
+    .gantt {
+        background-color: white;
+    }
+    
+    .gantt .grid-background {
+        fill: white;
+    }
+    
+    .gantt .grid-row {
+        fill: white;
+    }
+    
+    .gantt .grid-row:nth-child(even) {
+        fill: #f5f5f5;
+    }
+    
+    .gantt .grid-header {
+        fill: #f5f5f5;
+    }
+    
+    .gantt .bar {
+        fill: #4a85e5;
+        stroke: #3a75d5;
+    }
+    
+    .gantt .bar-progress {
+        fill: #a3a3ff;
+    }
+
+    .gantt .bar-label {
+        fill: #fff;
+        text-anchor: middle;
+        dominant-baseline: central;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    /* 确保甘特图占满card-body */
+    .card-body {
+        padding: 0.75rem;
+        background-color: white;
+    }
+
+    /* 解决手机端显示问题 */
+    @media (max-width: 768px) {
+        #ganttChart {
+            overflow-x: auto;
+        }
+    }
+    
+    /* 修复黑色垂直线问题 */
+    .gantt line {
+        stroke: #e0e0e0 !important;
+        stroke-width: 0.5 !important;
+    }
+    
+    .gantt svg * {
+        fill: inherit;
+    }
+    
+    .gantt svg {
+        background-color: white !important;
+    }
+    
+    /* 垂直分隔线修复 */
+    .gantt svg line[x1="0"][x2="0"],
+    .gantt svg line[x1="0"][y1],
+    .gantt svg line[x2="0"][y2] {
+        stroke: #e0e0e0 !important;
+        stroke-width: 0.5 !important;
+    }
+    
+    /* 确保所有黑色矩形变为白色 */
+    .gantt rect[fill="black"],
+    .gantt rect[fill="#000"],
+    .gantt rect[fill="#000000"],
+    .gantt rect[fill="none"] {
+        fill: white !important;
+    }
+    
+    /* 修复文本颜色 */
+    .gantt text {
+        fill: #333 !important;
+    }
+    
+    /* 修复操作按钮样式 */
+    .project-operations {
+        display: flex;
+        white-space: nowrap;
+        gap: 5px;
+    }
+    
+    .project-operations .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+    
+    .project-operations .btn i {
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}项目管理{% endblock %}
+
+{% block header_buttons %}
+<div class="btn-group me-2">
+    <button type="button" class="btn btn-sm btn-primary create-project-btn" data-bs-toggle="modal" data-bs-target="#newProjectModal" id="newProjectButton">
+        <i class="bi bi-plus-circle"></i> 新建项目
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportProjects()">
+        <i class="bi bi-download"></i> 导出
+    </button>
+</div>
+<script>
+    // 页面加载时检查权限并控制按钮显示
+    document.addEventListener('DOMContentLoaded', function() {
+        // 检查用户是否有创建项目的权限
+        if (!hasPermission('create_project')) {
+            // 如果没有创建项目权限，隐藏新建项目按钮
+            const newProjectButton = document.getElementById('newProjectButton');
+            if (newProjectButton) {
+                newProjectButton.style.display = 'none';
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- 项目列表 -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">项目列表</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>项目名称</th>
+                        <th>负责人</th>
+                        <th>开始日期</th>
+                        <th>结束日期</th>
+                        <th>进度</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr data-project-id="{{ project.id }}">
+                        <td>{{ project.name }}</td>
+                        <td>{{ project.manager }}</td>
+                        <td>{{ project.start_date }}</td>
+                        <td>{{ project.end_date }}</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ project.progress }}%">
+                                    {{ project.progress }}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ project.status_color }}">
+                                {{ project.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="project-operations">
+                                <a href="{{ url_for('projects.detail', project_id=project.id) }}?bypass_jwt=true" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary edit-btn project-edit-btn" onclick="editProject({{ project.id }})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn project-delete-btn" onclick="deleteProject({{ project.id }})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 甘特图 -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">项目甘特图</h5>
+        <div class="btn-toolbar">
+            <div class="btn-group me-2">
+                <button id="zoomIn" class="btn btn-sm btn-outline-secondary" title="放大">
+                    <i class="bi bi-zoom-in"></i>
+                </button>
+                <button id="zoomOut" class="btn btn-sm btn-outline-secondary" title="缩小">
+                    <i class="bi bi-zoom-out"></i>
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    视图
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" onclick="changeViewMode('Quarter Day')">每季度</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeViewMode('Half Day')">半天</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeViewMode('Day')">天</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeViewMode('Week')">周</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeViewMode('Month')">月</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-white p-0">
+        <div id="ganttChart" style="height: 400px; width: 100%; overflow: auto; position: relative; background-color: white !important; color: black !important;"></div>
+        <div id="ganttLoading" class="text-center py-3 d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-2">加载甘特图数据...</p>
+        </div>
+        <div id="ganttError" class="alert alert-danger d-none" role="alert">
+            <h4 class="alert-heading">加载失败!</h4>
+            <p id="errorMessage">无法加载甘特图数据。</p>
+        </div>
+    </div>
+</div>
+
+<!-- 新建项目模态框 -->
+<div class="modal fade" id="newProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建项目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">项目名称</label>
+                        <input type="text" class="form-control" id="projectName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectManager" class="form-label">项目负责人</label>
+                        <select class="form-select" id="projectManager" required>
+                            <option value="">-- 选择负责人 --</option>
+                            <!-- 项目经理列表将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">开始日期</label>
+                        <input type="date" class="form-control" id="startDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">结束日期</label>
+                        <input type="date" class="form-control" id="endDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDescription" class="form-label">项目描述</label>
+                        <textarea class="form-control" id="projectDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveProject()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/frappe-gantt.min.js') }}"></script>
+<script>
+    // 页面加载时初始化CSRF令牌
+    document.addEventListener('DOMContentLoaded', async function() {
+        // 获取初始CSRF令牌
+        let csrfToken = getCsrfToken();
+        if (!csrfToken) {
+            console.log('初始化时未找到CSRF令牌，尝试刷新获取');
+            csrfToken = await refreshCsrfToken();
+        }
+        
+        // 加载项目负责人
+        loadManagersForNewProject();
+        
+        // 监听新建项目模态框打开事件
+        const newProjectModal = document.getElementById('newProjectModal');
+        if (newProjectModal) {
+            newProjectModal.addEventListener('show.bs.modal', function(event) {
+                // 检查是否是编辑模式
+                const isEditMode = !!document.getElementById('editProjectId');
+                
+                // 如果不是编辑模式（即新建模式），则清空表单并加载项目经理列表
+                if (!isEditMode) {
+                    console.log('新建项目模态框打开 - 初始化表单');
+                    
+                    // 清空表单
+                    const form = document.getElementById('projectForm');
+                    if (form) form.reset();
+                    
+                    // 默认设置开始日期为今天
+                    const today = new Date().toISOString().split('T')[0];
+                    const startDateInput = document.getElementById('startDate');
+                    if (startDateInput) startDateInput.value = today;
+                    
+                    // 加载项目经理列表
+                    loadManagersForNewProject();
+                    
+                    // 确保模态框标题正确
+                    const titleElement = newProjectModal.querySelector('.modal-title');
+                    if (titleElement) titleElement.textContent = '新建项目';
+                    
+                    // 确保保存按钮行为正确
+                    const saveButton = newProjectModal.querySelector('.btn-primary');
+                    if (saveButton) saveButton.onclick = saveProject;
+                }
+            });
+        }
+        
+        // 初始化模态框功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取"新建项目"按钮
+            const newProjectBtn = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#newProjectModal"]');
+            if (newProjectBtn) {
+                newProjectBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 直接显示模态框
+                    const modal = document.getElementById('newProjectModal');
+                    if (modal) {
+                        modal.style.display = 'block';
+                        modal.classList.add('show');
+                        document.body.classList.add('modal-open');
+                        
+                        // 添加背景遮罩
+                        let backdrop = document.querySelector('.modal-backdrop');
+                        if (!backdrop) {
+                            backdrop = document.createElement('div');
+                            backdrop.className = 'modal-backdrop fade show';
+                            document.body.appendChild(backdrop);
+                        }
+                    }
+                });
+            }
+            
+            // 获取模态框中的关闭按钮
+            const closeBtns = document.querySelectorAll('#newProjectModal .btn-close, #newProjectModal [data-bs-dismiss="modal"]');
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = document.getElementById('newProjectModal');
+                    if (modal) {
+                        modal.classList.remove('show');
+                        setTimeout(() => {
+                            modal.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                            
+                            // 移除背景遮罩
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop) {
+                                backdrop.remove();
+                            }
+                        }, 300);
+                    }
+                });
+            });
+        });
+        
+        // 初始化甘特图
+        document.addEventListener('DOMContentLoaded', function() {
+            const ganttChartEl = document.getElementById('ganttChart');
+            const ganttLoadingEl = document.getElementById('ganttLoading');
+            const ganttErrorEl = document.getElementById('ganttError');
+            
+            // 先清空甘特图区域
+            if (ganttChartEl) {
+                ganttChartEl.innerHTML = '';
+                ganttChartEl.style.backgroundColor = '#ffffff';
+            }
+            
+            // 显示加载状态
+            if (ganttLoadingEl) {
+                ganttLoadingEl.classList.remove('d-none');
+            }
+            
+            try {
+                console.log('初始化甘特图...');
+                
+                // 确保甘特图任务数据是有效的数组
+                let tasks = [];
+                try {
+                    tasks = {{ gantt_tasks|tojson }} || [];
+                    console.log('获取到甘特图任务数据:', tasks);
+                } catch (e) {
+                    console.error('解析甘特图任务数据失败:', e);
+                    tasks = [];
+                }
+                
+                // 如果没有任务，创建一个默认任务
+                if (!tasks || !Array.isArray(tasks) || tasks.length === 0) {
+                    console.log('没有任务数据，创建示例任务');
+                    const today = new Date();
+                    const oneWeekLater = new Date(today);
+                    oneWeekLater.setDate(today.getDate() + 7);
+                    
+                    tasks = [{
+                        id: 'task_default',
+                        name: '示例任务',
+                        start: today.toISOString().split('T')[0],
+                        end: oneWeekLater.toISOString().split('T')[0],
+                        progress: 0,
+                        dependencies: ''
+                    }];
+                }
+                
+                // 确保所有任务都有有效的开始和结束日期
+                tasks = tasks.map(task => {
+                    if (!task.start) {
+                        const today = new Date();
+                        task.start = today.toISOString().split('T')[0];
+                    }
+                    
+                    if (!task.end) {
+                        const end = new Date(task.start);
+                        end.setDate(end.getDate() + 7);
+                        task.end = end.toISOString().split('T')[0];
+                    }
+                    
+                    // 确保进度是0-1的数字
+                    if (task.progress === undefined || task.progress === null) {
+                        task.progress = 0;
+                    } else if (typeof task.progress === 'number') {
+                        // 如果进度已经是0-1之间，使用原值，否则转换
+                        if (task.progress > 1) {
+                            task.progress = task.progress / 100;
+                        }
+                        // 确保进度在0-1之间
+                        task.progress = Math.max(0, Math.min(1, task.progress));
+                    } else {
+                        task.progress = 0;
+                    }
+                    
+                    return task;
+                });
+                
+                // 隐藏加载状态
+                if (ganttLoadingEl) {
+                    ganttLoadingEl.classList.add('d-none');
+                }
+                
+                // 创建甘特图实例
+                window.gantt = new Gantt("#ganttChart", tasks, {
+            header_height: 50,
+            column_width: 30,
+            step: 24,
+            view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
+            date_format: 'YYYY-MM-DD',
+                    language: 'zh',
+                    bar_height: 20,
+                    bar_corner_radius: 3,
+                    arrow_curve: 5,
+                    padding: 18,
+                    view_mode: 'Day',
+                    on_click: function (task) {
+                        console.log('点击任务:', task);
+                        const taskId = task.id.replace('task_', '');
+                        window.location.href = `/tasks/${taskId}?bypass_jwt=true`;
+                    }
+                });
+                
+                console.log('甘特图实例创建成功');
+                
+                // 直接修复SVG元素的样式
+                setTimeout(function() {
+                    try {
+                        // 获取所有SVG元素
+                        const svgElements = document.querySelectorAll('#ganttChart svg');
+                        console.log('找到SVG元素:', svgElements.length);
+                        
+                        svgElements.forEach(function(svg) {
+                            // 设置SVG及其父容器的背景色
+                            svg.style.backgroundColor = '#ffffff';
+                            
+                            // 覆盖整个SVG的背景矩形
+                            const width = svg.getAttribute('width') || '100%';
+                            const height = svg.getAttribute('height') || '100%';
+                            
+                            // 创建背景矩形
+                            const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                            bgRect.setAttribute('x', '0');
+                            bgRect.setAttribute('y', '0');
+                            bgRect.setAttribute('width', width);
+                            bgRect.setAttribute('height', height);
+                            bgRect.setAttribute('fill', '#ffffff');
+                            
+                            // 如果SVG有子元素，在第一个子元素之前插入背景矩形
+                            if (svg.firstChild) {
+                                svg.insertBefore(bgRect, svg.firstChild);
+                            } else {
+                                svg.appendChild(bgRect);
+                            }
+                            
+                            // 修复所有矩形元素的填充色
+                            const rectElements = svg.querySelectorAll('rect');
+                            rectElements.forEach(function(rect) {
+                                if (rect.classList.contains('grid-background')) {
+                                    rect.setAttribute('fill', '#ffffff');
+                                } else if (rect.classList.contains('grid-header')) {
+                                    rect.setAttribute('fill', '#f5f5f5');
+                                } else if (rect.classList.contains('grid-row')) {
+                                    // 检查是否是偶数行
+                                    const rowIndex = Array.from(rect.parentNode.children).indexOf(rect);
+                                    if (rowIndex % 2 === 0) {
+                                        rect.setAttribute('fill', '#ffffff');
+                                    } else {
+                                        rect.setAttribute('fill', '#f5f5f5');
+                                    }
+                                } else {
+                                    // 对于未分类的矩形，如果fill是none或black或未设置，设为白色
+                                    const fill = rect.getAttribute('fill');
+                                    if (!fill || fill === 'none' || fill === '#000000' || fill === 'black') {
+                                        rect.setAttribute('fill', '#ffffff');
+                                    }
+                                }
+                            });
+                            
+                            // 修复所有路径和线条元素
+                            const pathElements = svg.querySelectorAll('path, line');
+                            pathElements.forEach(function(element) {
+                                const fill = element.getAttribute('fill');
+                                if (fill === '#000000' || fill === 'black') {
+                                    element.setAttribute('fill', 'none');
+                                }
+                                
+                                const stroke = element.getAttribute('stroke');
+                                if (stroke === '#000000' || stroke === 'black') {
+                                    element.setAttribute('stroke', '#cccccc');
+                                }
+                            });
+                            
+                            // 修复所有任务条的填充色
+                            const barElements = svg.querySelectorAll('.bar');
+                            barElements.forEach(function(bar) {
+                                bar.setAttribute('fill', '#4a85e5');
+                                bar.setAttribute('stroke', '#3a75d5');
+                            });
+                            
+                            // 修复所有进度条的填充色
+                            const progressElements = svg.querySelectorAll('.bar-progress');
+                            progressElements.forEach(function(progress) {
+                                progress.setAttribute('fill', '#a3a3ff');
+                            });
+                            
+                            // 修复垂直线条和分隔线
+                            const verticalLines = svg.querySelectorAll('line[x1="0"][x2="0"], line[y1][y2]');
+                            verticalLines.forEach(function(line) {
+                                // 判断是否是垂直线
+                                const x1 = parseFloat(line.getAttribute('x1') || 0);
+                                const x2 = parseFloat(line.getAttribute('x2') || 0);
+                                if (x1 === x2) {
+                                    // 是垂直线，改变颜色
+                                    line.setAttribute('stroke', '#e0e0e0');
+                                    line.setAttribute('stroke-width', '0.5');
+                                }
+                            });
+                            
+                            // 查找并修复今日线
+                            const todayLine = svg.querySelector('.today-highlight');
+                            if (todayLine) {
+                                todayLine.setAttribute('fill', '#fcf8e3');
+                                todayLine.setAttribute('opacity', '0.5');
+                            }
+                            
+                            console.log('SVG样式修复完成');
+                        });
+                        
+                        // 添加缩放控制
+                        document.getElementById('zoomIn').addEventListener('click', function() {
+                            if (window.gantt) {
+                                const currentMode = window.gantt.options.view_mode;
+                                const modes = ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'];
+                                const currentIndex = modes.indexOf(currentMode);
+                                const newMode = modes[Math.max(0, currentIndex - 1)];
+                                window.gantt.change_view_mode(newMode);
+                                console.log('放大视图至：', newMode);
+                            }
+                        });
+                        
+                        document.getElementById('zoomOut').addEventListener('click', function() {
+                            if (window.gantt) {
+                                const currentMode = window.gantt.options.view_mode;
+                                const modes = ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'];
+                                const currentIndex = modes.indexOf(currentMode);
+                                const newMode = modes[Math.min(modes.length - 1, currentIndex + 1)];
+                                window.gantt.change_view_mode(newMode);
+                                console.log('缩小视图至：', newMode);
+                            }
+                        });
+                        
+                        // 添加视图切换功能
+                        const viewButtons = document.querySelectorAll('.dropdown-item[href="#"]');
+                        viewButtons.forEach(function(button) {
+                            button.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                if (window.gantt) {
+                                    const mode = this.textContent.trim();
+                                    let viewMode = 'Day';
+                                    
+                                    switch (mode) {
+                                        case '每季度':
+                                            viewMode = 'Quarter Day';
+                                            break;
+                                        case '半天':
+                                            viewMode = 'Half Day';
+                                            break;
+                                        case '天':
+                                            viewMode = 'Day';
+                                            break;
+                                        case '周':
+                                            viewMode = 'Week';
+                                            break;
+                                        case '月':
+                                            viewMode = 'Month';
+                                            break;
+                                    }
+                                    
+                                    window.gantt.change_view_mode(viewMode);
+                                    console.log('切换视图至：', viewMode);
+                                }
+                            });
+                        });
+                    } catch (styleError) {
+                        console.error('修复SVG样式时出错:', styleError);
+                    }
+                }, 500);
+                
+                // 定位并处理特定的垂直黑条
+                setTimeout(function() {
+                    try {
+                        // 查找特定的SVG结构，这些结构可能导致黑条
+                        const svgRoot = document.querySelector('#ganttChart svg');
+                        if (svgRoot) {
+                            // 查找并处理所有g元素
+                            const gElements = svgRoot.querySelectorAll('g');
+                            gElements.forEach(function(g) {
+                                // 检查这个g元素是否包含黑色矩形或线条
+                                const blackRects = g.querySelectorAll('rect[fill="black"], rect[fill="#000"], rect[fill="#000000"]');
+                                blackRects.forEach(function(rect) {
+                                    rect.setAttribute('fill', 'white');
+                                    console.log('修复黑色矩形');
+                                });
+                                
+                                // 处理可能的黑色线条
+                                const lines = g.querySelectorAll('line');
+                                lines.forEach(function(line) {
+                                    const stroke = line.getAttribute('stroke');
+                                    if (stroke === 'black' || stroke === '#000' || stroke === '#000000') {
+                                        line.setAttribute('stroke', '#e0e0e0');
+                                        console.log('修复黑色线条');
+                                    }
+                                    
+                                    // 特殊处理垂直线
+                                    const x1 = parseFloat(line.getAttribute('x1') || 0);
+                                    const x2 = parseFloat(line.getAttribute('x2') || 0);
+                                    const y1 = parseFloat(line.getAttribute('y1') || 0);
+                                    const y2 = parseFloat(line.getAttribute('y2') || 0);
+                                    
+                                    // 如果是垂直线，特别是在中间位置
+                                    if (x1 === x2 && x1 === 0) {
+                                        line.setAttribute('stroke', '#e0e0e0');
+                                        line.setAttribute('stroke-width', '0.5');
+                                        console.log('修复垂直分割线');
+                                    }
+                                });
+                            });
+                            
+                            console.log('处理完所有可能的黑色元素');
+                        }
+                    } catch (error) {
+                        console.error('处理黑色元素时出错:', error);
+                    }
+                }, 800);
+                
+            } catch (error) {
+                console.error('甘特图初始化失败:', error);
+                
+                // 隐藏加载状态，显示错误信息
+                if (ganttLoadingEl) {
+                    ganttLoadingEl.classList.add('d-none');
+                }
+                
+                if (ganttErrorEl) {
+                    ganttErrorEl.classList.remove('d-none');
+                    const errorMessageEl = document.getElementById('errorMessage');
+                    if (errorMessageEl) {
+                        errorMessageEl.textContent = error.message || '初始化甘特图失败';
+                    }
+                }
+            }
+        });
+        
+        // 检查项目列表中的负责人信息，如果有问题则尝试从API加载更完整的信息
+        checkAndRefreshProjectManagers();
+    });
+
+    // 保存项目
+    async function saveProject() {
+        try {
+            const form = document.getElementById('projectForm');
+            if (!form.checkValidity()) {
+                console.log('表单验证失败');
+                form.reportValidity();
+                return;
+            }
+            
+            // 获取表单数据
+            const formData = {
+                name: document.getElementById('projectName').value.trim(),
+                manager_id: document.getElementById('projectManager').value || null,
+                start_date: document.getElementById('startDate').value,
+                end_date: document.getElementById('endDate').value,
+                description: document.getElementById('projectDescription').value.trim() || '',
+                status: 'planning'  // 新项目默认状态为规划中
+            };
+            
+            // 日志记录表单数据
+            console.log('准备创建新项目:', formData);
+            
+            // 验证必填字段
+            if (!formData.name) {
+                console.log('项目名称为空');
+                alert('项目名称不能为空');
+                return;
+            }
+            
+            if (!formData.start_date) {
+                console.log('开始日期为空');
+                alert('开始日期不能为空');
+                return;
+            }
+            
+            if (formData.end_date && formData.end_date < formData.start_date) {
+                console.log('日期验证失败:', formData.start_date, formData.end_date);
+                alert('结束日期不能早于开始日期');
+                return;
+            }
+            
+            // 获取CSRF令牌
+            const csrfToken = getCsrfToken();
+            
+            // 构建请求头
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            };
+            
+            // 如果有CSRF令牌，添加到请求头
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+                headers['X-CSRFToken'] = csrfToken;
+            }
+            
+            // 项目API的URL
+            const apiUrl = '/api/auth/projects?bypass_jwt=true';
+            console.log('发送创建项目请求到:', apiUrl);
+            
+            // 发送创建项目的请求
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(formData)
+            });
+            
+            // 尝试解析响应，即使状态码不是200也尝试获取错误信息
+            let responseData;
+            try {
+                const responseText = await response.text();
+                console.log('服务器原始响应:', responseText);
+                responseData = JSON.parse(responseText);
+            } catch (e) {
+                console.warn('无法解析服务器响应JSON:', e);
+                responseData = { error: '无法解析服务器响应' };
+            }
+            
+            if (response.ok) {
+                console.log('创建项目成功:', responseData);
+                
+                // 关闭模态框
+                const modal = document.getElementById('newProjectModal');
+                if (modal) {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    } else {
+                        // 备用关闭方法
+                        modal.classList.remove('show');
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        
+                        // 移除背景遮罩
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+                    }
+                }
+                
+                // 显示成功消息
+                showSuccessMessage('项目创建成功！');
+                
+                // 刷新页面
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            } else {
+                // 如果请求失败但响应具有特定错误模式
+                if (responseData && responseData.error && responseData.error.includes('CSRF')) {
+                    console.error('CSRF验证失败:', responseData);
+                    
+                    // 尝试刷新CSRF令牌然后重试
+                    try {
+                        console.log('尝试刷新CSRF令牌并重试...');
+                        await refreshCsrfToken(); // 假设这个函数会获取新的CSRF令牌
+                        
+                        // 第二次尝试 - 使用新令牌，同时使用备用端点
+                        const newCsrfToken = getCsrfToken();
+                        const headers2 = {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        };
+                        
+                        if (newCsrfToken) {
+                            headers2['X-CSRF-TOKEN'] = newCsrfToken;
+                            headers2['X-CSRFToken'] = newCsrfToken;
+                        }
+                        
+                        // 使用备用端点重试
+                        const response2 = await fetch('/api/projects?bypass_jwt=true', {
+                            method: 'POST',
+                            headers: headers2,
+                            body: JSON.stringify(formData)
+                        });
+                        
+                        if (response2.ok) {
+                            // 成功，刷新页面
+                            showSuccessMessage('项目创建成功（备用路径）！');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 800);
+                            return;
+                        } else {
+                            throw new Error('备用API也失败');
+                        }
+                    } catch (retryError) {
+                        console.error('重试创建失败:', retryError);
+                        alert('CSRF令牌验证失败，请刷新页面后重试。');
+                    }
+                } else {
+                    // 普通错误显示
+                    console.error('创建项目失败:', responseData);
+                    alert('创建项目失败: ' + (responseData.error || responseData.message || '未知错误'));
+                }
+            }
+        } catch (error) {
+            console.error('创建项目时出错:', error);
+            alert('创建项目失败: ' + error.message);
+        }
+    }
+
+    // 导出项目
+    function exportProjects() {
+        window.location.href = '/api/projects/export';
+    }
+
+    // 编辑项目
+    function editProject(projectId) {
+        console.log('编辑项目:', projectId);
+        
+        // 构建API的绝对URL地址，使用全局路径确保不受当前路径影响
+        const baseUrl = window.location.origin; // 获取协议+主机名+端口
+        const url = `${baseUrl}/api/noauth/projects/${projectId}`;
+        
+        // 获取项目数据前先清空表单，以防显示旧数据
+        document.getElementById('projectName').value = '';
+        document.getElementById('projectDescription').value = '';
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        
+        // 添加加载状态指示器
+        const modal = new bootstrap.Modal(document.getElementById('newProjectModal'));
+        document.querySelector('#newProjectModal .modal-title').textContent = '加载项目信息...';
+        modal.show();
+        
+        // 获取项目数据
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`获取项目失败: ${response.status} - ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('成功获取项目数据:', data);
+                
+                // 确保有效的项目数据结构
+                if (!data || !data.project) {
+                    throw new Error('返回的项目数据格式不正确');
+                }
+                
+                const project = data.project;
+                
+                // 填充模态框表单
+                document.getElementById('projectName').value = project.name || '';
+                document.getElementById('projectDescription').value = project.description || '';
+                
+                // 设置开始日期和结束日期（如果有）
+                if (project.start_date) {
+                    document.getElementById('startDate').value = project.start_date.split('T')[0];
+                }
+                if (project.end_date) {
+                    document.getElementById('endDate').value = project.end_date.split('T')[0];
+                }
+                
+                // 处理项目经理选择
+                const managerSelect = document.getElementById('projectManager');
+                if (managerSelect) {
+                    // 如果API返回了项目经理列表，更新下拉选项
+                    if (data.project_managers && Array.isArray(data.project_managers) && data.project_managers.length > 0) {
+                        // 先清空选项
+                        managerSelect.innerHTML = '';
+                        
+                        // 添加空选项
+                        const emptyOption = document.createElement('option');
+                        emptyOption.value = '';
+                        emptyOption.text = '-- 选择负责人 --';
+                        managerSelect.appendChild(emptyOption);
+                        
+                        // 添加管理员选项
+                        data.project_managers.forEach(manager => {
+                            const option = document.createElement('option');
+                            option.value = manager.id;
+                            option.text = manager.name || `用户 #${manager.id}`;
+                            managerSelect.appendChild(option);
+                        });
+                        
+                        console.log(`已更新项目经理选项，共 ${data.project_managers.length} 个选项`);
+                    }
+                    
+                    // 选择当前项目的管理员
+                    if (project.manager_id) {
+                        console.log('设置项目负责人:', project.manager_id);
+                        
+                        // 尝试查找并选择对应选项
+                        let found = false;
+                        for (let i = 0; i < managerSelect.options.length; i++) {
+                            if (parseInt(managerSelect.options[i].value) === parseInt(project.manager_id)) {
+                                managerSelect.selectedIndex = i;
+                                found = true;
+                                console.log('已设置负责人索引:', i, '选项值:', managerSelect.options[i].text);
+                                break;
+                            }
+                        }
+                        
+                        // 如果找不到匹配的选项，添加一个新选项
+                        if (!found && project.manager_id) {
+                            const option = document.createElement('option');
+                            option.value = project.manager_id;
+                            option.text = project.manager || `负责人 #${project.manager_id}`;
+                            managerSelect.appendChild(option);
+                            option.selected = true;
+                            console.log('找不到对应的负责人选项，已添加新选项:', option.text);
+                        }
+                    } else {
+                        // 没有负责人，选择空选项
+                        managerSelect.value = '';
+                        console.log('项目没有设置负责人');
+                    }
+                }
+                
+                // 添加更新项目ID的隐藏字段
+                let hiddenInput = document.getElementById('editProjectId');
+                if (!hiddenInput) {
+                    hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.id = 'editProjectId';
+                    document.getElementById('projectForm').appendChild(hiddenInput);
+                }
+                hiddenInput.value = projectId;
+                
+                // 更改模态框标题为"编辑项目"
+                document.querySelector('#newProjectModal .modal-title').textContent = '编辑项目';
+                
+                // 修改保存按钮的行为
+                const saveButton = document.querySelector('#newProjectModal .btn-primary');
+                
+                // 保存原来的onclick处理程序
+                const originalOnclick = saveButton.onclick;
+                
+                // 修改按钮行为为更新项目
+                saveButton.onclick = function() {
+                    updateProject(projectId, originalOnclick);
+                };
+            })
+            .catch(error => {
+                console.error('获取项目信息失败:', error);
+                alert('获取项目信息失败: ' + error.message);
+                
+                // 尝试获取备选数据
+                attemptBackupDataRetrieval(projectId);
+            });
+    }
+    
+    // 尝试使用备选方法获取项目数据
+    async function attemptBackupDataRetrieval(projectId) {
+        try {
+            console.log('尝试使用备选方法获取项目数据...');
+            
+            // 尝试从表格行获取基本信息
+            const row = document.querySelector(`tr[data-project-id="${projectId}"]`);
+            let projectName = '';
+            let projectManager = '';
+            let startDate = '';
+            let endDate = '';
+            
+            if (row) {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 6) {
+                    projectName = cells[0].textContent.trim();
+                    projectManager = cells[1].textContent.trim();
+                    startDate = cells[2].textContent.trim();
+                    endDate = cells[3].textContent.trim();
+                    console.log('从表格行获取的项目信息:', { projectName, projectManager, startDate, endDate });
+                }
+            }
+            
+            // 尝试从其他API获取
+            try {
+                const response = await fetch(`/api/projects/${projectId}?bypass_jwt=true`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.project) {
+                        console.log('从备选API获取到项目数据:', data);
+                        displayProjectInModal(data.project, projectId);
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn('从备选API获取项目数据失败:', e);
+            }
+            
+            // 使用从表格行获取的数据或默认值
+            const projectData = {
+                id: projectId,
+                name: projectName || `项目 #${projectId}`,
+                description: '无法获取完整项目详情，使用基本信息',
+                manager: projectManager,
+                manager_id: null,
+                start_date: startDate,
+                end_date: endDate
+            };
+            
+            displayProjectInModal(projectData, projectId);
+            
+        } catch (error) {
+            console.error('备选数据获取也失败:', error);
+            // 显示最基本的信息
+            displayProjectInModal({
+                id: projectId,
+                name: `项目 #${projectId}`,
+                description: '无法获取项目信息，请手动填写'
+            }, projectId);
+        }
+    }
+    
+    // 在模态框中显示项目数据
+    function displayProjectInModal(project, projectId) {
+        // 填充模态框表单
+        document.getElementById('projectName').value = project.name || '';
+        document.getElementById('projectDescription').value = project.description || '';
+        
+        // 设置日期
+        if (project.start_date) {
+            let startDate = project.start_date;
+            if (startDate.includes('T')) {
+                startDate = startDate.split('T')[0];
+            }
+            document.getElementById('startDate').value = startDate;
+        }
+        
+        if (project.end_date) {
+            let endDate = project.end_date;
+            if (endDate.includes('T')) {
+                endDate = endDate.split('T')[0];
+            }
+            document.getElementById('endDate').value = endDate;
+        }
+        
+        // 尝试设置负责人
+        const managerSelect = document.getElementById('projectManager');
+        if (managerSelect && project.manager_id) {
+            // 设置选中项
+            for (let i = 0; i < managerSelect.options.length; i++) {
+                if (parseInt(managerSelect.options[i].value) === parseInt(project.manager_id)) {
+                    managerSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        } else if (managerSelect && project.manager) {
+            // 根据名称尝试匹配
+            for (let i = 0; i < managerSelect.options.length; i++) {
+                if (managerSelect.options[i].text === project.manager) {
+                    managerSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+        
+        // 添加更新项目ID的隐藏字段
+        let hiddenInput = document.getElementById('editProjectId');
+        if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.id = 'editProjectId';
+            document.getElementById('projectForm').appendChild(hiddenInput);
+        }
+        hiddenInput.value = projectId;
+        
+        // 显示模态框
+        const modal = new bootstrap.Modal(document.getElementById('newProjectModal'));
+        document.querySelector('#newProjectModal .modal-title').textContent = '编辑项目 (备用模式)';
+        
+        // 修改保存按钮的行为
+        const saveButton = document.querySelector('#newProjectModal .btn-primary');
+        const originalOnclick = saveButton.onclick;
+        saveButton.onclick = function() {
+            updateProject(projectId, originalOnclick);
+        };
+        
+        modal.show();
+    }
+
+    // 更新项目
+    async function updateProject(projectId, originalOnclick) {
+        try {
+            const form = document.getElementById('projectForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // 收集表单数据
+            const formData = {
+                name: document.getElementById('projectName').value,
+                manager_id: document.getElementById('projectManager').value,
+                start_date: document.getElementById('startDate').value,
+                end_date: document.getElementById('endDate').value,
+                description: document.getElementById('projectDescription').value
+            };
+            
+            console.log('准备更新项目数据:', formData);
+            
+            // 获取CSRF令牌
+            const csrfToken = getCsrfToken();
+            
+            // 构建请求头
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            };
+            
+            // 如果有CSRF令牌，添加到请求头
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+                headers['X-CSRFToken'] = csrfToken;
+            }
+            
+            // 使用无认证API，包含完整的请求头
+            const response = await fetch(`/api/noauth/projects/${projectId}?bypass_jwt=true`, {
+                method: 'PUT',
+                headers: headers,
+                body: JSON.stringify(formData)
+            });
+            
+            // 尝试解析响应，即使状态码不是200也尝试获取错误信息
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (e) {
+                console.warn('无法解析服务器响应JSON:', e);
+                responseData = { error: '无法解析服务器响应' };
+            }
+            
+            if (response.ok) {
+                console.log('项目更新成功:', responseData);
+                
+                // 关闭模态框并刷新页面
+                const modal = document.getElementById('newProjectModal');
+                if (modal) {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    } else {
+                        // 备用关闭方法
+                        modal.classList.remove('show');
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        
+                        // 移除背景遮罩
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+                    }
+                    
+                    // 恢复按钮的原始行为
+                    const saveButton = document.querySelector('#newProjectModal .btn-primary');
+                    if (saveButton && originalOnclick) {
+                        saveButton.onclick = originalOnclick;
+                    }
+                    
+                    // 恢复模态框标题
+                    const modalTitle = document.querySelector('#newProjectModal .modal-title');
+                    if (modalTitle) {
+                        modalTitle.textContent = '新建项目';
+                    }
+                    
+                    // 清空表单
+                    form.reset();
+                    
+                    // 刷新页面
+                    showSuccessMessage('项目更新成功！');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 800);
+                } else {
+                    window.location.reload();
+                }
+            } else {
+                // 如果请求失败但响应具有特定错误模式
+                if (responseData && responseData.error && responseData.error.includes('CSRF')) {
+                    console.error('CSRF验证失败:', responseData);
+                    
+                    // 尝试刷新CSRF令牌然后重试
+                    try {
+                        console.log('尝试刷新CSRF令牌并重试...');
+                        await refreshCsrfToken(); // 假设这个函数会获取新的CSRF令牌
+                        
+                        // 第二次尝试 - 使用新令牌，同时使用备用端点
+                        const newCsrfToken = getCsrfToken();
+                        const headers2 = {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        };
+                        
+                        if (newCsrfToken) {
+                            headers2['X-CSRF-TOKEN'] = newCsrfToken;
+                            headers2['X-CSRFToken'] = newCsrfToken;
+                        }
+                        
+                        // 使用项目API端点重试
+                        const response2 = await fetch(`/api/projects/${projectId}?bypass_jwt=true`, {
+                            method: 'PUT',
+                            headers: headers2,
+                            body: JSON.stringify(formData)
+                        });
+                        
+                        if (response2.ok) {
+                            // 成功，刷新页面
+                            showSuccessMessage('项目更新成功（备用路径）！');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 800);
+                            return;
+                        } else {
+                            throw new Error('备用API也失败');
+                        }
+                    } catch (retryError) {
+                        console.error('重试更新失败:', retryError);
+                        alert('CSRF令牌验证失败，请刷新页面后重试。');
+                    }
+                } else {
+                    // 普通错误显示
+                    alert('更新项目失败: ' + (responseData.error || responseData.message || '未知错误'));
+                }
+            }
+        } catch (error) {
+            console.error('更新项目时出现异常:', error);
+            alert('更新项目时出现异常: ' + error.message);
+        }
+    }
+    
+    // 显示成功消息
+    function showSuccessMessage(message) {
+        // 检查是否已有消息容器
+        let messageContainer = document.getElementById('successMessageContainer');
+        
+        if (!messageContainer) {
+            // 创建消息容器
+            messageContainer = document.createElement('div');
+            messageContainer.id = 'successMessageContainer';
+            messageContainer.style.position = 'fixed';
+            messageContainer.style.top = '20px';
+            messageContainer.style.right = '20px';
+            messageContainer.style.zIndex = '9999';
+            document.body.appendChild(messageContainer);
+        }
+        
+        // 创建提示框
+        const toast = document.createElement('div');
+        toast.className = 'alert alert-success alert-dismissible fade show';
+        toast.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        // 添加到容器
+        messageContainer.appendChild(toast);
+        
+        // 自动消失
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                messageContainer.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+    
+    // 获取CSRF令牌
+    function getCsrfToken() {
+        // 从cookie中查找
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'csrf_access_token' || name === 'X-CSRF-TOKEN' || name === 'csrf_token') {
+                return decodeURIComponent(value);
+            }
+        }
+        
+        // 从meta标签中查找
+        const metaTag = document.querySelector('meta[name="csrf-token"]');
+        if (metaTag) {
+            return metaTag.getAttribute('content');
+        }
+        
+        // 从localStorage中查找
+        const token = localStorage.getItem('access_token');
+        if (token && token.split('.').length === 3) {
+            try {
+                // 尝试从JWT中解析CSRF
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.csrf) {
+                    return payload.csrf;
+                }
+            } catch (e) {
+                console.warn('从JWT解析CSRF失败:', e);
+            }
+        }
+        
+        console.warn('未找到CSRF令牌');
+        return '';
+    }
+    
+    // 刷新CSRF令牌
+    async function refreshCsrfToken() {
+        try {
+            // 尝试从服务器获取新令牌
+            const response = await fetch('/api/csrf-token');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.csrf_token) {
+                    // 存储在localStorage中备用
+                    localStorage.setItem('csrf_token', data.csrf_token);
+                    console.log('已获取新的CSRF令牌');
+                    return data.csrf_token;
+                }
+            }
+            
+            // 尝试从cookie中获取
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'csrf_access_token' || name === 'X-CSRF-TOKEN' || name === 'csrf_token') {
+                    return decodeURIComponent(value);
+                }
+            }
+            
+            return '';
+        } catch (error) {
+            console.error('刷新CSRF令牌失败:', error);
+            return '';
+        }
+    }
+
+    // 删除项目
+    async function deleteProject(projectId) {
+        if (confirm('确定要删除这个项目吗？')) {
+            try {
+                const response = await fetch(`/api/noauth/projects/${projectId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const error = await response.json();
+                    alert(error.message || '删除项目失败');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('删除项目时发生错误');
+            }
+        }
+    }
+
+    // 在底部JavaScript部分添加此函数
+    function changeViewMode(mode) {
+        if (window.gantt) {
+            window.gantt.change_view_mode(mode);
+        }
+    }
+
+    // 查看项目详情
+    function viewProject(projectId) {
+        // 使用main.project_detail_redirect路由来确保CSRF令牌可用
+        window.location.href = `{{ url_for('main.project_detail_redirect', project_id=0) }}`.replace('0', projectId) + '?bypass_jwt=true';
+    }
+
+    // 检查并刷新项目负责人信息
+    async function checkAndRefreshProjectManagers() {
+        try {
+            // 检查页面上现有的项目负责人显示
+            const projectRows = document.querySelectorAll('table.table tbody tr');
+            let needsRefresh = false;
+            
+            // 如果有项目行的负责人显示为"undefined"或空，则需要刷新
+            projectRows.forEach(row => {
+                const managerCell = row.querySelector('td:nth-child(2)'); // 第二列是负责人
+                if (managerCell && (!managerCell.textContent || managerCell.textContent.trim() === '未分配' || managerCell.textContent.includes('undefined'))) {
+                    needsRefresh = true;
+                }
+            });
+            
+            // 如果不需要刷新，直接返回
+            if (!needsRefresh) {
+                console.log('项目负责人信息完整，无需刷新');
+                return;
+            }
+            
+            console.log('检测到项目负责人信息不完整，尝试从API获取更新');
+            
+            // 从API获取完整的项目列表
+            const response = await fetch('/api/active-projects');
+            if (!response.ok) {
+                throw new Error(`获取项目列表失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            if (!data.success || !data.projects) {
+                console.warn('API返回的项目列表为空或格式错误');
+                return;
+            }
+            
+            const projects = data.projects;
+            console.log(`成功获取 ${projects.length} 个项目信息`);
+            
+            // 更新页面上的项目负责人信息
+            projects.forEach(project => {
+                // 找到对应的项目行
+                const projectRow = document.querySelector(`tr[data-project-id="${project.id}"]`);
+                if (projectRow) {
+                    // 更新负责人单元格
+                    const managerCell = projectRow.querySelector('td:nth-child(2)');
+                    if (managerCell) {
+                        // 设置负责人名称
+                        const managerName = project.manager ? project.manager.name : '未分配';
+                        managerCell.textContent = managerName;
+                    }
+                }
+            });
+            
+            console.log('成功更新项目负责人信息');
+        } catch (error) {
+            console.error('刷新项目负责人信息失败:', error);
+        }
+    }
+
+    // 加载项目经理列表到新建项目模态框
+    async function loadManagersForNewProject() {
+        try {
+            console.log('加载项目经理列表到新建项目模态框...');
+            
+            const managerSelect = document.getElementById('projectManager');
+            if (!managerSelect) {
+                console.warn('找不到项目经理下拉框元素');
+                return;
+            }
+            
+            // 显示加载中状态
+            managerSelect.innerHTML = '<option value="">加载中...</option>';
+            managerSelect.disabled = true;
+            
+            // 从API获取项目经理列表
+            const response = await fetch('/api/project-managers?bypass_jwt=true', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            });
+            
+            console.log('项目经理API请求状态:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`获取项目经理列表失败，状态码: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('获取到的项目经理数据:', data);
+            
+            // 确保有有效的项目经理列表
+            if (!data || !data.project_managers || !Array.isArray(data.project_managers)) {
+                throw new Error('返回的项目经理列表格式不正确');
+            }
+            
+            const projectManagers = data.project_managers;
+            console.log(`成功获取 ${projectManagers.length} 个项目经理`);
+            
+            // 重置下拉框
+            managerSelect.innerHTML = '';
+            managerSelect.disabled = false;
+            
+            // 添加默认空选项
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.text = '-- 选择负责人 --';
+            managerSelect.appendChild(emptyOption);
+            
+            // 添加每个项目经理
+            projectManagers.forEach(manager => {
+                const option = document.createElement('option');
+                option.value = manager.id;
+                option.text = manager.name || `用户 #${manager.id}`;
+                managerSelect.appendChild(option);
+            });
+            
+            console.log('项目经理下拉框已更新');
+            
+        } catch (error) {
+            console.error('加载项目经理列表失败:', error);
+            
+            // 恢复下拉框状态并显示错误选项
+            const managerSelect = document.getElementById('projectManager');
+            if (managerSelect) {
+                managerSelect.innerHTML = '';
+                managerSelect.disabled = false;
+                
+                // 添加默认空选项
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.text = '-- 选择负责人 --';
+                managerSelect.appendChild(emptyOption);
+                
+                // 添加基本选项以确保功能性
+                const defaultManagers = [
+                    { id: 1, name: '管理员' },
+                    { id: 2, name: '项目经理' },
+                    { id: 3, name: '主管' }
+                ];
+                
+                defaultManagers.forEach(manager => {
+                    const option = document.createElement('option');
+                    option.value = manager.id;
+                    option.text = manager.name;
+                    managerSelect.appendChild(option);
+                });
+                
+                // 尝试直接请求备选API
+                setTimeout(() => {
+                    fetch('/api/projects?bypass_jwt=true')
+                        .then(response => response.json())
+                        .then(projects => {
+                            console.log('尝试从项目列表获取项目经理信息');
+                            // 如果获取到项目列表，可能会有额外的用户信息
+                        })
+                        .catch(err => console.error('备选请求也失败:', err));
+                }, 1000);
+            }
+        }
+    }
+</script>
+
+<!-- 强制应用权限控制脚本 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 强制检查用户权限并控制按钮显示
+        setTimeout(function() {
+            // 检查用户是否有创建项目的权限
+            const canCreateProject = hasPermission('create_project');
+            // 检查用户是否有管理项目的权限
+            const canManageProject = hasPermission('manage_project') || hasPermission('manage_all_projects');
+            
+            console.log('项目权限检查(强制):', { canCreateProject, canManageProject });
+            
+            // 设置"新建项目"按钮可见性
+            const newProjectButtons = document.querySelectorAll('.new-project-btn, .create-project-btn, [data-action="new-project"]');
+            newProjectButtons.forEach(button => {
+                if (button) {
+                    button.style.display = canCreateProject ? 'inline-block' : 'none';
+                }
+            });
+            
+            // 设置项目编辑按钮可见性
+            const projectEditButtons = document.querySelectorAll('.edit-btn, .project-edit-btn');
+            projectEditButtons.forEach(button => {
+                if (button) {
+                    button.style.display = canManageProject ? 'inline-block' : 'none';
+                }
+            });
+            
+            // 设置项目删除按钮可见性
+            const projectDeleteButtons = document.querySelectorAll('.delete-btn, .project-delete-btn');
+            projectDeleteButtons.forEach(button => {
+                if (button) {
+                    button.style.display = canManageProject ? 'inline-block' : 'none';
+                }
+            });
+            
+            // 如果用户没有创建项目权限，隐藏新建项目模态框触发按钮
+            const newProjectModalTriggers = document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#newProjectModal"]');
+            newProjectModalTriggers.forEach(trigger => {
+                if (trigger) {
+                    trigger.style.display = canCreateProject ? 'inline-block' : 'none';
+                }
+            });
+        }, 300); // 延迟执行以确保所有DOM元素都已加载
+    });
+</script>
+{% endblock %} 

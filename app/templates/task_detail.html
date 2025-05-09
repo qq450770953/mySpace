@@ -1,0 +1,1513 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+    .task-header {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .task-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .task-meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .task-description {
+        white-space: pre-wrap;
+        margin-bottom: 1.5rem;
+    }
+    .task-section {
+        margin-bottom: 2rem;
+    }
+    .task-section-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .comment-item {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .comment-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    .attachment-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+    .attachment-icon {
+        margin-right: 0.5rem;
+        color: #6c757d;
+    }
+    .risk-item {
+        padding: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+    }
+    .risk-level {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    .risk-high {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+    .risk-medium {
+        background-color: #fff3e0;
+        color: #ef6c00;
+    }
+    .risk-low {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+</style>
+{% endblock %}
+
+{% block head_scripts %}
+<script>
+    // 立即执行的函数，检查用户角色并隐藏编辑按钮
+    (function() {
+        // 等待DOM加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查当前用户是否为普通用户
+            if (typeof isRegularUser === 'function' && isRegularUser()) {
+                console.log('任务详情页：当前用户是普通用户，隐藏编辑按钮');
+                
+                // 隐藏编辑按钮
+                document.querySelectorAll('.edit-btn').forEach(function(btn) {
+                    btn.style.display = 'none';
+                });
+                
+                // 隐藏添加子任务、风险和附件的按钮
+                document.querySelectorAll('[onclick*="showAddSubtaskModal"], [onclick*="showAddRiskModal"], [onclick*="showUploadModal"]').forEach(function(btn) {
+                    btn.style.display = 'none';
+                });
+            } else {
+                console.log('任务详情页：当前用户是管理员或项目经理，显示所有功能按钮');
+                // 确保管理员和项目经理可以看到这些按钮
+                document.querySelectorAll('.edit-btn, [onclick*="showAddSubtaskModal"], [onclick*="showAddRiskModal"], [onclick*="showUploadModal"]').forEach(function(btn) {
+                    btn.style.display = 'inline-block';
+                });
+            }
+        });
+    })();
+    
+    // 全局函数定义，这些定义会在页面加载前就可用
+    // 获取任务ID的辅助函数
+    function getTaskId() {
+        var pathParts = window.location.pathname.split('/');
+        if (pathParts.length > 2 && pathParts[1] === "tasks") {
+            return pathParts[2];
+        }
+        return null;
+    }
+    
+    // 先定义一些初始的空函数，防止在真正的函数加载前出现未定义错误
+    // 这些函数将在后面的脚本中被覆盖
+    function loadComments() { console.log("loadComments占位函数被调用"); }
+    function loadAttachments() { console.log("loadAttachments占位函数被调用"); }
+    function loadSubtasks() { console.log("loadSubtasks占位函数被调用"); }
+    function loadRisks() { console.log("loadRisks占位函数被调用"); }
+    function loadTaskLogs() { console.log("loadTaskLogs占位函数被调用"); }
+    
+    // 加载任务详情
+    function loadTaskDetail() {
+        var taskId = getTaskId();
+        if (!taskId) return;
+        
+        console.log("开始加载任务详情, 任务ID:", taskId);
+        
+        // 修正API路径，增加备选路径降级处理
+        const apiUrl = `/api/tasks/${taskId}/detail?bypass_jwt=true`;
+        console.log("请求任务详情API路径:", apiUrl);
+        
+        // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+        fetchWithCsrf(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log("API响应状态:", response.status);
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // 尝试备选API路径
+                    console.log("主API路径返回404，尝试备选路径");
+                    return fetchWithCsrf(`/tasks/${taskId}?bypass_jwt=true`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                }
+                return response.text().then(text => {
+                    console.error("API错误响应:", text);
+                    throw new Error('获取任务详情失败: ' + response.statusText);
+                });
+            }
+            return response;
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error("备选API错误响应:", text);
+                    throw new Error('所有API尝试均失败: ' + response.statusText);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('获取到任务详情数据:', JSON.stringify(data));
+            
+            // 添加更多的调试信息来确认API响应结构
+            console.log('data类型:', typeof data);
+            console.log('data属性:', Object.keys(data));
+            
+            // 改进的数据处理逻辑，更健壮地处理各种数据结构
+            let taskData;
+            
+            // 处理各种可能的API响应结构
+            if (data && data.task && typeof data.task === 'object') {
+                // 结构1: { task: {...} }
+                console.log('使用data.task作为任务数据');
+                taskData = data.task;
+            } else if (data && typeof data === 'object') {
+                if (data.id && data.title) {
+                    // 结构2: 直接返回任务对象
+                    console.log('API直接返回了任务对象');
+                    taskData = data;
+                } else if (Object.keys(data).length > 0) {
+                    // 结构3: 其他有内容的对象，尝试使用
+                    console.log('使用API返回的数据作为任务数据');
+                    taskData = data;
+                } else {
+                    console.error('API返回的数据结构无法识别:', data);
+                    throw new Error('API返回的数据结构无法识别');
+                }
+            } else {
+                console.error('API返回的数据无效:', data);
+                throw new Error('API返回的数据无效或格式不正确');
+            }
+            
+            console.log('最终使用的任务数据:', taskData);
+            
+            // 直接调用显示函数，传入处理后的数据
+            displayTaskDetail(taskData);
+            
+            // 加载相关数据
+            loadComments();
+            loadAttachments();
+            loadSubtasks();
+            loadRisks();
+            loadTaskLogs();
+        })
+        .catch(error => {
+            console.error('获取任务详情时出错:', error);
+            // 在页面上显示错误信息
+            document.getElementById('taskTitle').textContent = '加载失败';
+            document.getElementById('taskDescription').textContent = '获取任务详情时出错: ' + error.message;
+        });
+    }
+    
+    // 显示任务详情 - 改进的版本，更健壮地处理各种数据结构
+    function displayTaskDetail(task) {
+        console.log('显示任务详情, 传入数据:', JSON.stringify(task));
+        
+        try {
+            // 检查task对象是否有效
+            if (!task || typeof task !== 'object') {
+                console.error('无效的任务数据:', task);
+                document.getElementById('taskTitle').textContent = '数据错误';
+                document.getElementById('taskDescription').textContent = '收到无效的任务数据';
+                return;
+            }
+            
+            // 设置标题
+            document.getElementById('taskTitle').textContent = task.title || '无标题';
+            console.log('设置标题:', task.title);
+            
+            // 设置项目
+            const projectElement = document.getElementById('taskProject');
+            if (projectElement) {
+                // 获取项目信息 - 支持多种数据结构
+                let projectInfo = null;
+                if (task.project && typeof task.project === 'object') {
+                    projectInfo = task.project;
+                } else if (task.project_id && task.project_name) {
+                    projectInfo = { id: task.project_id, name: task.project_name };
+                } else if (task.project_id) {
+                    // 如果只有项目ID，但没有项目名称，则显示项目ID
+                    projectInfo = { id: task.project_id, name: '项目-' + task.project_id };
+                }
+                
+                if (projectInfo && projectInfo.name) {
+                    projectElement.textContent = projectInfo.name;
+                    console.log('设置项目:', projectInfo.name);
+                } else {
+                    projectElement.textContent = '无项目';
+                    console.log('无项目数据');
+                }
+            } else {
+                console.error('找不到项目元素');
+            }
+            
+            // 设置状态显示
+            let statusText = '';
+            switch (task.status) {
+                case 'todo': statusText = '待办'; break;
+                case 'in_progress': statusText = '进行中'; break;
+                case 'review': statusText = '待审核'; break;
+                case 'done': statusText = '已完成'; break;
+                default: statusText = task.status || '未知';
+            }
+            const statusElement = document.getElementById('taskStatus');
+            if (statusElement) {
+                statusElement.textContent = statusText;
+                console.log('设置状态:', statusText);
+            } else {
+                console.error('找不到状态元素');
+            }
+            
+            // 设置优先级显示
+            let priorityText = '';
+            switch (task.priority) {
+                case 'low': priorityText = '低'; break;
+                case 'medium': priorityText = '中'; break;
+                case 'high': priorityText = '高'; break;
+                default: priorityText = task.priority || '未知';
+            }
+            const priorityElement = document.getElementById('taskPriority');
+            if (priorityElement) {
+                priorityElement.textContent = priorityText;
+                console.log('设置优先级:', priorityText);
+            } else {
+                console.error('找不到优先级元素');
+            }
+            
+            // 设置负责人
+            const assigneeElement = document.getElementById('taskAssignee');
+            if (assigneeElement) {
+                // 获取负责人信息 - 支持多种数据结构
+                let assigneeInfo = null;
+                if (task.assignee && typeof task.assignee === 'object') {
+                    assigneeInfo = task.assignee;
+                } else if (task.assignee_id && task.assignee_name) {
+                    assigneeInfo = { id: task.assignee_id, name: task.assignee_name };
+                } else if (task.assignee_id) {
+                    // 如果只有负责人ID，但没有名称，则显示ID
+                    assigneeInfo = { id: task.assignee_id, name: '用户-' + task.assignee_id };
+                }
+                
+                if (assigneeInfo && assigneeInfo.name) {
+                    assigneeElement.textContent = assigneeInfo.name;
+                    console.log('设置负责人:', assigneeInfo.name);
+                } else {
+                    assigneeElement.textContent = '未分配';
+                    console.log('无负责人数据');
+                }
+            } else {
+                console.error('找不到负责人元素');
+            }
+            
+            // 设置日期
+            const startDateElement = document.getElementById('taskStartDate');
+            if (startDateElement) {
+                // 尝试多种可能的日期字段名
+                const startDate = task.start_date || task.created_at || null;
+                try {
+                    startDateElement.textContent = startDate ? new Date(startDate).toLocaleDateString() : '未设置';
+                    console.log('设置开始日期:', startDate);
+                } catch (e) {
+                    console.error('日期格式处理错误:', e);
+                    startDateElement.textContent = startDate || '未设置';
+                }
+            } else {
+                console.error('找不到开始日期元素');
+            }
+            
+            const endDateElement = document.getElementById('taskEndDate');
+            if (endDateElement) {
+                // 尝试多种可能的日期字段名
+                const endDate = task.due_date || task.end_date || null;
+                try {
+                    endDateElement.textContent = endDate ? new Date(endDate).toLocaleDateString() : '未设置';
+                    console.log('设置截止日期:', endDate);
+                } catch (e) {
+                    console.error('日期格式处理错误:', e);
+                    endDateElement.textContent = endDate || '未设置';
+                }
+            } else {
+                console.error('找不到截止日期元素');
+            }
+            
+            // 设置进度
+            const progressElement = document.getElementById('taskProgress');
+            if (progressElement) {
+                const progress = typeof task.progress === 'number' ? task.progress : 0;
+                progressElement.textContent = progress;
+                console.log('设置进度:', progress);
+            } else {
+                console.error('找不到进度元素');
+            }
+            
+            // 设置描述
+            const descriptionElement = document.getElementById('taskDescription');
+            if (descriptionElement) {
+                descriptionElement.textContent = task.description || '无描述';
+                console.log('设置描述:', task.description);
+            } else {
+                console.error('找不到描述元素');
+            }
+            
+            console.log('任务详情渲染完成');
+        } catch (error) {
+            console.error('显示任务详情时出错:', error);
+            alert('显示任务详情时出错: ' + error.message);
+            
+            // 在出错时，也设置一些默认值，确保UI不会显示"加载中..."
+            const elements = {
+                'taskTitle': '加载错误',
+                'taskProject': '数据错误',
+                'taskStatus': '未知',
+                'taskPriority': '未知',
+                'taskAssignee': '未知',
+                'taskStartDate': '未知',
+                'taskEndDate': '未知',
+                'taskProgress': '0',
+                'taskDescription': '加载任务详情时出错: ' + error.message
+            };
+            
+            // 遍历并设置默认值
+            Object.keys(elements).forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = elements[id];
+            });
+        }
+    }
+    
+    window.showAddSubtaskModal = function() {
+        console.log("执行showAddSubtaskModal函数");
+        try {
+            const modalElement = document.getElementById('addSubtaskModal');
+            if (!modalElement) {
+                console.error("找不到子任务模态框元素");
+                alert("无法打开添加子任务窗口: 找不到模态框元素");
+                return;
+            }
+            
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        } catch (error) {
+            console.error("显示子任务模态框失败:", error);
+            alert("显示添加子任务窗口失败: " + error.message);
+        }
+    };
+    
+    window.showAddRiskModal = function() {
+        console.log("执行showAddRiskModal函数");
+        try {
+            const modalElement = document.getElementById('addRiskModal');
+            if (!modalElement) {
+                console.error("找不到风险模态框元素");
+                alert("无法打开添加风险窗口: 找不到模态框元素");
+                return;
+            }
+            
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        } catch (error) {
+            console.error("显示风险模态框失败:", error);
+            alert("显示添加风险窗口失败: " + error.message);
+        }
+    };
+    
+    window.showUploadModal = function() {
+        console.log("执行showUploadModal函数");
+        try {
+            const modalElement = document.getElementById('uploadAttachmentModal');
+            if (!modalElement) {
+                console.error("找不到上传模态框元素");
+                alert("无法打开上传附件窗口: 找不到模态框元素");
+                return;
+            }
+            
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        } catch (error) {
+            console.error("显示上传模态框失败:", error);
+            alert("显示上传附件窗口失败: " + error.message);
+        }
+    };
+    
+    window.addComment = function() {
+        console.log("执行addComment函数");
+        const commentText = document.getElementById('commentText').value.trim();
+        if (!commentText) {
+            alert('请输入评论内容');
+            return;
+        }
+        
+        const taskId = getTaskId();
+        if (!taskId) {
+            console.error('无法获取任务ID');
+            alert('无法获取任务ID');
+            return;
+        }
+        
+        // 禁用提交按钮，防止重复提交
+        const submitBtn = document.getElementById('submitCommentBtn');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = '提交中...';
+        }
+        
+        fetchWithCsrf(`/api/auth/tasks/${taskId}/comments?bypass_jwt=true`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                content: commentText
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error("评论提交错误响应:", text);
+                    throw new Error('添加评论失败: ' + response.statusText);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('评论提交成功:', data);
+            document.getElementById('commentText').value = '';
+            
+            // 刷新评论列表
+            loadComments();
+            
+            // 显示成功消息
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.role = 'alert';
+            alertDiv.innerHTML = `
+                评论添加成功
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            const commentSection = document.querySelector('.task-section:has(#commentsList)');
+            if (commentSection) {
+                commentSection.insertBefore(alertDiv, commentSection.firstChild);
+            }
+        })
+        .catch(error => {
+            console.error('添加评论失败:', error);
+            alert('添加评论失败: ' + error.message);
+        })
+        .finally(() => {
+            // 恢复提交按钮状态
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交评论';
+            }
+        });
+    };
+    
+    window.editTask = function() {
+        console.log("执行editTask函数");
+        
+        // 检查用户权限
+        if (typeof isRegularUser === 'function' && isRegularUser()) {
+            console.log("普通用户无权编辑任务");
+            alert("您没有编辑任务的权限");
+            return;
+        }
+        
+        const taskId = getTaskId();
+        if (!taskId) {
+            console.error('无法获取任务ID');
+            alert('无法获取任务ID');
+            return;
+        }
+        
+        // 使用带有绕过JWT认证的参数
+        const editUrl = `/tasks/${taskId}/edit?bypass_jwt=true`;
+        console.log('跳转到编辑页面:', editUrl);
+        window.location.href = editUrl;
+    };
+
+    // 当页面DOM内容加载完成时，添加事件监听器
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('=== 页面已加载，开始初始化任务详情页面 ===');
+        
+        try {
+            // 获取任务ID
+            const taskId = getTaskId();
+            if (!taskId) {
+                console.error('无法获取任务ID');
+                alert('无法获取任务ID，请确保URL格式正确');
+                return;
+            }
+            
+            console.log('正在加载任务ID: ' + taskId);
+            
+            // 检查关键DOM元素是否存在
+            const keyElements = [
+                'taskTitle', 'taskProject', 'taskStatus', 'taskPriority', 
+                'taskAssignee', 'taskStartDate', 'taskEndDate', 'taskProgress', 'taskDescription'
+            ];
+            
+            const missingElements = keyElements.filter(id => !document.getElementById(id));
+            if (missingElements.length > 0) {
+                console.error('页面缺少关键元素:', missingElements);
+                alert('页面结构不完整，缺少以下元素: ' + missingElements.join(', '));
+            }
+            
+            // 添加评论按钮事件监听器
+            const submitCommentBtn = document.getElementById('submitCommentBtn');
+            if (submitCommentBtn) {
+                submitCommentBtn.addEventListener('click', window.addComment);
+            } else {
+                console.warn('找不到评论提交按钮元素');
+            }
+            
+            // 延迟加载任务详情，以确保页面DOM完全加载
+            setTimeout(() => {
+                loadTaskDetail();
+            }, 100);
+            
+            // 添加子任务确认按钮事件
+            const confirmAddSubtaskBtn = document.getElementById('confirmAddSubtaskBtn');
+            if (confirmAddSubtaskBtn) {
+                confirmAddSubtaskBtn.addEventListener('click', function() {
+                    console.log('添加子任务确认按钮被点击');
+                    var taskId = getTaskId();
+                    const form = document.getElementById('addSubtaskForm');
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+                    
+                    // 获取当前日期
+                    const today = new Date();
+                    const formattedToday = today.toISOString().split('T')[0]; // 格式化为YYYY-MM-DD
+                    
+                    // 获取结束日期
+                    let endDate = document.getElementById('subtaskDueDate').value;
+                    if (!endDate) {
+                        // 如果没有设置，默认为30天后
+                        const future = new Date();
+                        future.setDate(future.getDate() + 30);
+                        endDate = future.toISOString().split('T')[0];
+                    }
+                    
+                    const subtaskData = {
+                        name: document.getElementById('subtaskName').value,
+                        description: document.getElementById('subtaskDescription').value,
+                        priority: document.getElementById('subtaskPriority').value,
+                        assignee_id: document.getElementById('subtaskAssignee').value || null,
+                        end_date: endDate
+                    };
+                    
+                    console.log('提交子任务数据:', subtaskData);
+                    
+                    // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+                    fetchWithCsrf(`/api/auth/tasks/${taskId}/subtasks?bypass_jwt=true`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(subtaskData)
+                    })
+                    .then(response => {
+                        console.log("添加子任务API响应状态:", response.status);
+                        if (!response.ok) {
+                            throw new Error('添加子任务失败: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("添加子任务成功，返回数据:", data);
+                        alert('子任务添加成功');
+                        document.getElementById('subtaskName').value = '';
+                        document.getElementById('subtaskDescription').value = '';
+                        
+                        // 隐藏模态框
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('addSubtaskModal'));
+                        if (modal) modal.hide();
+                        
+                        // 重新加载子任务列表
+                        loadSubtasks();
+                    })
+                    .catch(error => {
+                        console.error('添加子任务失败:', error);
+                        alert('添加子任务失败: ' + error.message);
+                    });
+                });
+            }
+            
+            // 添加风险确认按钮事件
+            const confirmAddRiskBtn = document.getElementById('confirmAddRiskBtn');
+            if (confirmAddRiskBtn) {
+                confirmAddRiskBtn.addEventListener('click', function() {
+                    console.log('添加风险确认按钮被点击');
+                    var taskId = getTaskId();
+                    const form = document.getElementById('addRiskForm');
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+                    
+                    const riskData = {
+                        title: document.getElementById('riskTitle').value,
+                        description: document.getElementById('riskDescription').value,
+                        probability: document.getElementById('riskProbability').value,
+                        impact: document.getElementById('riskImpact').value,
+                        mitigation_plan: document.getElementById('riskMitigation').value,
+                        status: 'open',
+                        severity: document.getElementById('riskImpact').value // 使用impact值作为severity默认值
+                    };
+                    
+                    console.log('提交风险数据:', riskData);
+                    
+                    // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+                    fetchWithCsrf(`/api/auth/tasks/${taskId}/risks?bypass_jwt=true`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(riskData)
+                    })
+                    .then(response => {
+                        console.log("添加风险API响应状态:", response.status);
+                        if (!response.ok) {
+                            throw new Error('添加风险失败: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("添加风险成功，返回数据:", data);
+                        alert('风险添加成功');
+                        document.getElementById('riskTitle').value = '';
+                        document.getElementById('riskDescription').value = '';
+                        document.getElementById('riskMitigation').value = '';
+                        
+                        // 隐藏模态框
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('addRiskModal'));
+                        if (modal) modal.hide();
+                        
+                        // 刷新风险列表
+                        loadRisks();
+                    })
+                    .catch(error => {
+                        console.error('添加风险失败:', error);
+                        alert('添加风险失败: ' + error.message);
+                    });
+                });
+            }
+            
+            // 上传附件确认按钮事件
+            const confirmUploadBtn = document.getElementById('confirmUploadBtn');
+            if (confirmUploadBtn) {
+                confirmUploadBtn.addEventListener('click', function() {
+                    console.log('上传附件确认按钮被点击');
+                    var taskId = getTaskId();
+                    const form = document.getElementById('uploadForm');
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    const fileInput = document.getElementById('attachmentFile');
+                    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                        alert('请选择要上传的文件');
+                        return;
+                    }
+                    
+                    formData.append('file', fileInput.files[0]);
+                    formData.append('description', document.getElementById('attachmentDescription').value || '');
+                    
+                    console.log('上传附件...');
+                    
+                    // 首先获取CSRF令牌，然后使用它进行文件上传
+                    getCsrfToken()
+                        .then(csrfToken => {
+                            return fetch(`/api/auth/tasks/${taskId}/attachments?bypass_jwt=true`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                },
+                                body: formData
+                            });
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('上传附件失败: ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            alert('附件上传成功');
+                            document.getElementById('attachmentFile').value = '';
+                            document.getElementById('attachmentDescription').value = '';
+                            
+                            // 隐藏模态框
+                            var modal = bootstrap.Modal.getInstance(document.getElementById('uploadAttachmentModal'));
+                            if (modal) modal.hide();
+                            
+                            // 刷新附件列表
+                            loadAttachments();
+                        })
+                        .catch(error => {
+                            console.error('上传附件失败:', error);
+                            alert('上传附件失败: ' + error.message);
+                        });
+                });
+            }
+        } catch (error) {
+            console.error("页面初始化时出错:", error);
+            alert("页面初始化时出错: " + error.message);
+        }
+    });
+    
+    console.log('========= 页面脚本初始化完成 ==========');
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>任务详情</h4>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary" onclick="window.location.href='/tasks?bypass_jwt=true'">
+                            <i class="fas fa-arrow-left"></i> 返回
+                        </button>
+                        {% if current_user.is_authenticated and (current_user.has_permission('manage_task') if hasattr(current_user, 'has_permission') else False or current_user.has_permission('manage_all_tasks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                        <button class="btn btn-outline-primary edit-btn" onclick="window.editTask()">
+                            <i class="fas fa-edit"></i> 编辑
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- 立即执行脚本，获取并显示任务ID -->
+                    <script>
+                        (function() {
+                            // 从URL中提取任务ID
+                            var pathParts = window.location.pathname.split('/');
+                            var taskId = "未知";
+                            
+                            if (pathParts.length > 2 && pathParts[1] === "tasks") {
+                                taskId = pathParts[2];
+                                console.log("内联脚本：从URL路径获取任务ID:", taskId);
+                            }
+                            
+                            // 在页面上显示任务ID
+                            document.write('<div class="alert alert-info mb-3">当前正在查看任务ID: ' + taskId + '</div>');
+                            
+                            // 将任务ID存储在全局变量中
+                            window.currentTaskId = taskId;
+                        })();
+                    </script>
+
+                    <!-- 任务基本信息 -->
+                    <div class="task-header">
+                        <div class="task-title" id="taskTitle">加载中...</div>
+                        <div class="task-meta">
+                            <span id="taskProject">加载中...</span> •
+                            <span id="taskStatus">加载中...</span> •
+                            <span id="taskPriority">加载中...</span> •
+                            <span id="taskAssignee">加载中...</span>
+                        </div>
+                        <div class="task-meta">
+                            开始日期: <span id="taskStartDate">加载中...</span> •
+                            截止日期: <span id="taskEndDate">加载中...</span> •
+                            进度: <span id="taskProgress">0</span>%
+                        </div>
+                    </div>
+
+                    <!-- 任务描述 -->
+                    <div class="task-section">
+                        <div class="task-section-title">任务描述</div>
+                        <div class="task-description" id="taskDescription">正在加载任务描述...</div>
+                    </div>
+
+                    <!-- 子任务 -->
+                    <div class="task-section">
+                        <div class="task-section-title d-flex justify-content-between align-items-center">
+                            <span>子任务</span>
+                            {% if current_user.is_authenticated and (current_user.has_permission('manage_task') if hasattr(current_user, 'has_permission') else False or current_user.has_permission('manage_all_tasks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                            <button class="btn btn-sm btn-outline-primary" onclick="window.showAddSubtaskModal()">
+                                <i class="fas fa-plus"></i> 添加子任务
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div id="subtasksList"></div>
+                    </div>
+
+                    <!-- 任务日志 -->
+                    <div class="task-section">
+                        <div class="task-section-title">任务日志</div>
+                        <div id="taskLogs"></div>
+                    </div>
+
+                    <!-- 任务评论 -->
+                    <div class="task-section">
+                        <div class="task-section-title">任务评论</div>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="commentText" rows="3" placeholder="添加评论..."></textarea>
+                            <button class="btn btn-primary mt-2" id="submitCommentBtn">发表评论</button>
+                        </div>
+                        <div id="commentsList"></div>
+                    </div>
+
+                    <!-- 任务风险 -->
+                    <div class="task-section">
+                        <div class="task-section-title d-flex justify-content-between align-items-center">
+                            <span>任务风险</span>
+                            {% if current_user.is_authenticated and (current_user.has_permission('manage_task') if hasattr(current_user, 'has_permission') else False or current_user.has_permission('manage_all_tasks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                            <button class="btn btn-sm btn-outline-primary" onclick="window.showAddRiskModal()">
+                                <i class="fas fa-plus"></i> 添加风险
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div id="risksList"></div>
+                    </div>
+
+                    <!-- 任务附件 -->
+                    <div class="task-section">
+                        <div class="task-section-title d-flex justify-content-between align-items-center">
+                            <span>任务附件</span>
+                            {% if current_user.is_authenticated and (current_user.has_permission('manage_task') if hasattr(current_user, 'has_permission') else False or current_user.has_permission('manage_all_tasks') if hasattr(current_user, 'has_permission') else False or current_user.has_role('admin') if hasattr(current_user, 'has_role') else False or current_user.has_role('manager') if hasattr(current_user, 'has_role') else False) %}
+                            <button class="btn btn-sm btn-outline-primary" onclick="window.showUploadModal()">
+                                <i class="fas fa-plus"></i> 上传附件
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div id="attachmentsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加子任务模态框 -->
+<div class="modal fade" id="addSubtaskModal" tabindex="-1" aria-labelledby="addSubtaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSubtaskModalLabel">添加子任务</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addSubtaskForm">
+                    <div class="mb-3">
+                        <label class="form-label">子任务标题</label>
+                        <input type="text" class="form-control" id="subtaskName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">子任务描述</label>
+                        <textarea class="form-control" id="subtaskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">优先级</label>
+                        <select class="form-select" id="subtaskPriority">
+                            <option value="low">低</option>
+                            <option value="medium" selected>中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">负责人</label>
+                        <select class="form-select" id="subtaskAssignee">
+                            <option value="">未分配</option>
+                            <option value="1">用户1</option>
+                            <option value="2">用户2</option>
+                            <option value="3">用户3</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">截止日期</label>
+                        <input type="date" class="form-control" id="subtaskDueDate">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmAddSubtaskBtn">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加风险模态框 -->
+<div class="modal fade" id="addRiskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加风险</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addRiskForm">
+                    <div class="mb-3">
+                        <label class="form-label">风险标题</label>
+                        <input type="text" class="form-control" id="riskTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">风险描述</label>
+                        <textarea class="form-control" id="riskDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">发生概率</label>
+                        <select class="form-select" id="riskProbability" required>
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">影响程度</label>
+                        <select class="form-select" id="riskImpact" required>
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">应对措施</label>
+                        <textarea class="form-control" id="riskMitigation" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmAddRiskBtn">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 上传附件模态框 -->
+<div class="modal fade" id="uploadAttachmentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">上传附件</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm">
+                    <div class="mb-3">
+                        <label class="form-label">选择文件</label>
+                        <input type="file" class="form-control" id="attachmentFile" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">文件描述</label>
+                        <input type="text" class="form-control" id="attachmentDescription">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmUploadBtn">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // 全局函数和变量，在整个页面可用
+    
+    // 加载评论
+    function loadComments() {
+        var taskId = getTaskId();
+        if (!taskId) return;
+        
+        console.log("开始加载评论, 任务ID:", taskId);
+        
+        fetchWithCsrf(`/api/auth/tasks/${taskId}/comments?bypass_jwt=true`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('获取评论失败: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(comments => {
+            console.log("获取到评论数据:", comments);
+            const commentsList = document.getElementById('commentsList');
+            if (!commentsList) {
+                console.error("找不到评论列表容器元素");
+                return;
+            }
+            
+            commentsList.innerHTML = '';
+            
+            if (!Array.isArray(comments) || comments.length === 0) {
+                commentsList.innerHTML = '<p class="text-muted">暂无评论</p>';
+                return;
+            }
+            
+            comments.forEach(comment => {
+                // 检查评论对象是否有效
+                if (!comment || typeof comment !== 'object') {
+                    console.error('无效的评论数据:', comment);
+                    return;
+                }
+                
+                const commentItem = document.createElement('div');
+                commentItem.className = 'comment-item';
+                
+                // 处理用户名显示
+                let userName = '未知用户';
+                if (comment.user && typeof comment.user === 'object' && comment.user.name) {
+                    userName = comment.user.name;
+                } else if (comment.user_name) {
+                    userName = comment.user_name;
+                }
+                
+                // 处理创建时间显示
+                let createdAt = '';
+                if (comment.created_at) {
+                    try {
+                        createdAt = new Date(comment.created_at).toLocaleString();
+                    } catch (e) {
+                        console.error('日期格式处理错误:', e);
+                        createdAt = comment.created_at;
+                    }
+                }
+                
+                commentItem.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-1">${userName}</h6>
+                        <span class="comment-meta">${createdAt || '未知时间'}</span>
+                    </div>
+                    <p>${comment.content || ''}</p>
+                `;
+                commentsList.appendChild(commentItem);
+            });
+        })
+        .catch(error => {
+            console.error('获取评论时出错:', error);
+            const commentsList = document.getElementById('commentsList');
+            if (commentsList) {
+                commentsList.innerHTML = '<p class="text-danger">加载评论时出错: ' + error.message + '</p>';
+            }
+        });
+    }
+    
+    // 加载子任务
+    function loadSubtasks() {
+        var taskId = getTaskId();
+        if (!taskId) return;
+        
+        console.log("开始加载子任务, 任务ID:", taskId);
+        
+        fetchWithCsrf(`/api/auth/tasks/${taskId}/subtasks?bypass_jwt=true`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log("子任务API响应状态:", response.status);
+            if (!response.ok) {
+                throw new Error('获取子任务失败: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(subtasks => {
+            console.log("获取到子任务数据:", subtasks);
+            const container = document.getElementById('subtasksList');
+            if (!container) {
+                console.error("找不到子任务列表容器元素");
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            if (!Array.isArray(subtasks) || subtasks.length === 0) {
+                container.innerHTML = '<p class="text-muted">暂无子任务</p>';
+                return;
+            }
+            
+            subtasks.forEach(subtask => {
+                // 检查子任务对象是否有效
+                if (!subtask || typeof subtask !== 'object') {
+                    console.error('无效的子任务数据:', subtask);
+                    return;
+                }
+                
+                const div = document.createElement('div');
+                div.className = 'subtask-item mb-3 p-3 border rounded';
+                
+                // 显示标题 - 支持多种字段名
+                const title = subtask.title || subtask.name || '未命名子任务';
+                
+                // 状态颜色逻辑
+                let statusBadgeClass = 'bg-secondary';
+                if (subtask.status === 'completed') {
+                    statusBadgeClass = 'bg-success';
+                } else if (subtask.status === 'in_progress') {
+                    statusBadgeClass = 'bg-primary';
+                }
+                
+                // 格式化状态显示
+                let statusText = subtask.status || 'unknown';
+                statusText = statusText.replace('_', ' '); // 替换下划线为空格
+                statusText = statusText.charAt(0).toUpperCase() + statusText.slice(1); // 首字母大写
+                
+                // 处理进度显示
+                const progress = typeof subtask.progress === 'number' ? subtask.progress : 0;
+                
+                // 处理负责人显示
+                let assigneeName = '未分配';
+                if (subtask.assignee && typeof subtask.assignee === 'object' && subtask.assignee.name) {
+                    assigneeName = subtask.assignee.name;
+                } else if (subtask.assignee_name) {
+                    assigneeName = subtask.assignee_name;
+                }
+                
+                // 处理日期显示
+                let dueDate = '未设置';
+                if (subtask.due_date) {
+                    try {
+                        dueDate = new Date(subtask.due_date).toLocaleDateString();
+                    } catch (e) {
+                        console.error('日期格式处理错误:', e);
+                        dueDate = subtask.due_date;
+                    }
+                } else if (subtask.end_date) {
+                    try {
+                        dueDate = new Date(subtask.end_date).toLocaleDateString();
+                    } catch (e) {
+                        console.error('日期格式处理错误:', e);
+                        dueDate = subtask.end_date;
+                    }
+                }
+                
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">${title}</h6>
+                        <span class="badge ${statusBadgeClass}">${statusText}</span>
+                    </div>
+                    <div class="mb-2">${subtask.description || ''}</div>
+                    <div class="progress mt-2 mb-2">
+                        <div class="progress-bar" role="progressbar" 
+                            style="width: ${progress}%;" 
+                            aria-valuenow="${progress}" 
+                            aria-valuemin="0" 
+                            aria-valuemax="100">${progress}%</div>
+                    </div>
+                    <div class="text-muted mt-2">
+                        <small>负责人: ${assigneeName}</small>
+                        <small class="ms-3">截止日期: ${dueDate}</small>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        })
+        .catch(error => {
+            console.error('获取子任务失败:', error);
+            const container = document.getElementById('subtasksList');
+            if (container) {
+                container.innerHTML = '<p class="text-danger">加载子任务时出错: ' + error.message + '</p>';
+            }
+        });
+    }
+    
+    // 加载附件
+    function loadAttachments() {
+        var taskId = getTaskId();
+        if (!taskId) return;
+        
+        console.log("开始加载附件, 任务ID:", taskId);
+        
+        fetchWithCsrf(`/api/auth/tasks/${taskId}/attachments?bypass_jwt=true`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('获取附件失败: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(attachments => {
+            console.log("获取到附件数据:", attachments);
+            const attachmentsList = document.getElementById('attachmentsList');
+            if (!attachmentsList) {
+                console.error("找不到附件列表容器元素");
+                return;
+            }
+            
+            attachmentsList.innerHTML = '';
+            
+            if (!Array.isArray(attachments) || attachments.length === 0) {
+                attachmentsList.innerHTML = '<p class="text-muted">暂无附件</p>';
+                return;
+            }
+            
+            attachments.forEach(attachment => {
+                // 检查附件对象是否有效
+                if (!attachment || typeof attachment !== 'object') {
+                    console.error('无效的附件数据:', attachment);
+                    return;
+                }
+                
+                const attachmentItem = document.createElement('div');
+                attachmentItem.className = 'attachment-item';
+                
+                // 处理创建时间显示
+                let createdAt = '';
+                if (attachment.created_at) {
+                    try {
+                        createdAt = new Date(attachment.created_at).toLocaleString();
+                    } catch (e) {
+                        console.error('日期格式处理错误:', e);
+                        createdAt = attachment.created_at;
+                    }
+                }
+                
+                attachmentItem.innerHTML = `
+                    <i class="fas fa-file attachment-icon"></i>
+                    <div class="flex-grow-1">
+                        <div>${attachment.filename || '未命名文件'}</div>
+                        <small class="text-muted">${createdAt || '未知时间'}</small>
+                    </div>
+                    <a href="/api/auth/tasks/${taskId}/attachments/${attachment.id}/download?bypass_jwt=true" class="btn btn-sm btn-outline-primary me-1">
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteAttachment('${attachment.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                attachmentsList.appendChild(attachmentItem);
+            });
+        })
+        .catch(error => {
+            console.error('获取附件时出错:', error);
+            const attachmentsList = document.getElementById('attachmentsList');
+            if (attachmentsList) {
+                attachmentsList.innerHTML = '<p class="text-danger">加载附件时出错: ' + error.message + '</p>';
+            }
+        });
+    }
+    
+    // 加载风险记录
+    function loadRisks() {
+        var taskId = getTaskId();
+        if (!taskId) return;
+        
+        console.log("开始加载风险, 任务ID:", taskId);
+        
+        fetchWithCsrf(`/api/auth/tasks/${taskId}/risks?bypass_jwt=true`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log("风险API响应状态:", response.status);
+            if (!response.ok) {
+                throw new Error('获取风险记录失败: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(risks => {
+            console.log("获取到风险数据:", risks);
+            const container = document.getElementById('risksList');
+            if (!container) {
+                console.error("找不到风险列表容器元素");
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            if (!Array.isArray(risks) || risks.length === 0) {
+                container.innerHTML = '<p class="text-muted">暂无风险记录</p>';
+                return;
+            }
+            
+            risks.forEach(risk => {
+                // 检查风险对象是否有效
+                if (!risk || typeof risk !== 'object') {
+                    console.error('无效的风险数据:', risk);
+                    return;
+                }
+                
+                const div = document.createElement('div');
+                div.className = 'risk-item';
+                
+                // 处理风险等级显示
+                let riskLevel = 'medium';
+                let riskLevelText = '中风险';
+                
+                if (risk.impact === 'high' || risk.severity === 'high') {
+                    riskLevel = 'high';
+                    riskLevelText = '高风险';
+                } else if (risk.impact === 'low' || risk.severity === 'low') {
+                    riskLevel = 'low';
+                    riskLevelText = '低风险';
+                }
+                
+                // 处理创建时间显示
+                let createdAt = '';
+                if (risk.created_at) {
+                    try {
+                        createdAt = new Date(risk.created_at).toLocaleString();
+                    } catch (e) {
+                        console.error('日期格式处理错误:', e);
+                        createdAt = risk.created_at;
+                    }
+                }
+                
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">${risk.title || '未命名风险'}</h6>
+                        <span class="risk-level risk-${riskLevel}">${riskLevelText}</span>
+                    </div>
+                    <div class="mb-2">${risk.description || ''}</div>
+                    <div class="mb-2">
+                        <strong>应对措施：</strong>
+                        <div>${risk.mitigation_plan || '暂无'}</div>
+                    </div>
+                    <div class="text-muted">
+                        创建时间：${createdAt || '未知'}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        })
+        .catch(error => {
+            console.error('获取风险记录失败:', error);
+            const container = document.getElementById('risksList');
+            if (container) {
+                container.innerHTML = '<p class="text-danger">加载风险记录时出错: ' + error.message + '</p>';
+            }
+        });
+    }
+    
+    // 加载任务日志
+    function loadTaskLogs() {
+        var taskId = getTaskId();
+        if (!taskId) return;
+        
+        console.log("开始加载任务日志, 任务ID:", taskId);
+        
+        fetchWithCsrf(`/api/auth/tasks/${taskId}/logs?bypass_jwt=true`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('获取任务日志失败: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(logs => {
+            console.log("获取到任务日志数据:", logs);
+            const container = document.getElementById('taskLogs');
+            if (!container) {
+                console.error("找不到任务日志容器元素");
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            if (!Array.isArray(logs) || logs.length === 0) {
+                container.innerHTML = '<p class="text-muted">暂无任务日志</p>';
+                return;
+            }
+            
+            logs.forEach(log => {
+                // 检查日志对象是否有效
+                if (!log || typeof log !== 'object') {
+                    console.error('无效的日志数据:', log);
+                    return;
+                }
+                
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                
+                // 处理用户名显示
+                let userName = '系统';
+                if (log.user && typeof log.user === 'object') {
+                    userName = log.user.username || log.user.name || '未知用户';
+                }
+                
+                // 处理创建时间显示
+                let createdAt = '';
+                if (log.created_at) {
+                    try {
+                        createdAt = new Date(log.created_at).toLocaleString();
+                    } catch (e) {
+                        console.error('日期格式处理错误:', e);
+                        createdAt = log.created_at;
+                    }
+                }
+                
+                // 处理日志内容
+                let logContent = log.details || log.content || '';
+                if (!logContent) {
+                    logContent = `${log.action || '操作'} 记录`;
+                }
+                
+                div.innerHTML = `
+                    <div class="comment-meta">
+                        ${userName} • ${createdAt || '未知时间'}
+                    </div>
+                    <div>${logContent}</div>
+                `;
+                container.appendChild(div);
+            });
+        })
+        .catch(error => {
+            console.error('获取任务日志失败:', error);
+            const container = document.getElementById('taskLogs');
+            if (container) {
+                container.innerHTML = '<p class="text-danger">加载任务日志时出错: ' + error.message + '</p>';
+            }
+        });
+    }
+    
+    console.log('========= 页面脚本初始化完成 ==========');
+</script>
+{% endblock %} 

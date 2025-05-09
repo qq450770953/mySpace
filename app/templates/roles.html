@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">角色管理</h5>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">
+                        <i class="fas fa-plus"></i> 添加角色
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>角色名称</th>
+                                    <th>描述</th>
+                                    <th>权限数量</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rolesTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加角色模态框 -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加角色</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addRoleForm">
+                    <div class="form-group">
+                        <label for="roleName">角色名称</label>
+                        <input type="text" class="form-control" id="roleName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="roleDescription">描述</label>
+                        <textarea class="form-control" id="roleDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>权限</label>
+                        <div id="permissionsList" class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addRole()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑角色模态框 -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑角色</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editRoleForm">
+                    <input type="hidden" id="editRoleId">
+                    <div class="form-group">
+                        <label for="editRoleName">角色名称</label>
+                        <input type="text" class="form-control" id="editRoleName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRoleDescription">描述</label>
+                        <textarea class="form-control" id="editRoleDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>权限</label>
+                        <div id="editPermissionsList" class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updateRole()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 加载角色列表
+function loadRoles() {
+    fetch('/api/auth/roles')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('rolesTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(role => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${role.name}</td>
+                    <td>${role.description || '-'}</td>
+                    <td>${role.permissions ? role.permissions.length : 0}</td>
+                    <td>${new Date(role.created_at).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editRole(${role.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteRole(${role.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        });
+}
+
+// 加载权限列表
+function loadPermissions() {
+    fetch('/api/auth/permissions')
+        .then(response => response.json())
+        .then(data => {
+            const permissionLists = [
+                document.getElementById('permissionsList'),
+                document.getElementById('editPermissionsList')
+            ];
+            
+            permissionLists.forEach(list => {
+                list.innerHTML = '';
+                data.forEach(permission => {
+                    const div = document.createElement('div');
+                    div.className = 'custom-control custom-checkbox';
+                    div.innerHTML = `
+                        <input type="checkbox" class="custom-control-input" 
+                               id="permission_${permission.id}" value="${permission.id}">
+                        <label class="custom-control-label" for="permission_${permission.id}">
+                            ${permission.name}
+                        </label>
+                    `;
+                    list.appendChild(div);
+                });
+            });
+        });
+}
+
+// 添加角色
+function addRole() {
+    const formData = {
+        name: document.getElementById('roleName').value,
+        description: document.getElementById('roleDescription').value,
+        permissions: Array.from(document.querySelectorAll('#permissionsList input:checked'))
+            .map(checkbox => checkbox.value)
+    };
+    
+    fetch('/api/auth/roles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        $('#addRoleModal').modal('hide');
+        document.getElementById('addRoleForm').reset();
+        loadRoles();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('添加角色失败');
+    });
+}
+
+// 编辑角色
+function editRole(roleId) {
+    fetch(`/api/auth/roles/${roleId}`)
+        .then(response => response.json())
+        .then(role => {
+            document.getElementById('editRoleId').value = role.id;
+            document.getElementById('editRoleName').value = role.name;
+            document.getElementById('editRoleDescription').value = role.description || '';
+            
+            // 设置权限复选框
+            const checkboxes = document.querySelectorAll('#editPermissionsList input');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = role.permissions.some(p => p.id === checkbox.value);
+            });
+            
+            $('#editRoleModal').modal('show');
+        });
+}
+
+// 更新角色
+function updateRole() {
+    const roleId = document.getElementById('editRoleId').value;
+    const formData = {
+        name: document.getElementById('editRoleName').value,
+        description: document.getElementById('editRoleDescription').value,
+        permissions: Array.from(document.querySelectorAll('#editPermissionsList input:checked'))
+            .map(checkbox => checkbox.value)
+    };
+    
+    fetch(`/api/auth/roles/${roleId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        $('#editRoleModal').modal('hide');
+        document.getElementById('editRoleForm').reset();
+        loadRoles();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('更新角色失败');
+    });
+}
+
+// 删除角色
+function deleteRole(roleId) {
+    if (!confirm('确定要删除该角色吗？')) {
+        return;
+    }
+    
+    fetch(`/api/auth/roles/${roleId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        loadRoles();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('删除角色失败');
+    });
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    loadRoles();
+    loadPermissions();
+});
+</script>
+{% endblock %} 

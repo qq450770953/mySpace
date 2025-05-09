@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "frappe-gantt": "^1.0.3",
+    "frappe-gantt-extended": "^0.7.0"
+  }
+}

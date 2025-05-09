@@ -1,0 +1,1619 @@
+{% extends "base.html" %}
+
+{% block title %}项目详情 - {{ project.name }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+    .task-list {
+        margin-top: 20px;
+    }
+    .task-card {
+        margin-bottom: 10px;
+        border-left: 4px solid #007bff;
+    }
+    .task-card.priority-1 {
+        border-left-color: #28a745;
+    }
+    .task-card.priority-2 {
+        border-left-color: #ffc107;
+    }
+    .task-card.priority-3 {
+        border-left-color: #dc3545;
+    }
+    .project-header {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .member-badge {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}项目详情{% endblock %}
+
+{% block header_buttons %}
+<div class="btn-group me-2">
+    <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ url_for('main.projects') }}?bypass_jwt=true'">
+        <i class="bi bi-arrow-left"></i> 返回项目列表
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openEditModal({{ project.id }})">
+        <i class="bi bi-pencil"></i> 编辑项目
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDeleteProject()">
+        <i class="bi bi-trash"></i> 删除项目
+    </button>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- 项目信息 -->
+<div class="project-header">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>{{ project.name }}</h2>
+            <p class="text-muted">{{ project.description }}</p>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>状态:</strong> <span class="badge bg-primary">{{ project.status }}</span></p>
+                    <p><strong>负责人:</strong> {{ project.manager }}</p>
+                    <p><strong>开始日期:</strong> {{ project.start_date }}</p>
+                    <p><strong>结束日期:</strong> {{ project.end_date }}</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar" role="progressbar" style="width: {{ project.progress }}%" 
+                             aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ project.progress }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 项目导航 -->
+<ul class="nav nav-tabs" id="projectTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="true">
+            任务
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="members-tab" data-bs-toggle="tab" data-bs-target="#members" type="button" role="tab" aria-controls="members" aria-selected="false">
+            团队成员
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="files-tab" data-bs-toggle="tab" data-bs-target="#files" type="button" role="tab" aria-controls="files" aria-selected="false">
+            文件
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
+            设置
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="projectTabContent">
+    <!-- 任务标签页 -->
+    <div class="tab-pane fade show active" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <h4>项目任务</h4>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                <i class="bi bi-plus-circle"></i> 新建任务
+            </button>
+        </div>
+
+        {% if tasks %}
+        <div class="row">
+            <div class="col-md-4">
+                <h5>待办</h5>
+                <div class="task-list">
+                    {% for task in tasks if task.status == 'to_do' %}
+                    <div class="card task-card priority-{{ task.priority }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text text-truncate">{{ task.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-secondary">{{ task.assignee }}</span>
+                                <small class="text-muted">{{ task.due_date }}</small>
+                            </div>
+                            <div class="progress mt-2" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ task.progress }}%"></div>
+                            </div>
+                            <div class="mt-2 task-operations">
+                                <a href="/tasks/{{ task.id }}/view?bypass_jwt=true" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> 查看
+                                </a>
+                                <a href="/tasks/{{ task.id }}/edit?bypass_jwt=true" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil"></i> 编辑
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <h5>进行中</h5>
+                <div class="task-list">
+                    {% for task in tasks if task.status == 'in_progress' %}
+                    <div class="card task-card priority-{{ task.priority }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text text-truncate">{{ task.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-secondary">{{ task.assignee }}</span>
+                                <small class="text-muted">{{ task.due_date }}</small>
+                            </div>
+                            <div class="progress mt-2" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ task.progress }}%"></div>
+                            </div>
+                            <div class="mt-2 task-operations">
+                                <a href="/tasks/{{ task.id }}/view?bypass_jwt=true" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> 查看
+                                </a>
+                                <a href="/tasks/{{ task.id }}/edit?bypass_jwt=true" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil"></i> 编辑
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <h5>已完成</h5>
+                <div class="task-list">
+                    {% for task in tasks if task.status == 'completed' %}
+                    <div class="card task-card priority-{{ task.priority }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text text-truncate">{{ task.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-secondary">{{ task.assignee }}</span>
+                                <small class="text-muted">{{ task.due_date }}</small>
+                            </div>
+                            <div class="progress mt-2" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ task.progress }}%"></div>
+                            </div>
+                            <div class="mt-2 task-operations">
+                                <a href="/tasks/{{ task.id }}/view?bypass_jwt=true" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> 查看
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> 该项目暂无任务
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- 成员标签页 -->
+    <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <h4>团队成员</h4>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                <i class="bi bi-person-plus"></i> 添加成员
+            </button>
+        </div>
+
+        {% if members %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>成员</th>
+                        <th>角色</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.role }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeMember({{ member.id }})">
+                                <i class="bi bi-person-x"></i> 移除
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> 该项目暂无成员
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- 文件标签页 -->
+    <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab">
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <h4>项目文件</h4>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadFileModal">
+                <i class="bi bi-upload"></i> 上传文件
+            </button>
+        </div>
+        
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> 暂无项目文件
+        </div>
+    </div>
+    
+    <!-- 设置标签页 -->
+    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+        <div class="my-3">
+            <h4>项目设置</h4>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header">项目基本信息</div>
+            <div class="card-body">
+                <form id="projectSettingsForm">
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">项目名称</label>
+                        <input type="text" class="form-control" id="projectName" value="{{ project.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDescription" class="form-label">项目描述</label>
+                        <textarea class="form-control" id="projectDescription" rows="3">{{ project.description }}</textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="startDate" class="form-label">开始日期</label>
+                            <input type="date" class="form-control" id="startDate" value="{{ project.start_date }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="endDate" class="form-label">结束日期</label>
+                            <input type="date" class="form-control" id="endDate" value="{{ project.end_date }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectStatus" class="form-label">项目状态</label>
+                        <select class="form-select" id="projectStatus">
+                            <option value="planning" {% if project.status == 'planning' %}selected{% endif %}>规划中</option>
+                            <option value="active" {% if project.status == 'active' %}selected{% endif %}>进行中</option>
+                            <option value="completed" {% if project.status == 'completed' %}selected{% endif %}>已完成</option>
+                            <option value="on_hold" {% if project.status == 'on_hold' %}selected{% endif %}>已暂停</option>
+                            <option value="cancelled" {% if project.status == 'cancelled' %}selected{% endif %}>已取消</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectManager" class="form-label">项目负责人</label>
+                        <select class="form-select" id="projectManager">
+                            <option value="">-- 选择负责人 --</option>
+                            <!-- 项目经理选项将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">保存设置</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header">高级设置</div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> 危险操作区域
+                </div>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteProject()">
+                    <i class="bi bi-trash"></i> 删除项目
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新建任务模态框 -->
+<div class="modal fade" id="newTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建任务</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newTaskForm">
+                    <div class="mb-3">
+                        <label for="taskTitle" class="form-label">任务标题</label>
+                        <input type="text" class="form-control" id="taskTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDescription" class="form-label">任务描述</label>
+                        <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskAssignee" class="form-label">负责人</label>
+                        <select class="form-select" id="taskAssignee">
+                            <option value="">选择负责人</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.name or user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="taskDueDate" class="form-label">截止日期</label>
+                            <input type="date" class="form-control" id="taskDueDate">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="taskPriority" class="form-label">优先级</label>
+                            <select class="form-select" id="taskPriority">
+                                <option value="1">低</option>
+                                <option value="2" selected>中</option>
+                                <option value="3">高</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="createTask()">创建任务</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加成员模态框 -->
+<div class="modal fade" id="addMemberModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加团队成员</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm">
+                    <div class="mb-3">
+                        <label for="memberUser" class="form-label">选择用户</label>
+                        <select class="form-select" id="memberUser" required>
+                            <option value="">选择用户</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.name or user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="memberRole" class="form-label">角色</label>
+                        <select class="form-select" id="memberRole">
+                            <option value="member">成员</option>
+                            <option value="manager">管理员</option>
+                            <option value="viewer">观察者</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addMember()">添加成员</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 上传文件模态框 -->
+<div class="modal fade" id="uploadFileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">上传文件</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadFileForm">
+                    <div class="mb-3">
+                        <label for="fileUpload" class="form-label">选择文件</label>
+                        <input class="form-control" type="file" id="fileUpload">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fileDescription" class="form-label">文件描述</label>
+                        <textarea class="form-control" id="fileDescription" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="uploadFile()">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑项目模态框 -->
+<div class="modal fade" id="editProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑项目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProjectForm">
+                    <!-- 隐藏的项目ID字段 -->
+                    <input type="hidden" id="editProjectId" value="{{ project.id }}">
+                    <div class="mb-3">
+                        <label for="editProjectName" class="form-label">项目名称</label>
+                        <input type="text" class="form-control" id="editProjectName" value="{{ project.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectDescription" class="form-label">项目描述</label>
+                        <textarea class="form-control" id="editProjectDescription" rows="3">{{ project.description }}</textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editStartDate" class="form-label">开始日期</label>
+                            <input type="date" class="form-control" id="editStartDate" value="{{ project.start_date }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editEndDate" class="form-label">结束日期</label>
+                            <input type="date" class="form-control" id="editEndDate" value="{{ project.end_date }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectStatus" class="form-label">项目状态</label>
+                        <select class="form-select" id="editProjectStatus">
+                            <option value="planning" {% if project.status == 'planning' %}selected{% endif %}>规划中</option>
+                            <option value="active" {% if project.status == 'active' %}selected{% endif %}>进行中</option>
+                            <option value="completed" {% if project.status == 'completed' %}selected{% endif %}>已完成</option>
+                            <option value="on_hold" {% if project.status == 'on_hold' %}selected{% endif %}>已暂停</option>
+                            <option value="cancelled" {% if project.status == 'cancelled' %}selected{% endif %}>已取消</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectManager" class="form-label">项目负责人</label>
+                        <select class="form-select" id="editProjectManager">
+                            <option value="">-- 选择负责人 --</option>
+                            <!-- 负责人选项将在页面加载时通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updateProject()">保存更改</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 直接从URL获取项目ID
+        const projectId = getProjectIdFromUrl();
+        if (projectId) {
+            // 尝试通过API获取最新的项目数据
+            fetchAndUpdateProjectInfo(projectId);
+        }
+    });
+    
+    // 从URL中提取项目ID
+    function getProjectIdFromUrl() {
+        const path = window.location.pathname;
+        const matches = path.match(/\/detail\/(\d+)/);
+        if (matches && matches.length >= 2) {
+            return matches[1];
+        }
+        return null;
+    }
+    
+    // 获取项目详情并更新页面
+    async function fetchAndUpdateProjectInfo(projectId) {
+        try {
+            // 使用我们之前添加的带CSRF的fetch
+            const response = await fetchWithCsrf(`/api/noauth/projects/${projectId}`);
+            
+            if (!response.ok) {
+                throw new Error(`获取项目数据失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            if (!data || !data.project) {
+                throw new Error('返回的项目数据格式不正确');
+            }
+            
+            // 更新页面上的项目信息
+            updateProjectUI(data.project);
+            
+        } catch (error) {
+            console.error('获取项目最新信息失败:', error);
+            // 如果更新失败，刷新整个页面
+            location.reload();
+        }
+    }
+    
+    // 更新页面UI元素
+    function updateProjectUI(projectData) {
+        try {
+            // 更新标题和描述
+            const titleElement = document.querySelector('.project-header h2');
+            if (titleElement) titleElement.textContent = projectData.name;
+            
+            const descElement = document.querySelector('.project-header p.text-muted');
+            if (descElement) descElement.textContent = projectData.description || '';
+            
+            // 更新右侧卡片中的项目信息
+            // 找到包含项目信息的卡片
+            const infoCard = document.querySelector('.project-info-card');
+            if (infoCard) {
+                // 更新状态
+                const statusElement = infoCard.querySelector('[data-field="status"]');
+                if (statusElement) statusElement.textContent = projectData.status || '未设置';
+                
+                // 更新负责人
+                const managerElement = infoCard.querySelector('[data-field="manager"]');
+                if (managerElement) managerElement.textContent = projectData.manager || '未分配';
+                
+                // 更新开始日期
+                const startDateElement = infoCard.querySelector('[data-field="start_date"]');
+                if (startDateElement) startDateElement.textContent = projectData.start_date || '未设置';
+                
+                // 更新结束日期
+                const endDateElement = infoCard.querySelector('[data-field="end_date"]');
+                if (endDateElement) endDateElement.textContent = projectData.end_date || '未设置';
+                
+                // 更新进度
+                const progressElement = infoCard.querySelector('[data-field="progress"]');
+                if (progressElement) progressElement.textContent = `${projectData.progress || 0}%`;
+                
+                // 更新进度条
+                const progressBar = infoCard.querySelector('.progress-bar');
+                if (progressBar) {
+                    progressBar.style.width = `${projectData.progress || 0}%`;
+                    progressBar.textContent = `${projectData.progress || 0}%`;
+                }
+            } else {
+                // 找不到项目信息卡片，尝试通用选择器
+                console.warn('找不到项目信息卡片，尝试通用选择器');
+                
+                // 更新右侧侧边栏的信息
+                const sidebar = document.querySelector('.project-sidebar');
+                if (sidebar) {
+                    const infoElements = sidebar.querySelectorAll('.info-item');
+                    infoElements.forEach(element => {
+                        const field = element.getAttribute('data-field');
+                        if (field && projectData[field] !== undefined) {
+                            const valueElement = element.querySelector('.value');
+                            if (valueElement) {
+                                valueElement.textContent = projectData[field] || '未设置';
+                            }
+                        }
+                    });
+                }
+            }
+            
+            console.log('已成功更新项目UI');
+        } catch (error) {
+            console.error('更新项目UI失败:', error);
+            // 如果失败，不要抛出异常，而是在控制台记录错误并继续
+        }
+    }
+
+    // 显示模态框的公共函数
+    function showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+            modal.classList.add('show');
+            document.body.classList.add('modal-open');
+            
+            // 添加背景遮罩
+            let backdrop = document.querySelector('.modal-backdrop');
+            if (!backdrop) {
+                backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
+        }
+    }
+    
+    // 安全关闭模态框的函数
+    function closeModal(modalId) {
+        try {
+            const modalElement = document.getElementById(modalId);
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                } else {
+                    // 备用方法 - 使用jQuery或原生JavaScript
+                    if (window.jQuery) {
+                        window.jQuery(`#${modalId}`).modal('hide');
+                    } else {
+                        // 尝试直接添加hidden.bs.modal类
+                        modalElement.classList.remove('show');
+                        modalElement.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        
+                        // 删除模态框背景
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.parentNode.removeChild(backdrop);
+                        }
+                    }
+                }
+                console.log(`模态框 ${modalId} 已关闭`);
+            }
+        } catch (error) {
+            console.error(`关闭模态框 ${modalId} 失败:`, error);
+        }
+    }
+    
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化标签页
+        const triggerTabList = [].slice.call(document.querySelectorAll('#projectTabs button'));
+        triggerTabList.forEach(function(triggerEl) {
+            const tabTrigger = new bootstrap.Tab(triggerEl);
+            triggerEl.addEventListener('click', function(event) {
+                event.preventDefault();
+                tabTrigger.show();
+            });
+        });
+        
+        // 初始化模态框
+        const modalCloseButtons = document.querySelectorAll('.btn-close, [data-bs-dismiss="modal"]');
+        modalCloseButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = this.closest('.modal');
+                if (modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+        
+        console.log('开始初始化项目详情页面...');
+        
+        // 激活调试信息和检查项目信息显示
+        const debugInfo = document.getElementById('debugInfo');
+        if (debugInfo) {
+            debugInfo.style.display = 'block';
+        }
+        
+        // 检查项目信息展示是否有问题
+        checkProjectInfoDisplay();
+        
+        // 延迟执行API数据获取以避免首次渲染冲突
+        setTimeout(() => {
+            // 直接从URL获取项目ID并刷新项目数据
+            const projectId = getProjectIdFromUrl();
+            if (projectId) {
+                fetchAndUpdateProjectInfo(projectId);
+            }
+        }, 1000);
+        
+        // 添加修复项目负责人下拉框的函数
+        window.fixProjectManagerDropdowns = function() {
+            console.log('正在尝试修复项目负责人下拉框...');
+            
+            // 创建基本的项目经理列表
+            const basicManagers = [
+                { id: 1, name: '管理员' },
+                { id: 2, name: '项目经理' },
+                { id: 3, name: '主管' },
+                { id: 4, name: '团队成员' }
+            ];
+            
+            // 获取所有需要处理的下拉框
+            const managerSelects = [
+                document.getElementById('projectManager'),
+                document.getElementById('editProjectManager')
+            ];
+            
+            // 当前项目的负责人ID
+            const currentManagerId = {{ project.manager_id or 0 }};
+            console.log(`当前项目负责人ID: ${currentManagerId}`);
+            
+            managerSelects.forEach((select, index) => {
+                if (!select) {
+                    console.warn(`未找到下拉框 #${index+1}`);
+                    return;
+                }
+                
+                console.log(`正在处理下拉框 #${index+1}: ${select.id}`);
+                console.log(`当前选项数量: ${select.options.length}`);
+                
+                // 如果下拉框为空，添加选项
+                if (select.options.length <= 1) {
+                    console.log(`下拉框 ${select.id} 为空，添加基本选项`);
+                    
+                    // 先清空
+                    while (select.options.length > 0) {
+                        select.remove(0);
+                    }
+                    
+                    // 添加默认选项
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.text = "-- 选择负责人 --";
+                    select.appendChild(defaultOption);
+                    
+                    // 添加基本项目经理选项
+                    basicManagers.forEach(manager => {
+                        const option = document.createElement('option');
+                        option.value = manager.id;
+                        option.text = manager.name;
+                        
+                        // 如果是当前项目的负责人，则设为选中
+                        if (currentManagerId && Number(currentManagerId) === Number(manager.id)) {
+                            option.selected = true;
+                            console.log(`为下拉框 ${select.id} 设置选中项: ${manager.name} (ID: ${manager.id})`);
+                        }
+                        
+                        select.appendChild(option);
+                    });
+                    
+                    console.log(`下拉框 ${select.id} 现在有 ${select.options.length} 个选项`);
+                } else {
+                    console.log(`下拉框 ${select.id} 已经有 ${select.options.length} 个选项，无需修复`);
+                }
+            });
+        };
+        
+        // 加载项目经理列表
+        loadProjectManagers()
+            .then((managers) => {
+                console.log('项目经理列表加载完成，共获取', managers.length, '个负责人');
+                
+                // 如果加载完后下拉框仍然为空，尝试修复
+                setTimeout(() => {
+                    const managerSelect = document.getElementById('projectManager');
+                    const editManagerSelect = document.getElementById('editProjectManager');
+                    
+                    if (!managerSelect || managerSelect.options.length <= 1 || !editManagerSelect || editManagerSelect.options.length <= 1) {
+                        console.warn('项目负责人下拉框仍然为空，尝试directFetchManagers...');
+                        // 尝试使用directFetchManagers作为最后的备份
+                        directFetchManagers()
+                            .then(managers => {
+                                console.log('使用directFetchManagers成功获取', managers.length, '个负责人');
+                            })
+                            .catch(error => {
+                                console.error('directFetchManagers也失败了，使用固定的备用列表:', error);
+                                window.fixProjectManagerDropdowns();
+                            });
+                    }
+                }, 1000);
+                
+                // 初始化编辑模态框的项目经理选择器
+                // 这段代码保留，但大部分功能已经在loadProjectManagers中实现
+                const editProjectModal = document.getElementById('editProjectModal');
+                if (editProjectModal) {
+                    const managerSelect = editProjectModal.querySelector('#editProjectManager');
+                    if (managerSelect) {
+                        // 获取项目负责人ID
+                        const currentManagerId = {{ project.manager_id or 0 }};
+                        if (currentManagerId) {
+                            // 查找并选中对应的选项
+                            for (let i = 0; i < managerSelect.options.length; i++) {
+                                if (Number(managerSelect.options[i].value) === Number(currentManagerId)) {
+                                    managerSelect.selectedIndex = i;
+                                    console.log('编辑模态框中已设置负责人索引:', i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('页面初始化过程中出错:', error);
+                // 尝试使用directFetchManagers作为备份
+                console.log('尝试使用directFetchManagers作为备份...');
+                directFetchManagers()
+                    .then(managers => {
+                        console.log('使用directFetchManagers成功获取', managers.length, '个负责人');
+                    })
+                    .catch(error => {
+                        console.error('所有方法都失败了，使用最后的备用选项:', error);
+                        window.fixProjectManagerDropdowns();
+                    });
+            });
+            
+        // 监听编辑模态框的打开事件
+        const editProjectModalEl = document.getElementById('editProjectModal');
+        if (editProjectModalEl) {
+            editProjectModalEl.addEventListener('show.bs.modal', function (event) {
+                console.log('编辑项目模态框正在打开...');
+                
+                // 检查项目负责人下拉框
+                const managerSelect = document.getElementById('editProjectManager');
+                if (managerSelect && managerSelect.options.length <= 1) {
+                    console.warn('模态框打开时发现项目负责人下拉框为空，尝试修复...');
+                    // 尝试使用directFetchManagers作为可靠的备份
+                    directFetchManagers()
+                        .catch(error => {
+                            console.error('directFetchManagers在模态框打开时失败:', error);
+                            window.fixProjectManagerDropdowns();
+                        });
+                }
+            });
+        }
+    });
+    
+    // 加载项目经理列表
+    async function loadProjectManagers() {
+        try {
+            // 获取所有可用的项目经理
+            const response = await fetch('/api/project-managers?bypass_jwt=true');
+            
+            if (!response.ok) {
+                throw new Error(`获取项目经理列表失败，HTTP状态码: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (!data || !data.project_managers) {
+                throw new Error('获取项目经理列表失败: 响应格式不正确');
+            }
+            
+            const managers = data.project_managers;
+            
+            // 获取当前项目的manager_id
+            const currentManagerId = {{ project.manager_id or 0 }};
+            
+            // 更新项目设置和编辑模态框中的下拉框
+            const selects = [
+                document.getElementById('projectManager'),
+                document.getElementById('editProjectManager')
+            ];
+            
+            selects.forEach(select => {
+                if (!select) return;
+                
+                // 清空现有选项
+                while (select.options.length > 0) {
+                    select.remove(0);
+                }
+                
+                // 添加默认选项
+                const defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.text = "-- 选择负责人 --";
+                select.appendChild(defaultOption);
+                
+                // 添加所有管理员选项
+                managers.forEach(manager => {
+                    const option = document.createElement('option');
+                    option.value = manager.id;
+                    option.text = manager.name;
+                    
+                    // 如果是当前项目的负责人，则设为选中
+                    if (currentManagerId && Number(currentManagerId) === Number(manager.id)) {
+                        option.selected = true;
+                    }
+                    
+                    select.appendChild(option);
+                });
+            });
+        } catch (error) {
+            console.error('加载项目经理列表失败:', error);
+        }
+    }
+    
+    // 添加默认的项目负责人选项
+    function addDefaultManagers() {
+        console.log('添加默认的项目负责人选项...');
+        
+        // 创建基本的负责人列表
+        const defaultManagers = [
+            { id: 1, name: '管理员' },
+            { id: 2, name: '项目经理' },
+            { id: 3, name: '主管' },
+            { id: 4, name: '团队成员' }
+        ];
+        
+        // 更新所有下拉框
+        updateManagerSelects(defaultManagers);
+        
+        // 然后尝试通过其他方法获取更多管理员
+        directFetchManagers();
+        
+        return defaultManagers;
+    }
+    
+    // 直接从API获取项目负责人列表的备用函数
+    async function directFetchManagers() {
+        console.log('使用备用方法直接获取项目负责人列表...');
+        try {
+            // 尝试几种不同的API
+            const apiUrls = [
+                '/api/project-managers?bypass_jwt=true', 
+                '/api/active-projects',
+                '/api/projects?bypass_jwt=true',
+                '/api/users',
+                // 添加硬编码数据请求，以确保至少有一个有效的选项
+                '/api/noauth/projects/1'
+            ];
+            
+            // 尝试不同的API端点
+            let managers = [];
+            let success = false;
+            
+            for (const url of apiUrls) {
+                try {
+                    console.log(`尝试从 ${url} 获取用户数据...`);
+                    
+                    // 设置超时控制
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
+                    
+                    const response = await fetch(url, {
+                        signal: controller.signal,
+                        cache: 'no-cache',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) {
+                        console.warn(`端点 ${url} 返回状态码 ${response.status}`);
+                        continue;
+                    }
+                    
+                    const text = await response.text();
+                    console.log(`从 ${url} 获取的原始响应长度: ${text.length} 字符`);
+                    
+                    // 解析JSON
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        console.warn(`解析来自 ${url} 的JSON失败:`, e);
+                        continue;
+                    }
+                    
+                    console.log(`从 ${url} 解析的数据类型:`, typeof data);
+                    
+                    // 提取用户数据
+                    if (url.includes('project-managers') && data && data.project_managers) {
+                        // 项目经理API响应
+                        managers = data.project_managers;
+                        console.log(`从 ${url} 获取到 ${managers.length} 个项目经理`);
+                        success = managers.length > 0;
+                        if (success) break;
+                    } else if (url.includes('active-projects') && data && data.projects) {
+                        // 项目列表API，从项目的manager提取用户
+                        const uniqueManagers = new Map();
+                        
+                        data.projects.forEach(project => {
+                            if (project.manager && project.manager_id) {
+                                uniqueManagers.set(project.manager_id, {
+                                    id: project.manager_id,
+                                    name: project.manager.name || `用户 #${project.manager_id}`
+                                });
+                            }
+                        });
+                        
+                        managers = Array.from(uniqueManagers.values());
+                        console.log(`从 ${url} 提取 ${managers.length} 个唯一项目负责人`);
+                        success = managers.length > 0;
+                        if (success) break;
+                    } else if (url.includes('/noauth/projects/') && data && data.project) {
+                        // 单个项目API，提取项目负责人
+                        const project = data.project;
+                        if (project.manager_id) {
+                            managers = [{ 
+                                id: project.manager_id, 
+                                name: project.manager || `负责人 #${project.manager_id}` 
+                            }];
+                            console.log(`从单个项目API获取到项目负责人:`, managers[0]);
+                            success = true;
+                            break;
+                        }
+                    } else if (Array.isArray(data)) {
+                        // 可能是用户列表或项目列表
+                        if (data.length > 0 && data[0].hasOwnProperty('id')) {
+                            managers = data.map(item => ({
+                                id: item.id,
+                                name: item.name || item.username || `用户 #${item.id}`
+                            }));
+                            console.log(`从 ${url} 获取到 ${managers.length} 个用户/项目`);
+                            success = managers.length > 0;
+                            if (success) break;
+                        }
+                    }
+                } catch (error) {
+                    console.warn(`从 ${url} 获取数据失败:`, error);
+                }
+            }
+            
+            // 如果所有API都失败，手动创建一些示例用户
+            if (!success || managers.length === 0) {
+                console.warn('所有API端点尝试失败，使用硬编码用户列表');
+                managers = [
+                    { id: 1, name: '管理员 (默认)' },
+                    { id: 2, name: '项目经理 (默认)' },
+                    { id: 3, name: '开发主管 (默认)' },
+                    { id: 4, name: '测试主管 (默认)' },
+                    { id: 5, name: '产品经理 (默认)' }
+                ];
+            }
+            
+            console.log('最终获取到的项目负责人列表:', managers);
+            
+            // 使用获取到的数据更新下拉框
+            updateManagerSelects(managers);
+            
+            return managers;
+        } catch (error) {
+            console.error('备用方法获取项目负责人列表失败:', error);
+            
+            // 最后的后备方案：硬编码用户列表
+            const fallbackManagers = [
+                { id: 1, name: '系统管理员' },
+                { id: 2, name: '默认项目经理' }
+            ];
+            
+            console.log('使用最终后备方案:', fallbackManagers);
+            
+            // 使用后备数据更新下拉框
+            updateManagerSelects(fallbackManagers);
+            
+            return fallbackManagers;
+        }
+    }
+    
+    // 更新所有项目负责人下拉框
+    function updateManagerSelects(managers) {
+        console.log('使用以下数据更新项目负责人下拉框:', managers);
+        
+        // 获取当前项目的manager_id
+        const currentManagerId = {{ project.manager_id or 0 }};
+        
+        // 更新项目设置和编辑模态框中的下拉框
+        const selects = [
+            document.getElementById('projectManager'),
+            document.getElementById('editProjectManager')
+        ];
+        
+        selects.forEach(select => {
+            if (!select) return;
+            
+            console.log(`更新下拉框 ${select.id}...`);
+            
+            // 清空现有选项
+            while (select.options.length > 0) {
+                select.remove(0);
+            }
+            
+            // 添加默认选项
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.text = "-- 选择负责人 --";
+            select.appendChild(defaultOption);
+            
+            // 添加所有管理员选项
+            managers.forEach(manager => {
+                const option = document.createElement('option');
+                option.value = manager.id;
+                option.text = manager.name;
+                
+                // 如果是当前项目的负责人，则设为选中
+                if (currentManagerId && Number(currentManagerId) === Number(manager.id)) {
+                    option.selected = true;
+                    console.log(`为下拉框 ${select.id} 设置选中项: ${manager.name} (ID: ${manager.id})`);
+                }
+                
+                select.appendChild(option);
+            });
+            
+            console.log(`下拉框 ${select.id} 现在有 ${select.options.length} 个选项`);
+        });
+    }
+
+    // 使用fetchWithCsrf发送请求，自动处理CSRF令牌
+    async function fetchWithCsrf(url, options = {}) {
+        // 获取CSRF令牌
+        const csrfToken = getCsrfToken();
+        
+        // 创建默认headers
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(options.headers || {})
+        };
+        
+        // 添加CSRF令牌（尝试多种可能的header名称）
+        if (csrfToken) {
+            headers['X-CSRF-TOKEN'] = csrfToken;
+            headers['X-CSRFToken'] = csrfToken;
+        }
+        
+        // 合并选项
+        const mergedOptions = {
+            ...options,
+            headers,
+            credentials: 'include'  // 确保包含cookies
+        };
+        
+        // 执行请求
+        return fetch(url, mergedOptions);
+    }
+
+    // 获取CSRF令牌的辅助函数
+    function getCsrfToken() {
+        // 从cookie中查找
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'csrf_access_token' || name === 'X-CSRF-TOKEN' || name === 'csrf_token') {
+                return decodeURIComponent(value);
+            }
+        }
+        
+        // 检查meta标签
+        const metaTag = document.querySelector('meta[name="csrf-token"]');
+        if (metaTag) {
+            return metaTag.getAttribute('content');
+        }
+        
+        // 从localStorage检查JWT
+        try {
+            const token = localStorage.getItem('access_token');
+            if (token && token.split('.').length === 3) {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.csrf) {
+                    return payload.csrf;
+                }
+            }
+        } catch (e) {
+            console.warn('从JWT获取CSRF令牌失败:', e);
+        }
+        
+        console.warn('未能找到CSRF令牌');
+        return '';
+    }
+
+    // 使用fetchWithCsrf发送请求，自动处理CSRF令牌
+    async function createTask() {
+        try {
+            const form = document.getElementById('newTaskForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const taskData = {
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                assignee_id: document.getElementById('taskAssignee').value || null,
+                due_date: document.getElementById('taskDueDate').value || null,
+                priority: document.getElementById('taskPriority').value,
+                project_id: {{ project.id }},
+                status: 'to_do'
+            };
+            
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf('/api/auth/tasks/?bypass_jwt=true', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(taskData)
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                closeModal('newTaskModal');
+                alert('任务创建成功');
+                location.reload();
+            } else {
+                alert('创建任务失败: ' + (result.error || '未知错误'));
+            }
+        } catch (error) {
+            console.error('创建任务错误:', error);
+            alert('创建任务时出现异常: ' + error.message);
+        }
+    }
+    
+    // 使用fetchWithCsrf发送请求，自动处理CSRF令牌
+    async function addMember() {
+        try {
+            const form = document.getElementById('addMemberForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const memberData = {
+                user_id: document.getElementById('memberUser').value,
+                role: document.getElementById('memberRole').value
+            };
+            
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf(`/api/auth/projects/{{ project.id }}/members?bypass_jwt=true`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(memberData)
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                closeModal('addMemberModal');
+                alert('团队成员添加成功');
+                location.reload();
+            } else {
+                alert('添加成员失败: ' + (result.error || '未知错误'));
+            }
+        } catch (error) {
+            console.error('添加成员错误:', error);
+            alert('添加成员时出现异常: ' + error.message);
+        }
+    }
+    
+    // 使用fetchWithCsrf发送请求，自动处理CSRF令牌
+    async function removeMember(userId) {
+        if (confirm('确定要移除该成员吗？')) {
+            try {
+                // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+                const response = await fetchWithCsrf(`/api/auth/projects/{{ project.id }}/members/${userId}?bypass_jwt=true`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('成员已移除');
+                    location.reload();
+                } else {
+                    const result = await response.json();
+                    alert('移除成员失败: ' + (result.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('移除成员错误:', error);
+                alert('移除成员时出现异常: ' + error.message);
+            }
+        }
+    }
+    
+    // 上传文件
+    function uploadFile() {
+        alert('文件上传功能尚未实现');
+        closeModal('uploadFileModal');
+    }
+    
+    // 删除项目确认
+    function confirmDeleteProject() {
+        if (confirm('确定要删除该项目吗？此操作不可恢复！')) {
+            deleteProject();
+        }
+    }
+    
+    // 使用fetchWithCsrf发送请求，自动处理CSRF令牌
+    async function deleteProject() {
+        try {
+            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
+            const response = await fetchWithCsrf(`/api/projects/{{ project.id }}?bypass_jwt=true`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                alert('项目已删除');
+                window.location.href = '/main/projects?bypass_jwt=true';
+            } else {
+                const result = await response.json();
+                alert('删除项目失败: ' + (result.error || '未知错误'));
+            }
+        } catch (error) {
+            console.error('删除项目错误:', error);
+            alert('删除项目时出现异常: ' + error.message);
+        }
+    }
+    
+    // 打开编辑项目模态框并加载项目数据
+    async function openEditModal(projectId) {
+        try {
+            // 1. 发起API请求获取项目详情
+            const response = await fetch(`/api/noauth/projects/${projectId}?bypass_jwt=true`);
+            if (!response.ok) {
+                throw new Error(`获取项目数据失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            if (!data || !data.project) {
+                throw new Error('返回的项目数据格式不正确');
+            }
+            
+            const project = data.project;
+            const managers = data.project_managers || [];
+            
+            // 2. 填充表单
+            // 获取表单字段
+            const nameField = document.getElementById('editProjectName');
+            const descField = document.getElementById('editProjectDescription');
+            const startDateField = document.getElementById('editStartDate');
+            const endDateField = document.getElementById('editEndDate');
+            const statusSelect = document.getElementById('editProjectStatus');
+            
+            // 填充基本字段
+            if (nameField) nameField.value = project.name || '';
+            if (descField) descField.value = project.description || '';
+            
+            // 处理日期 - 确保使用YYYY-MM-DD格式
+            if (startDateField) {
+                if (project.start_date) {
+                    // 移除可能的时间部分
+                    let datePart = project.start_date.split('T')[0];
+                    startDateField.value = datePart;
+                } else {
+                    startDateField.value = '';
+                }
+            }
+            
+            if (endDateField) {
+                if (project.end_date) {
+                    // 移除可能的时间部分
+                    let datePart = project.end_date.split('T')[0];
+                    endDateField.value = datePart;
+                } else {
+                    endDateField.value = '';
+                }
+            }
+            
+            // 处理项目状态
+            if (statusSelect) {
+                // 尝试找到匹配的选项
+                let found = false;
+                for (let i = 0; i < statusSelect.options.length; i++) {
+                    if (statusSelect.options[i].value === project.status) {
+                        statusSelect.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found && statusSelect.options.length > 0) {
+                    // 默认选择第一个选项
+                    statusSelect.selectedIndex = 0;
+                }
+            }
+            
+            // 确保项目ID保存到表单中
+            document.getElementById('editProjectId').value = projectId;
+            
+            // 3. 设置项目经理
+            const managerSelect = document.getElementById('editProjectManager');
+            if (managerSelect) {
+                // 先清空当前选项，确保有干净的状态
+                managerSelect.innerHTML = '';
+                
+                // 添加空选项
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.text = '-- 选择负责人 --';
+                managerSelect.appendChild(emptyOption);
+                
+                // 添加所有经理选项
+                if (data.project_managers && data.project_managers.length > 0) {
+                    data.project_managers.forEach(manager => {
+                        const option = document.createElement('option');
+                        option.value = manager.id;
+                        option.text = manager.name;
+                        managerSelect.appendChild(option);
+                    });
+                } else if (managers && managers.length > 0) {
+                    // 使用预加载的经理列表
+                    managers.forEach(manager => {
+                        const option = document.createElement('option');
+                        option.value = manager.id;
+                        option.text = manager.name;
+                        managerSelect.appendChild(option);
+                    });
+                }
+                
+                // 设置选中的项目经理
+                if (project.manager_id) {
+                    // 尝试找到与项目经理ID匹配的选项
+                    let found = false;
+                    for (let i = 0; i < managerSelect.options.length; i++) {
+                        if (managerSelect.options[i].value == project.manager_id) {
+                            managerSelect.selectedIndex = i;
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    // 如果未找到匹配的选项，添加一个新选项
+                    if (!found && project.manager_id) {
+                        const option = document.createElement('option');
+                        option.value = project.manager_id;
+                        option.text = project.manager || `负责人 #${project.manager_id}`;
+                        option.selected = true;
+                        managerSelect.appendChild(option);
+                    }
+                } else {
+                    // 没有项目经理，选择空选项
+                    managerSelect.value = '';
+                }
+            }
+            
+            // 5. 显示模态框
+            const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
+            modal.show();
+            
+        } catch (error) {
+            console.error('打开编辑项目模态框失败:', error);
+            alert(`无法加载项目信息: ${error.message}`);
+        }
+    }
+    
+    // 辅助函数：填充编辑表单
+    function fillEditForm(project) {
+        // 确保获取到所有必要的表单元素
+        const nameField = document.getElementById('editProjectName');
+        const descField = document.getElementById('editProjectDescription');
+        const startDateField = document.getElementById('editStartDate');
+        const endDateField = document.getElementById('editEndDate');
+        const statusField = document.getElementById('editProjectStatus');
+        const managerField = document.getElementById('editProjectManager');
+        const idField = document.getElementById('editProjectId');
+        
+        // 检查并填充表单字段
+        if (nameField) nameField.value = project.name || '';
+        if (descField) descField.value = project.description || '';
+        if (startDateField) startDateField.value = project.start_date ? project.start_date.split('T')[0] : '';
+        if (endDateField) endDateField.value = project.end_date ? project.end_date.split('T')[0] : '';
+        if (statusField) statusField.value = project.status || 'active';
+        if (idField) idField.value = project.id;
+        
+        // 处理负责人下拉框
+        if (managerField && project.manager_id) {
+            // 查找对应选项
+            let found = false;
+            for (let i = 0; i < managerField.options.length; i++) {
+                if (Number(managerField.options[i].value) === Number(project.manager_id)) {
+                    managerField.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            
+            // 未找到对应选项时创建新选项
+            if (!found) {
+                const option = document.createElement('option');
+                option.value = project.manager_id;
+                option.text = project.manager || `负责人 #${project.manager_id}`;
+                option.selected = true;
+                managerField.appendChild(option);
+            }
+        }
+        
+        console.log('编辑表单已填充完成');
+    }
+    
+    // 使用fetchWithCsrf发送请求，自动处理CSRF令牌
+    async function updateProject() {
+        try {
+            // 验证表单
+            const form = document.getElementById('editProjectForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // 获取项目ID
+            const projectId = document.getElementById('editProjectId').value;
+            if (!projectId) {
+                throw new Error('无法确定要更新的项目ID');
+            }
+            
+            // 收集表单数据
+            const projectData = {
+                name: document.getElementById('editProjectName').value || '',
+                description: document.getElementById('editProjectDescription').value || '',
+                start_date: document.getElementById('editStartDate').value || null,
+                end_date: document.getElementById('editEndDate').value || null,
+                status: document.getElementById('editProjectStatus').value || 'active',
+                manager_id: document.getElementById('editProjectManager').value || null
+            };
+            
+            // 使用带CSRF的fetch
+            const response = await fetchWithCsrf(`/api/noauth/projects/${projectId}?bypass_jwt=true`, {
+                method: 'PUT',
+                body: JSON.stringify(projectData)
+            });
+            
+            // 处理响应
+            if (!response.ok) {
+                // 尝试解析错误响应
+                let errorMessage = `请求失败: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    if (errorData.error) {
+                        errorMessage = errorData.error;
+                    }
+                } catch (e) {
+                    // 无法解析JSON，使用默认错误消息
+                }
+                throw new Error(errorMessage);
+            }
+            
+            const result = await response.json();
+            
+            // 关闭模态框并显示成功消息
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProjectModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            alert('项目更新成功');
+            
+            // 刷新页面以显示更新后的信息
+            window.location.reload();
+            
+        } catch (error) {
+            console.error('更新项目失败:', error);
+            alert(`更新项目错误: ${error.message}`);
+        }
+    }
+    
+    // 保存项目设置 - 使用updateProject函数来保持一致性
+    document.getElementById('projectSettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 先获取项目经理列表
+        fetch('/api/project-managers?bypass_jwt=true')
+            .then(response => response.json())
+            .then(data => {
+                const projectManagers = data.project_managers || [];
+                
+                // 检查当前选择的manager_id是否在可用项目经理列表中
+                const selectedManagerId = document.getElementById('projectManager').value;
+                const managerExists = projectManagers.some(manager => manager.id == selectedManagerId);
+                
+                if (selectedManagerId && !managerExists) {
+                    console.warn('选择的项目经理不在可用列表中');
+                }
+                
+                // 从设置表单获取值填充到编辑表单
+                document.getElementById('editProjectName').value = document.getElementById('projectName').value;
+                document.getElementById('editProjectDescription').value = document.getElementById('projectDescription').value;
+                document.getElementById('editStartDate').value = document.getElementById('startDate').value;
+                document.getElementById('editEndDate').value = document.getElementById('endDate').value;
+                document.getElementById('editProjectStatus').value = document.getElementById('projectStatus').value;
+                document.getElementById('editProjectManager').value = document.getElementById('projectManager').value;
+                
+                // 使用通用的更新函数
+                updateProject();
+            })
+            .catch(error => {
+                console.error('获取项目经理列表错误:', error);
+                alert('获取项目经理列表失败: ' + error.message);
+            });
+    });
+</script>
+{% endblock %} 

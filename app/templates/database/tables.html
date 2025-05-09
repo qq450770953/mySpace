@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}数据库表{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">数据库表列表</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>表名</th>
+                                    <th>列名</th>
+                                    <th>数据类型</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for table in tables %}
+                                <tr>
+                                    <td rowspan="{{ table.columns|length }}">{{ table.name }}</td>
+                                    <td>{{ table.columns[0].name }}</td>
+                                    <td>{{ table.columns[0].type }}</td>
+                                </tr>
+                                {% for column in table.columns[1:] %}
+                                <tr>
+                                    <td>{{ column.name }}</td>
+                                    <td>{{ column.type }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 可以在这里添加表格的交互功能
+    const tables = document.querySelectorAll('table tr');
+    tables.forEach(row => {
+        row.addEventListener('click', function() {
+            this.classList.toggle('table-active');
+        });
+    });
+});
+</script>
+{% endblock %} 

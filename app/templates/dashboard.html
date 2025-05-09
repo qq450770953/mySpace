@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}仪表盘{% endblock %}
+
+{% block header %}个人仪表盘{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">欢迎使用项目管理系统</h2>
+                    <p class="card-text">这是您的个人仪表板，您可以在这里查看项目概览和系统状态。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速导航按钮 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">快速导航</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-{% if 'manage_risks' in current_user_data.permissions or 'manage_resources' in current_user_data.permissions or 'admin' in current_user_data.roles %}3{% else %}6{% endif %} mb-3">
+                            <a href="{{ url_for('main.projects') }}?bypass_jwt=true" class="btn btn-lg btn-primary w-100">
+                                <i class="bi bi-folder"></i> 项目管理
+                            </a>
+                        </div>
+                        <div class="col-md-{% if 'manage_risks' in current_user_data.permissions or 'manage_resources' in current_user_data.permissions or 'admin' in current_user_data.roles %}3{% else %}6{% endif %} mb-3">
+                            <a href="{{ url_for('main.tasks') }}?bypass_jwt=true" class="btn btn-lg btn-success w-100">
+                                <i class="bi bi-list-task"></i> 任务管理
+                            </a>
+                        </div>
+                        <!-- 仅当用户有管理风险的权限时显示风险管理 -->
+                        {% if 'manage_risks' in current_user_data.permissions or 'admin' in current_user_data.roles %}
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('main.risks') }}?bypass_jwt=true" class="btn btn-lg btn-warning w-100">
+                                <i class="bi bi-exclamation-triangle"></i> 风险管理
+                            </a>
+                        </div>
+                        {% endif %}
+                        <!-- 仅当用户有管理资源的权限时显示资源管理 -->
+                        {% if 'manage_resources' in current_user_data.permissions or 'admin' in current_user_data.roles %}
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('main.resources') }}?bypass_jwt=true" class="btn btn-lg btn-info w-100">
+                                <i class="bi bi-people"></i> 资源管理
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="row text-center mt-3">
+                        <div class="col-md-{% if 'manage_users' in current_user_data.permissions or 'admin' in current_user_data.roles %}4{% else %}6{% endif %} mb-3">
+                            <a href="{{ url_for('main.reports') }}?bypass_jwt=true" class="btn btn-lg btn-secondary w-100">
+                                <i class="bi bi-file-earmark-text"></i> 报表统计
+                            </a>
+                        </div>
+                        <!-- 仅当用户有管理用户的权限时显示用户管理 -->
+                        {% if 'manage_users' in current_user_data.permissions or 'admin' in current_user_data.roles %}
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ url_for('main.users') }}?bypass_jwt=true" class="btn btn-lg btn-dark w-100">
+                                <i class="bi bi-person-gear"></i> 用户管理
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-{% if 'manage_users' in current_user_data.permissions or 'admin' in current_user_data.roles %}4{% else %}6{% endif %} mb-3">
+                            <a href="javascript:void(0);" onclick="logout()" class="btn btn-lg btn-danger w-100">
+                                <i class="bi bi-box-arrow-right"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 简单统计卡片 -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">系统状态</h5>
+                    <p class="card-text">系统运行正常</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">用户信息</h5>
+                    <p class="card-text">当前登录用户: {{ user.username if user and user.username else '未知用户' }}</p>
+                    <p class="card-text">角色: {{ current_user_data.roles|join(', ') if current_user_data and current_user_data.roles else '无角色' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
