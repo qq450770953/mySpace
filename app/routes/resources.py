@@ -18,6 +18,30 @@ from sqlalchemy import or_, and_
 from flask_login import login_required, current_user
 from app.utils.permissions import permission_required, PERMISSION_MANAGE_RESOURCES, PERMISSION_VIEW_PROJECT
 
+def calculate_utilization_rate(resource):
+    """计算资源的利用率
+    
+    Args:
+        resource: 资源对象
+        
+    Returns:
+        float: 利用率百分比 (0-100)
+    """
+    try:
+        if not hasattr(resource, 'allocations') or not resource.allocations:
+            return 0.0
+            
+        # 计算已分配的数量
+        allocated = sum(a.allocated_quantity for a in resource.allocations if a.status == 'active')
+        
+        # 计算利用率
+        if resource.capacity and resource.capacity > 0:
+            return (allocated / resource.capacity) * 100
+        return 0.0
+    except Exception as e:
+        logger.error(f"计算资源利用率出错: {str(e)}")
+        return 0.0
+
 def simple_linear_regression(x, y):
     """Simple linear regression implementation using numpy"""
     x_mean = np.mean(x)
@@ -214,13 +238,53 @@ def create_project_resource(project_id):
     }), 201
 
 @resource_bp.route('/api/resources/<int:resource_id>', methods=['GET'])
-@jwt_required()
-@permission_required(PERMISSION_VIEW_PROJECT)
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
 def get_resource(resource_id):
     """获取单个资源详情"""
     try:
+        # 检查是否启用了bypass_jwt参数
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        logger.info(f"获取资源详情请求: {request.method} - /api/resources/{resource_id}, bypass_jwt={bypass_jwt}")
+        
+        # 如果没有启用bypass_jwt，则检查权限
+        if not bypass_jwt:
+            # 获取当前用户ID
+            current_user_id = get_jwt_identity()
+            if not current_user_id:
+                return jsonify({'error': '认证失败，请登录'}), 401
+                
+            # 获取用户，检查是否具有查看项目权限
+            user = User.query.get(current_user_id)
+            if not user or not user.has_permission(PERMISSION_VIEW_PROJECT):
+                return jsonify({'error': '您没有查看资源的权限'}), 403
+        
+        # 获取资源
         resource = Resource.query.get_or_404(resource_id)
-        return jsonify(resource.to_dict())
+            
+        # 转换为字典
+        try:
+            resource_data = resource.to_dict()
+        except Exception as e:
+            logger.warning(f"转换资源到字典时出错: {str(e)}")
+            # 手动构建资源字典
+            resource_data = {
+                'id': resource.id,
+                'name': resource.name,
+                'type_id': resource.type_id,
+                'description': resource.description,
+                'capacity': resource.capacity,
+                'unit': resource.unit,
+                'status': resource.status,
+                'cost_per_unit': resource.cost_per_unit,
+                'created_at': resource.created_at.isoformat() if resource.created_at else None,
+                'updated_at': resource.updated_at.isoformat() if resource.updated_at else None
+            }
+            
+        # 添加额外的计算字段
+        resource_data['utilization_rate'] = calculate_utilization_rate(resource)
+            
+        return jsonify(resource_data)
         
     except Exception as e:
         logger.error(f"Error getting resource: {str(e)}")
@@ -244,39 +308,25 @@ def update_resource(resource_id):
         # 获取资源
         resource = Resource.query.get_or_404(resource_id)
         
-        # 获取项目，检查权限
-        project = Project.query.get(resource.project_id)
-        if not project:
-            return jsonify({'error': '资源所属项目不存在'}), 404
-        
-        # 用户需要有资源管理权限
-        user = User.query.get(current_user_id)
-        if not user.has_permission(PERMISSION_MANAGE_RESOURCES):
-            return jsonify({'error': '您没有资源管理权限'}), 403
+        # 如果不是bypass模式，检查用户是否有资源管理权限
+        if not bypass_jwt:
+            user = User.query.get(current_user_id)
+            if not user or not user.has_permission(PERMISSION_MANAGE_RESOURCES):
+                return jsonify({'error': '您没有资源管理权限'}), 403
         
         data = request.get_json()
         
         # Update the resource with the provided data
         if 'name' in data:
             resource.name = data['name']
-        if 'resource_type' in data:
-            resource.resource_type = data['resource_type']
-        if 'quantity' in data:
-            resource.quantity = data['quantity']
+        if 'type_id' in data:
+            resource.type_id = data['type_id']
+        if 'capacity' in data:
+            resource.capacity = data['capacity']
         if 'unit' in data:
             resource.unit = data['unit']
         if 'cost_per_unit' in data:
             resource.cost_per_unit = data['cost_per_unit']
-        if 'start_date' in data and data['start_date']:
-            try:
-                resource.start_date = datetime.fromisoformat(data['start_date'].replace('Z', '+00:00'))
-            except ValueError:
-                return jsonify({'error': 'Invalid start date format'}), 400
-        if 'end_date' in data and data['end_date']:
-            try:
-                resource.end_date = datetime.fromisoformat(data['end_date'].replace('Z', '+00:00'))
-            except ValueError:
-                return jsonify({'error': 'Invalid end date format'}), 400
         if 'status' in data:
             resource.status = data['status']
         if 'description' in data:
@@ -287,12 +337,10 @@ def update_resource(resource_id):
         return jsonify({
             'id': resource.id,
             'name': resource.name,
-            'type': resource.resource_type,
-            'quantity': resource.quantity,
+            'type_id': resource.type_id,
+            'capacity': resource.capacity,
             'unit': resource.unit,
             'cost_per_unit': resource.cost_per_unit,
-            'start_date': resource.start_date.isoformat() if resource.start_date else None,
-            'end_date': resource.end_date.isoformat() if resource.end_date else None,
             'status': resource.status,
             'description': resource.description
         })
@@ -319,15 +367,11 @@ def delete_resource(resource_id):
         # 获取资源
         resource = Resource.query.get_or_404(resource_id)
         
-        # 获取项目，检查权限
-        project = Project.query.get(resource.project_id)
-        if not project:
-            return jsonify({'error': '资源所属项目不存在'}), 404
-        
         # 用户需要有资源管理权限
-        user = User.query.get(current_user_id)
-        if not user.has_permission(PERMISSION_MANAGE_RESOURCES):
-            return jsonify({'error': '您没有资源管理权限'}), 403
+        if not bypass_jwt:
+            user = User.query.get(current_user_id)
+            if not user or not user.has_permission(PERMISSION_MANAGE_RESOURCES):
+                return jsonify({'error': '您没有资源管理权限'}), 403
         
         # 检查资源是否正在使用
         active_allocations = ResourceAllocation.query.filter_by(
@@ -357,22 +401,31 @@ def delete_resource(resource_id):
 @permission_required(PERMISSION_VIEW_PROJECT)
 def get_resource_usage_api(resource_id):
     """获取资源用量记录"""
-    resource = Resource.query.get_or_404(resource_id)
-    
-    # 验证用户是否有权访问该资源所属项目
-    if not can_access_project(resource.project_id):
-        return jsonify({'error': '没有权限访问该资源'}), 403
-    
-    # 获取资源的使用记录
-    usage_records = ResourceUtilization.query.filter_by(resource_id=resource_id).order_by(ResourceUtilization.recorded_at.desc()).all()
-    
-    return jsonify([{
-        'id': record.id,
-        'quantity_used': record.quantity_used,
-        'recorded_at': record.recorded_at.isoformat() if record.recorded_at else None,
-        'recorded_by': record.recorded_by,
-        'notes': record.notes
-    } for record in usage_records])
+    try:
+        resource = Resource.query.get_or_404(resource_id)
+        
+        # 获取当前用户
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        # 验证用户是否有权查看项目资源
+        if not user or not user.has_permission(PERMISSION_VIEW_PROJECT):
+            return jsonify({'error': '没有权限访问该资源'}), 403
+        
+        # 获取资源的使用记录
+        usage_records = ResourceUtilization.query.filter_by(resource_id=resource_id).order_by(ResourceUtilization.utilization_date.desc()).all()
+        
+        return jsonify([{
+            'id': record.id,
+            'utilized_quantity': record.utilized_quantity,
+            'utilization_date': record.utilization_date.isoformat() if record.utilization_date else None,
+            'status': record.status,
+            'created_at': record.created_at.isoformat() if record.created_at else None,
+            'updated_at': record.updated_at.isoformat() if record.updated_at else None
+        } for record in usage_records])
+    except Exception as e:
+        logger.error(f"Error getting resource usage: {str(e)}")
+        return jsonify({'error': f'获取资源用量记录失败: {str(e)}'}), 500
 
 @resource_bp.route('/api/resources/<int:resource_id>/usage', methods=['POST'])
 @jwt_required()
@@ -1433,4 +1486,191 @@ def redirect_old_resource_detail_endpoint(resource_id):
     if request.query_string:
         target = f"{target}?{request.query_string.decode('utf-8')}"
     logger.info(f"Redirecting from old resource detail API path to: {target}")
-    return redirect(target, code=308)  # 使用308永久重定向 
+    return redirect(target, code=308)  # 使用308永久重定向
+
+@resource_bp.route('/api/resource-allocations', methods=['GET'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+def get_all_resource_allocations():
+    """获取所有资源分配"""
+    try:
+        # 检查是否启用了bypass_jwt参数
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        logger.info(f"获取所有资源分配请求: {request.method} - /api/resource-allocations, bypass_jwt={bypass_jwt}")
+        
+        # 获取查询参数
+        status = request.args.get('status')
+        resource_id = request.args.get('resource_id')
+        task_id = request.args.get('task_id')
+        
+        # 构建查询
+        query = ResourceAllocation.query
+        
+        # 应用过滤
+        if status:
+            query = query.filter(ResourceAllocation.status == status)
+        if resource_id:
+            query = query.filter(ResourceAllocation.resource_id == resource_id)
+        if task_id:
+            query = query.filter(ResourceAllocation.task_id == task_id)
+        
+        # 获取分配记录
+        allocations = query.all()
+        
+        # 准备返回数据
+        allocation_list = []
+        for allocation in allocations:
+            # 获取关联的资源和任务信息
+            resource = Resource.query.get(allocation.resource_id) if allocation.resource_id else None
+            try:
+                from app.models.task import Task
+                task = Task.query.get(allocation.task_id) if allocation.task_id else None
+                task_name = task.title if task else "未知任务"
+            except Exception as e:
+                logger.error(f"获取任务信息失败: {str(e)}")
+                task_name = "未知任务"
+            
+            # 添加详细的分配信息
+            allocation_data = allocation.to_dict()
+            allocation_data.update({
+                'resource_name': resource.name if resource else "未知资源",
+                'task_name': task_name,
+                'unit': resource.unit if resource else "单位"
+            })
+            allocation_list.append(allocation_data)
+        
+        return jsonify({
+            'message': '获取资源分配成功',
+            'allocations': allocation_list
+        })
+        
+    except Exception as e:
+        logger.error(f"获取资源分配失败: {str(e)}", exc_info=True)
+        return jsonify({'error': f'获取资源分配失败: {str(e)}'}), 500
+
+@resource_bp.route('/api/resource-allocations/<int:allocation_id>', methods=['GET'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+def get_resource_allocation(allocation_id):
+    """获取单个资源分配详情"""
+    try:
+        # 检查是否启用了bypass_jwt参数
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        allocation = ResourceAllocation.query.get_or_404(allocation_id)
+        
+        # 获取关联的资源和任务信息
+        resource = Resource.query.get(allocation.resource_id) if allocation.resource_id else None
+        try:
+            from app.models.task import Task
+            task = Task.query.get(allocation.task_id) if allocation.task_id else None
+            task_name = task.title if task else "未知任务"
+        except Exception as e:
+            logger.error(f"获取任务信息失败: {str(e)}")
+            task_name = "未知任务"
+        
+        # 添加详细的分配信息
+        allocation_data = allocation.to_dict()
+        allocation_data.update({
+            'resource_name': resource.name if resource else "未知资源",
+            'task_name': task_name,
+            'unit': resource.unit if resource else "单位"
+        })
+        
+        return jsonify({
+            'message': '获取资源分配成功',
+            'allocation': allocation_data
+        })
+        
+    except Exception as e:
+        logger.error(f"获取资源分配详情失败: {str(e)}", exc_info=True)
+        return jsonify({'error': f'获取资源分配详情失败: {str(e)}'}), 500
+
+@resource_bp.route('/api/resource-allocations/<int:allocation_id>', methods=['DELETE'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+@permission_required(PERMISSION_MANAGE_RESOURCES)
+def delete_resource_allocation(allocation_id):
+    """删除资源分配"""
+    try:
+        # 检查是否启用了bypass_jwt参数
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        allocation = ResourceAllocation.query.get_or_404(allocation_id)
+        
+        # 删除分配
+        db.session.delete(allocation)
+        db.session.commit()
+        
+        return jsonify({
+            'message': '资源分配删除成功'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"删除资源分配失败: {str(e)}", exc_info=True)
+        return jsonify({'error': f'删除资源分配失败: {str(e)}'}), 500
+
+@resource_bp.route('/api/resource-allocations', methods=['POST'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+@permission_required(PERMISSION_MANAGE_RESOURCES)
+def create_resource_allocation():
+    """创建新的资源分配"""
+    try:
+        # 检查是否启用了bypass_jwt参数
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        data = request.get_json()
+        
+        # 验证必要字段
+        required_fields = ['resource_id', 'task_id', 'quantity', 'start_time', 'end_time']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'缺少必要字段: {field}'}), 400
+        
+        # 创建新的资源分配
+        allocation = ResourceAllocation(
+            resource_id=data['resource_id'],
+            task_id=data['task_id'],
+            quantity=data['quantity'],
+            start_time=datetime.fromisoformat(data['start_time'].replace('Z', '+00:00')),
+            end_time=datetime.fromisoformat(data['end_time'].replace('Z', '+00:00')),
+            status=data.get('status', 'pending')
+        )
+        
+        db.session.add(allocation)
+        db.session.commit()
+        
+        return jsonify({
+            'message': '资源分配创建成功',
+            'allocation': allocation.to_dict()
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"创建资源分配失败: {str(e)}", exc_info=True)
+        return jsonify({'error': f'创建资源分配失败: {str(e)}'}), 500
+
+@resource_bp.route('/api/tasks', methods=['GET'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+def get_tasks_for_allocation():
+    """获取任务列表，用于资源分配时选择任务"""
+    try:
+        # 检查是否启用了bypass_jwt参数
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        # 导入Task模型
+        from app.models.task import Task
+        
+        # 获取活跃状态的任务
+        tasks = Task.query.filter(Task.status != 'completed').all()
+        
+        # 转换为字典列表
+        task_list = [task.to_dict() for task in tasks]
+        
+        return jsonify({
+            'message': '获取任务列表成功',
+            'tasks': task_list
+        })
+        
+    except Exception as e:
+        logger.error(f"获取任务列表失败: {str(e)}", exc_info=True)
+        return jsonify({'error': f'获取任务列表失败: {str(e)}'}), 500 

@@ -116,6 +116,99 @@
     </div>
 </div>
 
+<!-- 风险详情模态框 -->
+<div class="modal fade" id="viewRiskModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">风险详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">风险标题</label>
+                            <p id="viewRiskTitle"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">所属项目</label>
+                            <p id="viewRiskProject"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">风险描述</label>
+                    <p id="viewRiskDescription"></p>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">风险等级</label>
+                            <p id="viewRiskSeverity"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">可能性</label>
+                            <p id="viewRiskProbability"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">影响程度</label>
+                            <p id="viewRiskImpact"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">状态</label>
+                            <p id="viewRiskStatus"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">负责人</label>
+                            <p id="viewRiskOwner"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">缓解措施</label>
+                    <p id="viewRiskMitigation"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">应急计划</label>
+                    <p id="viewRiskContingency"></p>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <label class="form-label fw-bold">创建和更新信息</label>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                创建时间
+                                <span id="viewRiskCreatedAt" class="badge bg-primary rounded-pill"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                更新时间
+                                <span id="viewRiskUpdatedAt" class="badge bg-info rounded-pill"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="editRisk(currentViewingRiskId)">编辑</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 新建风险模态框 -->
 <div class="modal fade" id="newRiskModal" tabindex="-1">
     <div class="modal-dialog">
@@ -179,6 +272,83 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" onclick="saveRisk()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑风险模态框 -->
+<div class="modal fade" id="editRiskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑风险</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editRiskForm">
+                    <input type="hidden" id="editRiskId">
+                    <div class="mb-3">
+                        <label for="editProjectId" class="form-label">所属项目 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="editProjectId" required>
+                            <option value="">请选择项目</option>
+                            <!-- 项目选项将在页面加载时通过 JavaScript 动态填充 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editRiskTitle" class="form-label">风险标题</label>
+                        <input type="text" class="form-control" id="editRiskTitle" placeholder="无标题风险">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editRiskDescription" class="form-label">风险描述</label>
+                        <textarea class="form-control" id="editRiskDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSeverity" class="form-label">严重程度</label>
+                        <select class="form-select" id="editSeverity">
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProbability" class="form-label">可能性</label>
+                        <select class="form-select" id="editProbability">
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editImpact" class="form-label">影响程度</label>
+                        <select class="form-select" id="editImpact">
+                            <option value="low">低</option>
+                            <option value="medium">中</option>
+                            <option value="high">高</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editStatus" class="form-label">状态</label>
+                        <select class="form-select" id="editStatus">
+                            <option value="open">未处理</option>
+                            <option value="in_progress">处理中</option>
+                            <option value="mitigated">已缓解</option>
+                            <option value="closed">已关闭</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editMitigation" class="form-label">缓解措施</label>
+                        <textarea class="form-control" id="editMitigation" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editContingency" class="form-label">应急计划</label>
+                        <textarea class="form-control" id="editContingency" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updateRisk()">保存</button>
             </div>
         </div>
     </div>
@@ -459,16 +629,333 @@
         }
     }
     
+    // 当前正在查看的风险ID
+    let currentViewingRiskId = null;
+
     // 查看风险详情
-    function viewRisk(riskId) {
-        alert('查看风险 ID: ' + riskId);
-        // 实现查看风险详情逻辑
+    async function viewRisk(riskId) {
+        try {
+            currentViewingRiskId = riskId;
+            const url = `/api/auth/risks/${riskId}?bypass_jwt=true`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error('获取风险详情失败');
+            }
+            
+            const risk = await response.json();
+            console.log('风险详情:', risk);
+            
+            // 填充模态框内容
+            document.getElementById('viewRiskTitle').textContent = risk.title || '无标题';
+            document.getElementById('viewRiskProject').textContent = risk.project_name || '未分配';
+            document.getElementById('viewRiskDescription').textContent = risk.description || '无描述';
+            
+            // 格式化风险严重程度
+            let severityText = '未知';
+            let severityClass = 'text-secondary';
+            if (risk.severity === 'high') {
+                severityText = '高';
+                severityClass = 'text-danger';
+            } else if (risk.severity === 'medium') {
+                severityText = '中';
+                severityClass = 'text-warning';
+            } else if (risk.severity === 'low') {
+                severityText = '低';
+                severityClass = 'text-success';
+            }
+            document.getElementById('viewRiskSeverity').innerHTML = `<span class="${severityClass}">${severityText}</span>`;
+            
+            // 格式化概率
+            let probabilityText = '未知';
+            if (risk.probability === 'high') probabilityText = '高';
+            else if (risk.probability === 'medium') probabilityText = '中';
+            else if (risk.probability === 'low') probabilityText = '低';
+            document.getElementById('viewRiskProbability').textContent = probabilityText;
+            
+            // 格式化影响
+            let impactText = '未知';
+            if (risk.impact === 'high') impactText = '高';
+            else if (risk.impact === 'medium') impactText = '中';
+            else if (risk.impact === 'low') impactText = '低';
+            document.getElementById('viewRiskImpact').textContent = impactText;
+            
+            // 格式化状态
+            let statusText = risk.status || '未知';
+            let statusClass = 'text-secondary';
+            if (statusText === 'open') {
+                statusText = '未处理';
+                statusClass = 'text-danger';
+            } else if (statusText === 'in_progress') {
+                statusText = '处理中';
+                statusClass = 'text-warning';
+            } else if (statusText === 'mitigated') {
+                statusText = '已缓解';
+                statusClass = 'text-success';
+            } else if (statusText === 'closed') {
+                statusText = '已关闭';
+                statusClass = 'text-secondary';
+            }
+            document.getElementById('viewRiskStatus').innerHTML = `<span class="${statusClass}">${statusText}</span>`;
+            
+            // 其他字段
+            document.getElementById('viewRiskOwner').textContent = risk.owner_name || '未分配';
+            document.getElementById('viewRiskMitigation').textContent = risk.mitigation_plan || '无缓解措施';
+            document.getElementById('viewRiskContingency').textContent = risk.contingency_plan || '无应急计划';
+            
+            // 格式化日期时间
+            const createdAt = risk.created_at ? new Date(risk.created_at).toLocaleString() : '未知';
+            const updatedAt = risk.updated_at ? new Date(risk.updated_at).toLocaleString() : '未知';
+            document.getElementById('viewRiskCreatedAt').textContent = createdAt;
+            document.getElementById('viewRiskUpdatedAt').textContent = updatedAt;
+            
+            // 显示模态框
+            const modal = document.getElementById('viewRiskModal');
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                document.body.classList.add('modal-open');
+                
+                // 添加背景遮罩
+                let backdrop = document.querySelector('.modal-backdrop');
+                if (!backdrop) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'modal-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                }
+                
+                // 设置关闭按钮事件
+                const closeBtns = document.querySelectorAll('#viewRiskModal .btn-close, #viewRiskModal [data-bs-dismiss="modal"]');
+                closeBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        closeViewRiskModal();
+                    });
+                });
+            }
+        } catch (error) {
+            console.error('查看风险详情错误:', error);
+            showAlert('danger', '获取风险详情失败');
+        }
+    }
+
+    // 关闭查看风险详情模态框
+    function closeViewRiskModal() {
+        const modal = document.getElementById('viewRiskModal');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                
+                // 移除背景遮罩
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }, 300);
+        }
     }
     
     // 编辑风险
-    function editRisk(riskId) {
-        alert('编辑风险 ID: ' + riskId);
-        // 实现编辑风险逻辑
+    async function editRisk(riskId) {
+        try {
+            // 关闭查看风险详情模态框（如果打开的话）
+            closeViewRiskModal();
+            
+            // 获取风险详情
+            const url = `/api/auth/risks/${riskId}?bypass_jwt=true`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error('获取风险详情失败');
+            }
+            
+            const risk = await response.json();
+            console.log('编辑风险数据:', risk);
+            
+            // 填充编辑表单
+            document.getElementById('editRiskId').value = risk.id;
+            document.getElementById('editRiskTitle').value = risk.title || '';
+            document.getElementById('editRiskDescription').value = risk.description || '';
+            document.getElementById('editSeverity').value = risk.severity || 'medium';
+            document.getElementById('editProbability').value = risk.probability || 'medium';
+            document.getElementById('editImpact').value = risk.impact || 'medium';
+            document.getElementById('editStatus').value = risk.status || 'open';
+            document.getElementById('editMitigation').value = risk.mitigation_plan || '';
+            document.getElementById('editContingency').value = risk.contingency_plan || '';
+            
+            // 确保项目下拉列表已加载
+            await loadProjectsForEdit();
+            
+            // 选择当前项目
+            if (risk.project_id) {
+                document.getElementById('editProjectId').value = risk.project_id;
+            }
+            
+            // 显示编辑模态框
+            const modal = document.getElementById('editRiskModal');
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                document.body.classList.add('modal-open');
+                
+                // 添加背景遮罩
+                let backdrop = document.querySelector('.modal-backdrop');
+                if (!backdrop) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'modal-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                }
+                
+                // 设置关闭按钮事件
+                const closeBtns = document.querySelectorAll('#editRiskModal .btn-close, #editRiskModal [data-bs-dismiss="modal"]');
+                closeBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        closeEditRiskModal();
+                    });
+                });
+            }
+        } catch (error) {
+            console.error('编辑风险错误:', error);
+            showAlert('danger', '加载风险详情失败');
+        }
+    }
+
+    // 加载项目列表到编辑表单
+    async function loadProjectsForEdit() {
+        try {
+            // 使用相同的API获取项目列表
+            const response = await fetch('/api/projects?bypass_jwt=true');
+            if (!response.ok) {
+                throw new Error('加载项目列表失败');
+            }
+            
+            const data = await response.json();
+            let projects = [];
+            
+            // 检查返回的数据结构，适应可能的不同格式
+            if (Array.isArray(data)) {
+                projects = data; // 直接是数组
+            } else if (data.projects && Array.isArray(data.projects)) {
+                projects = data.projects; // 项目数组在projects字段中
+            } else if (typeof data === 'object') {
+                projects = Object.values(data).filter(item => item && typeof item === 'object' && item.id);
+            }
+            
+            if (!projects || projects.length === 0) {
+                console.warn('没有找到项目数据');
+                return;
+            }
+            
+            const projectSelect = document.getElementById('editProjectId');
+            
+            // 清空现有选项（保留默认选项）
+            projectSelect.innerHTML = '<option value="">请选择项目</option>';
+            
+            // 添加项目选项
+            projects.forEach(project => {
+                if (project && project.id) {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.name || `项目 #${project.id}`;
+                    projectSelect.appendChild(option);
+                }
+            });
+        } catch (error) {
+            console.error('加载编辑表单项目列表错误:', error);
+        }
+    }
+
+    // 关闭编辑风险模态框
+    function closeEditRiskModal() {
+        const modal = document.getElementById('editRiskModal');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                
+                // 移除背景遮罩
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }, 300);
+        }
+    }
+
+    // 更新风险
+    async function updateRisk() {
+        try {
+            const form = document.getElementById('editRiskForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const riskId = document.getElementById('editRiskId').value;
+            
+            // 获取项目ID并验证
+            const projectId = document.getElementById('editProjectId').value;
+            if (!projectId) {
+                document.getElementById('editProjectId').classList.add('is-invalid');
+                return;
+            }
+            
+            const formData = {
+                project_id: parseInt(projectId),
+                title: document.getElementById('editRiskTitle').value || '无标题风险',
+                description: document.getElementById('editRiskDescription').value,
+                severity: document.getElementById('editSeverity').value,
+                probability: document.getElementById('editProbability').value,
+                impact: document.getElementById('editImpact').value,
+                status: document.getElementById('editStatus').value,
+                mitigation_plan: document.getElementById('editMitigation').value || '',
+                contingency_plan: document.getElementById('editContingency').value || ''
+            };
+            
+            console.log('更新风险数据:', formData);
+            
+            // 构建更新API URL
+            let url = `/api/auth/risks/${riskId}?bypass_jwt=true`;
+            
+            // 获取CSRF令牌
+            let csrfToken = getCsrfToken();
+            
+            if (!csrfToken) {
+                console.warn('更新风险时未找到CSRF令牌，尝试刷新获取');
+                csrfToken = await refreshCsrfToken();
+            }
+            
+            // 发送更新请求
+            const response = await fetchWithCsrf(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || '更新风险失败');
+            }
+            
+            const result = await response.json();
+            console.log('风险更新成功:', result);
+            
+            // 关闭模态框
+            closeEditRiskModal();
+            
+            // 刷新风险列表
+            loadRisks();
+            
+            // 显示成功消息
+            showAlert('success', '风险更新成功！');
+        } catch (error) {
+            console.error('更新风险错误:', error);
+            showAlert('danger', error.message || '更新风险失败，请重试');
+        }
     }
     
     // 删除风险
@@ -522,6 +1009,11 @@
             }
             const data = await response.json();
             
+            console.log('风险数据:', data);
+            
+            // 更新风险表格
+            updateRiskTable(data);
+            
             // 刷新风险矩阵
             refreshRiskMatrix(data);
             
@@ -529,6 +1021,106 @@
             console.error('加载风险列表错误:', error);
             showAlert('danger', '加载风险列表失败，请重试');
         }
+    }
+    
+    // 更新风险表格
+    function updateRiskTable(risks) {
+        const tableBody = document.querySelector('table.table tbody');
+        if (!tableBody) {
+            console.error('找不到风险表格的tbody元素');
+            return;
+        }
+        
+        // 清空现有表格内容
+        tableBody.innerHTML = '';
+        
+        if (!Array.isArray(risks) || risks.length === 0) {
+            // 如果没有风险数据，显示一条消息
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = '<td colspan="8" class="text-center">暂无风险数据</td>';
+            tableBody.appendChild(emptyRow);
+            return;
+        }
+        
+        // 添加风险数据到表格
+        risks.forEach(risk => {
+            // 设置风险等级的颜色和标签
+            let levelColor = 'secondary';
+            let level = '未知';
+            
+            if (risk.severity === 'high') {
+                levelColor = 'danger';
+                level = '高';
+            } else if (risk.severity === 'medium') {
+                levelColor = 'warning';
+                level = '中';
+            } else if (risk.severity === 'low') {
+                levelColor = 'success';
+                level = '低';
+            }
+            
+            // 设置状态的颜色和标签
+            let statusColor = 'secondary';
+            let status = risk.status || '未知';
+            
+            if (status === 'open') {
+                statusColor = 'danger';
+                status = '未处理';
+            } else if (status === 'in_progress') {
+                statusColor = 'warning';
+                status = '处理中';
+            } else if (status === 'mitigated') {
+                statusColor = 'success';
+                status = '已缓解';
+            } else if (status === 'closed') {
+                statusColor = 'secondary';
+                status = '已关闭';
+            }
+            
+            // 格式化概率和影响
+            let probability = '未知';
+            if (risk.probability === 'high') probability = '高';
+            else if (risk.probability === 'medium') probability = '中';
+            else if (risk.probability === 'low') probability = '低';
+            
+            let impact = '未知';
+            if (risk.impact === 'high') impact = '高';
+            else if (risk.impact === 'medium') impact = '中';
+            else if (risk.impact === 'low') impact = '低';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${risk.description}</td>
+                <td>${risk.project_name || '未指定'}</td>
+                <td>
+                    <span class="badge bg-${levelColor}">
+                        ${level}
+                    </span>
+                </td>
+                <td>${probability}</td>
+                <td>${impact}</td>
+                <td>
+                    <span class="badge bg-${statusColor}">
+                        ${status}
+                    </span>
+                </td>
+                <td>${risk.owner_name || '未指定'}</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="viewRisk(${risk.id})">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary edit-btn" onclick="editRisk(${risk.id})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-btn" onclick="deleteRisk(${risk.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
     }
     
     // 刷新风险矩阵

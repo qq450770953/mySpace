@@ -5,7 +5,7 @@ from app.models.auth import User  # 修改导入路径
 from app.models.project import Project  # 保持这个导入不变
 from flask_login import current_user
 from app import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import json
 from werkzeug.utils import secure_filename
@@ -669,7 +669,8 @@ def gantt_chart(project_id):
                 return render_template('error.html', error='您没有权限查看此项目的甘特图'), 403
         
         logger.info(f"展示甘特图页面: 项目ID={project_id}, 项目名称={project.name}")
-        return render_template('gantt_chart.html', project_id=project_id)
+        # 统一使用gantt_chart.html模板
+        return render_template('gantt_chart.html', project_id=project_id, project=project)
     except Exception as e:
         logger.error(f"加载甘特图页面失败: {str(e)}", exc_info=True)
         return render_template('error.html', error=f'加载甘特图页面出错: {str(e)}'), 500
@@ -711,18 +712,32 @@ def get_gantt_data(project_id):
         
         # 处理任务数据
         for task in tasks:
-            # 确保任务有开始日期和截止日期
-            start_date = task.created_at.date() if task.created_at else datetime.now().date()
+            # 优先使用start_date字段，如果没有则使用created_at字段
+            start_date = None
+            
+            if hasattr(task, 'start_date') and task.start_date:
+                start_date = task.start_date
+            else:
+                start_date = task.created_at.date() if task.created_at else datetime.now().date()
+            
+            # 确保有结束日期
             due_date = task.due_date if task.due_date else (start_date + timedelta(days=7))
             
             # 确保日期格式正确
-            if not isinstance(start_date, datetime.date):
+            if not isinstance(start_date, (datetime.date, datetime.datetime)):
                 logger.warning(f"任务 {task.id} 开始日期格式不正确: {start_date}")
                 start_date = datetime.now().date()
                 
-            if not isinstance(due_date, datetime.date):
+            if not isinstance(due_date, (datetime.date, datetime.datetime)):
                 logger.warning(f"任务 {task.id} 截止日期格式不正确: {due_date}")
                 due_date = start_date + timedelta(days=7)
+            
+            # 确保日期是date类型而非datetime类型
+            if isinstance(start_date, datetime.datetime):
+                start_date = start_date.date()
+                
+            if isinstance(due_date, datetime.datetime):
+                due_date = due_date.date()
             
             # 获取任务负责人姓名
             assignee_name = None
@@ -734,12 +749,12 @@ def get_gantt_data(project_id):
             # 创建甘特图任务数据
             task_data = {
                 'id': task.id,
-                'text': task.title,
+                'text': task.title or f"任务 #{task.id}",  # 确保text字段有值
                 'start_date': start_date.strftime('%Y-%m-%d'),
                 'end_date': due_date.strftime('%Y-%m-%d'),
                 'progress': task.progress / 100 if task.progress else 0,
-                'status': task.status,
-                'priority': task.priority,
+                'status': task.status or 'todo',
+                'priority': task.priority or 'medium',
                 'assignee': assignee_name,
                 'parent': task.parent_id or 0  # 父任务ID或顶级任务
             }
@@ -801,23 +816,46 @@ def update_gantt_task(task_id):
         updated_fields = []
         
         if 'start_date' in data:
-            # Task模型中将start_date映射到created_at
-            if isinstance(data['start_date'], str):
-                task.created_at = datetime.strptime(data['start_date'], '%Y-%m-%d')
-            else:
-                task.created_at = data['start_date']
-            updated_fields.append('start_date')
-                
+            # 优先更新Task.start_date字段，如果Task模型有这个字段
+            try:
+                if hasattr(task, 'start_date'):
+                    if isinstance(data['start_date'], str):
+                        task.start_date = datetime.strptime(data['start_date'], '%Y-%m-%d').date()
+                    elif isinstance(data['start_date'], datetime.date):
+                        task.start_date = data['start_date']
+                    else:
+                        logger.warning(f"无效的start_date格式: {data['start_date']}, 类型: {type(data['start_date'])}")
+                else:
+                    # 否则更新created_at字段
+                    if isinstance(data['start_date'], str):
+                        task.created_at = datetime.strptime(data['start_date'], '%Y-%m-%d')
+                    elif isinstance(data['start_date'], datetime.date):
+                        task.created_at = datetime.combine(data['start_date'], datetime.min.time())
+                    else:
+                        logger.warning(f"无效的start_date格式: {data['start_date']}, 类型: {type(data['start_date'])}")
+                updated_fields.append('start_date')
+            except ValueError as e:
+                logger.error(f"处理start_date时出错: {e}")
+                # 不返回错误，而是记录并继续
+        
         if 'end_date' in data:
-            # Task模型中将end_date映射到due_date
-            if isinstance(data['end_date'], str):
-                task.due_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
-            else:
-                task.due_date = data['end_date']
-            updated_fields.append('end_date')
-                
+            # 更新due_date字段
+            try:
+                if isinstance(data['end_date'], str):
+                    task.due_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
+                elif isinstance(data['end_date'], datetime.date):
+                    task.due_date = data['end_date']
+                else:
+                    logger.warning(f"无效的end_date格式: {data['end_date']}, 类型: {type(data['end_date'])}")
+                updated_fields.append('end_date')
+            except ValueError as e:
+                logger.error(f"处理end_date时出错: {e}")
+                # 不返回错误，而是记录并继续
+        
         if 'progress' in data:
-            task.progress = data['progress']
+            # 确保progress值在0-100范围内
+            progress_value = int(data['progress']) if isinstance(data['progress'], (int, float, str)) else 0
+            task.progress = max(0, min(100, progress_value))
             updated_fields.append('progress')
             
             # 如果进度为100%，自动将状态设为completed
@@ -825,17 +863,23 @@ def update_gantt_task(task_id):
                 task.status = 'completed'
                 task.completed_at = datetime.utcnow()
                 updated_fields.append('status')
+            # 如果进度>0且<100，自动将状态设为in_progress
+            elif task.progress > 0 and task.progress < 100 and task.status not in ['in_progress']:
+                task.status = 'in_progress'
+                updated_fields.append('status')
         
         db.session.commit()
         logger.info(f"甘特图任务更新成功: {task_id}, 字段: {', '.join(updated_fields)}")
         
         # 返回更新后的任务数据
+        start_date = task.start_date if hasattr(task, 'start_date') and task.start_date else task.created_at.date()
+        
         return jsonify({
             'id': task.id,
             'title': task.title,
             'status': task.status,
             'progress': task.progress,
-            'start_date': task.created_at.strftime('%Y-%m-%d') if task.created_at else None,
+            'start_date': start_date.strftime('%Y-%m-%d') if start_date else None,
             'end_date': task.due_date.strftime('%Y-%m-%d') if task.due_date else None,
             'message': '任务更新成功'
         })

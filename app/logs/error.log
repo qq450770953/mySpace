@@ -1469,3 +1469,1951 @@ jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object'
 2025-05-09 09:10:52,079 - app.routes.main - ERROR - Error in tasks: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'has_permission'
 2025-05-09 10:17:26,890 - app.routes.main - ERROR - Error in users: expected token 'end of statement block', got 'if'
 2025-05-09 11:52:16,327 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-09 14:12:45,174 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-09 14:13:07,725 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-09 14:18:26,784 - app.routes.main - ERROR - Error in users: expected token 'end of statement block', got 'if'
+2025-05-09 14:18:54,372 - app.routes.main - ERROR - Error in users: expected token 'end of statement block', got 'if'
+2025-05-09 14:23:26,475 - app.routes.main - ERROR - 处理用户对象失败: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1818, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1459, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py", line 1068, in process
+    raise TypeError(
+TypeError: SQLite DateTime type only accepts Python datetime and date objects as input.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1130, in _emit_lazyload
+    result = session.execute(
+             ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 3005, in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4431, in _flush
+    with util.safe_reraise():
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4392, in _flush
+    flush_context.execute()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 85, in save_obj
+    _emit_update_statements(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 912, in _emit_update_statements
+    c = connection.execute(
+        ^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1824, in _execute_context
+    self._handle_dbapi_exception(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1818, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1459, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py", line 1068, in process
+    raise TypeError(
+sqlalchemy.exc.StatementError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]]
+2025-05-09 14:23:26,484 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,488 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,490 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,493 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,495 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,499 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,501 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:23:26,511 - app.routes.main - ERROR - Error in users: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 859, in users
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "d:\tmp\work\app\templates\users.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "d:\tmp\work\app\templates\base.html", line 321, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\tmp\work\app\templates\users.html", line 43, in block 'content'
+    <td>{{ user.username }}</td>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 485, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:23', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,331 - app.routes.main - ERROR - 处理用户对象失败: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1818, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1459, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py", line 1068, in process
+    raise TypeError(
+TypeError: SQLite DateTime type only accepts Python datetime and date objects as input.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1130, in _emit_lazyload
+    result = session.execute(
+             ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 3005, in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4431, in _flush
+    with util.safe_reraise():
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4392, in _flush
+    flush_context.execute()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 85, in save_obj
+    _emit_update_statements(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 912, in _emit_update_statements
+    c = connection.execute(
+        ^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1824, in _execute_context
+    self._handle_dbapi_exception(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1818, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1459, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py", line 1068, in process
+    raise TypeError(
+sqlalchemy.exc.StatementError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]]
+2025-05-09 14:24:25,338 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,345 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,353 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,360 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,367 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,375 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,380 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:24:25,391 - app.routes.main - ERROR - Error in users: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 859, in users
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "d:\tmp\work\app\templates\users.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "d:\tmp\work\app\templates\base.html", line 321, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\tmp\work\app\templates\users.html", line 43, in block 'content'
+    <td>{{ user.username }}</td>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 485, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,110 - app.routes.main - ERROR - 处理用户对象失败: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1818, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1459, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py", line 1068, in process
+    raise TypeError(
+TypeError: SQLite DateTime type only accepts Python datetime and date objects as input.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1130, in _emit_lazyload
+    result = session.execute(
+             ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 3005, in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4431, in _flush
+    with util.safe_reraise():
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4392, in _flush
+    flush_context.execute()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 85, in save_obj
+    _emit_update_statements(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 912, in _emit_update_statements
+    c = connection.execute(
+        ^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1824, in _execute_context
+    self._handle_dbapi_exception(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1818, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1459, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py", line 1068, in process
+    raise TypeError(
+sqlalchemy.exc.StatementError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]]
+2025-05-09 14:25:20,113 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,115 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,118 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,120 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,124 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,127 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,129 - app.routes.main - ERROR - 处理用户对象失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 825, in users
+    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 967, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1098, in _emit_lazyload
+    lazy_clause, params = self._generate_lazy_clause(state, passive)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 854, in _generate_lazy_clause
+    value = mapper._get_state_attr_by_column(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 3581, in _get_state_attr_by_column
+    return state.manager[prop.key].impl.get(state, dict_, passive=passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:25:20,132 - app.routes.main - ERROR - Error in users: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+Traceback (most recent call last):
+  File "d:\tmp\work\app\routes\main.py", line 859, in users
+    return render_template(
+           ^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "d:\tmp\work\app\templates\users.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "d:\tmp\work\app\templates\base.html", line 321, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\tmp\work\app\templates\users.html", line 43, in block 'content'
+    <td>{{ user.username }}</td>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\jinja2\environment.py", line 485, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 796, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1653, in load_scalar_attributes
+    result = load_on_ident(
+             ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 509, in load_on_ident
+    return load_on_pk_identity(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 694, in load_on_pk_identity
+    session.execute(
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2170, in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 549, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2994, in _autoflush
+    self.flush()
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4388, in _flush
+    flush_context.transaction = transaction = self._autobegin_t()._begin()
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _begin
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 103, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "D:\tmp\work\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 928, in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: UPDATE users SET updated_at=?, last_login=? WHERE users.id = ?]
+[parameters: [{'last_login': '2025-05-09 06:24', 'users_id': 1}]] (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-09 14:38:45,569 - app.routes.risk - ERROR - Error creating risk: 'created_by' is an invalid keyword argument for Risk
+2025-05-09 14:44:56,351 - app - ERROR - Error updating resource: 'Resource' object has no attribute 'project_id'
+2025-05-09 15:22:37,360 - app.routes.tasks - ERROR - 获取甘特图数据失败: isinstance() arg 2 must be a type, a tuple of types, or a union
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\tasks.py", line 727, in get_gantt_data
+    if not isinstance(start_date, datetime.date):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: isinstance() arg 2 must be a type, a tuple of types, or a union
+2025-05-09 15:24:26,045 - app.routes.tasks - ERROR - 获取甘特图数据失败: type object 'datetime.datetime' has no attribute 'datetime'
+Traceback (most recent call last):
+  File "D:\tmp\work\app\routes\tasks.py", line 727, in get_gantt_data
+    if not isinstance(start_date, (datetime.date, datetime.datetime)):
+                                                  ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
+2025-05-09 16:42:46,856 - app - ERROR - 验证JWT时出错: Signature has expired

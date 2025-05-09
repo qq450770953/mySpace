@@ -7,7 +7,7 @@ from app.extensions import init_extensions, socketio, db, migrate, mail, jwt, lo
 from app.commands import register_commands
 import win32file
 import win32con
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, jwt_required
 from flask_cors import CORS
 import sys
 import atexit
@@ -153,6 +153,17 @@ def create_app(config_name=None):
     # 注册蓝图并豁免CSRF检查
     app.register_blueprint(task_api_exempt_bp)
     csrf.exempt(task_api_exempt_bp)  # 豁免CSRF检查
+    
+    # 创建资源分配API的CSRF豁免蓝图
+    resource_allocation_exempt_bp = Blueprint('resource_allocation_exempt', __name__)
+    
+    @resource_allocation_exempt_bp.route('/api/resource-allocations', methods=['GET', 'POST'])
+    @resource_allocation_exempt_bp.route('/api/resource-allocations/', methods=['GET', 'POST'])
+    @resource_allocation_exempt_bp.route('/api/resource-allocations/<int:allocation_id>', methods=['GET', 'DELETE'])
+    @resource_allocation_exempt_bp.route('/api/tasks', methods=['GET'])
+    def resource_allocation_exempt_route(allocation_id=None):
+        # 此函数不会被调用，仅用于创建路由模式匹配
+        pass
     
     # 添加一个自定义的路由过滤器，以便在bypass_jwt=true时免除CSRF检查
     @app.before_request
@@ -562,6 +573,230 @@ def create_app(config_name=None):
         user_is_regular=user_is_regular
     )
     
+    # 添加一个直接路由，处理用户API请求
+    @app.route('/api/auth/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def user_api_route(user_id):
+        """处理直接访问/api/auth/users/<id>的请求"""
+        try:
+            app.logger.info(f"用户API请求: {request.method} - /api/auth/users/{user_id}")
+            
+            # 绕过CSRF保护(处理带有bypass_jwt=true的请求)
+            if request.args.get('bypass_jwt') == 'true':
+                app.logger.info("绕过JWT和CSRF验证")
+                request._csrf_token = True
+            
+            # 导入用户蓝图中的函数
+            from app.routes.users import get_user, update_user, delete_user
+            
+            # 根据HTTP方法调用相应的处理函数
+            if request.method == 'GET':
+                return get_user(user_id)
+            elif request.method == 'PUT':
+                return update_user(user_id)
+            elif request.method == 'DELETE':
+                return delete_user(user_id)
+            else:
+                return jsonify({'error': 'Method not allowed'}), 405
+                
+        except Exception as e:
+            app.logger.error(f"处理用户API请求出错: {str(e)}", exc_info=True)
+            return jsonify({'error': '处理请求时出错', 'details': str(e)}), 500
+            
+    # 添加处理用户列表和创建用户的路由
+    @app.route('/api/auth/users', methods=['GET', 'POST'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def users_list_api_route():
+        """处理直接访问/api/auth/users的请求，用于获取用户列表和创建用户"""
+        try:
+            app.logger.info(f"用户列表API请求: {request.method} - /api/auth/users")
+            
+            # 绕过CSRF保护(处理带有bypass_jwt=true的请求)
+            if request.args.get('bypass_jwt') == 'true':
+                app.logger.info("绕过JWT和CSRF验证")
+                request._csrf_token = True
+            
+            # 导入用户蓝图中的函数
+            from app.routes.users import get_users, create_user
+            
+            # 根据HTTP方法调用相应的处理函数
+            if request.method == 'GET':
+                return get_users()
+            elif request.method == 'POST':
+                return create_user()
+            else:
+                return jsonify({'error': 'Method not allowed'}), 405
+                
+        except Exception as e:
+            app.logger.error(f"处理用户列表API请求出错: {str(e)}", exc_info=True)
+            return jsonify({'error': '处理请求时出错', 'details': str(e)}), 500
+            
+    # 添加处理风险列表的路由
+    @app.route('/api/auth/risks/', methods=['GET', 'POST'])
+    @app.route('/api/auth/risks', methods=['GET', 'POST'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def risks_api_route():
+        """处理直接访问/api/auth/risks/的请求，用于获取风险列表和创建风险"""
+        try:
+            app.logger.info(f"风险列表API请求: {request.method} - /api/auth/risks/")
+            
+            # 绕过CSRF保护(处理带有bypass_jwt=true的请求)
+            if request.args.get('bypass_jwt') == 'true':
+                app.logger.info("绕过JWT和CSRF验证")
+                request._csrf_token = True
+            
+            # 导入风险蓝图中的函数
+            from app.routes.risk import get_risks, create_risk
+            
+            # 根据HTTP方法调用相应的处理函数
+            if request.method == 'GET':
+                return get_risks()
+            elif request.method == 'POST':
+                return create_risk()
+            else:
+                return jsonify({'error': 'Method not allowed'}), 405
+                
+        except Exception as e:
+            app.logger.error(f"处理风险列表API请求出错: {str(e)}", exc_info=True)
+            return jsonify({'error': '处理请求时出错', 'details': str(e)}), 500
+            
+    # 添加处理单个风险的路由
+    @app.route('/api/auth/risks/<int:risk_id>', methods=['GET', 'PUT', 'DELETE'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def risk_detail_api_route(risk_id):
+        """处理直接访问/api/auth/risks/<id>的请求，用于获取、更新和删除单个风险"""
+        try:
+            app.logger.info(f"风险详情API请求: {request.method} - /api/auth/risks/{risk_id}")
+            
+            # 绕过CSRF保护(处理带有bypass_jwt=true的请求)
+            if request.args.get('bypass_jwt') == 'true':
+                app.logger.info("绕过JWT和CSRF验证")
+                request._csrf_token = True
+            
+            # 导入风险蓝图中的函数
+            from app.routes.risk import get_risk, update_risk, delete_risk
+            
+            # 根据HTTP方法调用相应的处理函数
+            if request.method == 'GET':
+                return get_risk(risk_id)
+            elif request.method == 'PUT':
+                return update_risk(risk_id)
+            elif request.method == 'DELETE':
+                return delete_risk(risk_id)
+            else:
+                return jsonify({'error': 'Method not allowed'}), 405
+                
+        except Exception as e:
+            app.logger.error(f"处理风险详情API请求出错: {str(e)}", exc_info=True)
+            return jsonify({'error': '处理请求时出错', 'details': str(e)}), 500
+            
+    # 添加处理资源列表的路由
+    @app.route('/api/auth/resources/', methods=['GET', 'POST'])
+    @app.route('/api/auth/resources', methods=['GET', 'POST'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def resources_api_route():
+        """处理直接访问/api/auth/resources/的请求，用于获取资源列表和创建资源"""
+        try:
+            app.logger.info(f"资源列表API请求: {request.method} - /api/auth/resources/")
+            
+            # 绕过CSRF保护(处理带有bypass_jwt=true的请求)
+            if request.args.get('bypass_jwt') == 'true':
+                app.logger.info("绕过JWT和CSRF验证")
+                request._csrf_token = True
+            
+            # 导入资源蓝图中的函数
+            from app.routes.resources import get_resources, create_resource
+            
+            # 根据HTTP方法调用相应的处理函数
+            if request.method == 'GET':
+                return get_resources()
+            elif request.method == 'POST':
+                return create_resource()
+            else:
+                return jsonify({'error': 'Method not allowed'}), 405
+                
+        except Exception as e:
+            app.logger.error(f"处理资源列表API请求出错: {str(e)}", exc_info=True)
+            return jsonify({'error': '处理请求时出错', 'details': str(e)}), 500
+            
+    # 添加处理单个资源的路由
+    @app.route('/api/auth/resources/<int:resource_id>', methods=['GET', 'PUT', 'DELETE'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def resource_detail_api_route(resource_id):
+        """将旧的API路径重定向到新的路径"""
+        target = f"/api/resources/{resource_id}"
+        # 保留所有查询参数
+        if request.query_string:
+            target = f"{target}?{request.query_string.decode('utf-8')}"
+        app.logger.info(f"Redirecting from old resource detail API path to: {target}")
+        return redirect(target, code=308)  # 使用308永久重定向
+        
+    @app.route('/api/resource-allocations', methods=['GET'])
+    @app.route('/api/resource-allocations/', methods=['GET'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def resource_allocations_api_route():
+        """处理资源分配API的请求"""
+        from app.routes.resources import get_all_resource_allocations
+        return get_all_resource_allocations()
+        
+    @app.route('/api/resource-allocations/<int:allocation_id>', methods=['GET', 'DELETE'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def resource_allocation_detail_api_route(allocation_id):
+        """处理单个资源分配API的请求"""
+        from app.routes.resources import get_resource_allocation, delete_resource_allocation
+        if request.method == 'GET':
+            return get_resource_allocation(allocation_id)
+        elif request.method == 'DELETE':
+            return delete_resource_allocation(allocation_id)
+            
+    @app.route('/api/resource-allocations', methods=['POST'])
+    @app.route('/api/resource-allocations/', methods=['POST'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def resource_allocation_create_api_route():
+        """处理创建资源分配API的请求"""
+        from app.routes.resources import create_resource_allocation
+        return create_resource_allocation()
+        
+    @app.route('/api/tasks', methods=['GET'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def tasks_api_route():
+        """处理任务列表API的请求"""
+        from app.routes.resources import get_tasks_for_allocation
+        return get_tasks_for_allocation()
+
+    @app.route('/api/resources/<int:resource_id>', methods=['GET', 'PUT', 'DELETE'])
+    @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+    def resource_api_route(resource_id):
+        """处理直接访问/api/resources/<id>的请求，用于获取、更新和删除单个资源"""
+        try:
+            app.logger.info(f"资源API请求: {request.method} - /api/resources/{resource_id}")
+            
+            # 绕过CSRF保护(处理带有bypass_jwt=true的请求)
+            if request.args.get('bypass_jwt') == 'true':
+                app.logger.info("绕过JWT和CSRF验证")
+                request._csrf_token = True
+            
+            # 导入资源蓝图中的函数
+            from app.routes.resources import get_resource, update_resource, delete_resource
+            
+            # 根据HTTP方法调用相应的处理函数
+            if request.method == 'GET':
+                return get_resource(resource_id)
+            elif request.method == 'PUT':
+                return update_resource(resource_id)
+            elif request.method == 'DELETE':
+                return delete_resource(resource_id)
+            else:
+                return jsonify({'error': 'Method not allowed'}), 405
+                
+        except Exception as e:
+            app.logger.error(f"处理资源API请求出错: {str(e)}", exc_info=True)
+            return jsonify({'error': '处理请求时出错', 'details': str(e)}), 500
+    
+    # 注册资源分配豁免蓝图
+    app.register_blueprint(resource_allocation_exempt_bp)
+    csrf.exempt(resource_allocation_exempt_bp)  # 豁免CSRF检查
+    
     return app
 
 def setup_logging(app):
@@ -570,6 +805,15 @@ def setup_logging(app):
         # 确保日志目录存在
         log_dir = os.path.join(app.root_path, 'logs')
         os.makedirs(log_dir, exist_ok=True)
+        
+        # 首先清理现有的日志处理器，避免日志文件锁定问题
+        if hasattr(app, 'log_handlers'):
+            for handler in app.log_handlers.values():
+                try:
+                    handler.close()
+                    app.logger.removeHandler(handler)
+                except Exception as e:
+                    print(f"Error closing existing handler: {str(e)}")
         
         # 设置日志格式
         formatter = logging.Formatter(
@@ -604,6 +848,10 @@ def setup_logging(app):
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
         
+        # 移除现有处理器
+        for handler in app.logger.handlers[:]:
+            app.logger.removeHandler(handler)
+        
         # 配置应用日志
         app.logger.addHandler(file_handler)
         app.logger.addHandler(error_handler)
@@ -612,12 +860,16 @@ def setup_logging(app):
         
         # 配置 Werkzeug 日志
         werkzeug_logger = logging.getLogger('werkzeug')
+        for handler in werkzeug_logger.handlers[:]:
+            werkzeug_logger.removeHandler(handler)
         werkzeug_logger.addHandler(file_handler)
         werkzeug_logger.addHandler(console_handler)
         werkzeug_logger.setLevel(logging.INFO)
         
         # 配置 SQLAlchemy 日志
         sqlalchemy_logger = logging.getLogger('sqlalchemy.engine')
+        for handler in sqlalchemy_logger.handlers[:]:
+            sqlalchemy_logger.removeHandler(handler)
         sqlalchemy_logger.addHandler(file_handler)
         sqlalchemy_logger.setLevel(logging.INFO)
         

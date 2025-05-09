@@ -1,0 +1,149 @@
+/* 甘特图样式定义 */
+.gantt-container {
+    height: 600px;
+    width: 100%;
+    overflow: auto;
+    margin: 1rem 0;
+}
+
+/* 甘特图任务状态样式 */
+.gantt .bar {
+    fill: #6c757d;
+    stroke: #495057;
+    stroke-width: 1px;
+}
+
+.gantt .bar-wrapper {
+    cursor: pointer;
+}
+
+.gantt .bar-wrapper:hover .bar {
+    fill: #5b6d7c;
+}
+
+.gantt .bar-wrapper.active .bar {
+    fill: #007bff;
+}
+
+.gantt .bar-progress {
+    fill: #28a745;
+}
+
+.gantt .bar.status-todo {
+    fill: #6c757d;
+}
+
+.gantt .bar.status-in_progress {
+    fill: #ffc107;
+}
+
+.gantt .bar.status-completed {
+    fill: #28a745;
+}
+
+.gantt .bar.priority-high {
+    stroke: #dc3545;
+    stroke-width: 2px;
+}
+
+.gantt .bar.priority-medium {
+    stroke: #fd7e14;
+    stroke-width: 1.5px;
+}
+
+.gantt .today-highlight {
+    stroke: #fd7e14;
+    stroke-width: 2px;
+}
+
+/* 甘特图底部控制栏 */
+.gantt-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.gantt-controls .btn-group {
+    margin-right: 0.5rem;
+}
+
+/* 甘特图标题和任务名称 */
+.gantt-title {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 0.5rem;
+}
+
+.gantt .title {
+    font-weight: bold;
+}
+
+/* 甘特图弹出信息 */
+.gantt-task-info {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px;
+    max-width: 300px;
+}
+
+.gantt-task-info h4 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-size: 16px;
+}
+
+.gantt-task-info p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+/* 甘特图加载和错误提示 */
+.gantt-loading,
+.gantt-error {
+    padding: 2rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.gantt-error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+/* 甘特图空数据提示 */
+.gantt-empty {
+    padding: 3rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin: 1rem 0;
+    color: #6c757d;
+}
+
+.gantt-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+/* 改进甘特图在移动设备上的显示 */
+@media (max-width: 768px) {
+    .gantt-container {
+        height: 400px;
+    }
+    
+    .gantt-controls {
+        flex-direction: column;
+    }
+    
+    .gantt-controls .btn-group {
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+} 

@@ -1980,6 +1980,25 @@ function generate_id(task) {
   );
 }
 
+// 检查文件是否存在
+console.log('Frappe Gantt库已加载');
+
+// 添加一个全局错误处理，确保甘特图初始化时的错误能被正确捕获
+window.addEventListener('error', function(event) {
+    if (event.filename && event.filename.includes('frappe-gantt')) {
+        console.error('甘特图库加载错误:', event.message);
+        console.error('错误位置:', event.filename, event.lineno, event.colno);
+        
+        // 尝试通知应用程序
+        if (typeof window.showGanttError === 'function') {
+            window.showGanttError('甘特图库执行出错: ' + event.message);
+        }
+        
+        // 阻止错误继续传播
+        event.preventDefault();
+    }
+});
+
 return Gantt;
 
 }());

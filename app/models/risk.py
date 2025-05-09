@@ -41,7 +41,9 @@ class Risk(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             'project_id': self.project_id,
+            'project_name': self.project.name if self.project else '未分配',
             'owner_id': self.owner_id,
+            'owner_name': self.owner.name if self.owner else '未分配',
             'task_id': self.task_id,
             'owner': self.owner.to_dict() if self.owner else None
         }

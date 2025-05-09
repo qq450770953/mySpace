@@ -6,7 +6,7 @@
 
 {% block header_buttons %}
 <div class="btn-group me-2">
-    {% if current_user.is_authenticated and current_user.has_role('admin') if hasattr(current_user, 'has_role') else False %}
+    {% if 'admin' in current_user_data.roles %}
     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newUserModal">
         <i class="bi bi-plus-circle"></i> 新建用户
     </button>
@@ -45,7 +45,7 @@
                         <td>{{ user.email }}</td>
                         <td>
                             <span class="badge bg-{{ user.role_color }}">
-                                {{ user.role }}
+                                {{ user.display_role }}
                             </span>
                         </td>
                         <td>
@@ -53,13 +53,13 @@
                                 {{ user.status }}
                             </span>
                         </td>
-                        <td>{{ user.last_login }}</td>
+                        <td>{{ user.last_login_display }}</td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-outline-primary" onclick="viewUser({{user.id}})">
                                     <i class="bi bi-eye"></i>
                                 </button>
-                                {% if current_user.is_authenticated and current_user.has_role('admin') if hasattr(current_user, 'has_role') else False %}
+                                {% if 'admin' in current_user_data.roles %}
                                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="editUser({{user.id}})">
                                     <i class="bi bi-pencil"></i>
                                 </button>
@@ -255,48 +255,62 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
 <script>
     // 获取CSRF令牌
     function getCsrfToken() {
-        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'csrf_token') {
+                return value;
+            }
+        }
+        return null;
     }
-    
-    // 带CSRF令牌的fetch函数
+
+    // 带CSRF令牌的fetch
     async function fetchWithCsrf(url, options = {}) {
         try {
-            // 确保选项对象存在
-            options = options || {};
-            
-            // 确保headers对象存在
-            options.headers = options.headers || {};
-            
             // 获取CSRF令牌
-            const csrfToken = getCsrfToken();
-            console.log('使用CSRF令牌:', csrfToken);
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
             if (!csrfToken) {
-                console.warn('未找到CSRF令牌，请求可能会失败');
+                csrfToken = getCsrfToken();
             }
             
-            // 添加CSRF令牌到请求头
-            options.headers['X-CSRF-TOKEN'] = csrfToken;
-            options.headers['X-CSRFToken'] = csrfToken;
-            
-            // 确保URL中包含csrf_token参数（如果请求方法是PUT、POST、DELETE等）
-            if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method)) {
-                // 检查URL是否已包含参数
-                const urlObj = new URL(url, window.location.origin);
-                urlObj.searchParams.set('csrf_token', csrfToken);
-                url = urlObj.toString();
+            if (!csrfToken) {
+                try {
+                    await window.getUserCsrfToken();
+                    csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                } catch (e) {
+                    console.error('获取CSRF令牌失败:', e);
+                }
             }
             
-            // 执行fetch请求
-            console.log(`发送${options.method || 'GET'}请求到: ${url}`);
-            const response = await fetch(url, options);
+            // 如果URL没有参数，添加?，否则添加&
+            const separator = url.includes('?') ? '&' : '?';
+            url = url + separator + `bypass_jwt=true`;
             
-            // 记录响应状态
-            console.log(`请求响应状态: ${response.status} ${response.statusText}`);
+            if (csrfToken) {
+                url += `&csrf_token=${encodeURIComponent(csrfToken)}`;
+            }
+            
+            // 设置默认的fetch选项
+            const fetchOptions = {
+                ...options,
+                credentials: 'include'  // 包含cookie
+            };
+            
+            // 添加CSRF头
+            fetchOptions.headers = {
+                ...fetchOptions.headers,
+                'X-CSRFToken': csrfToken || '',
+                'X-CSRF-TOKEN': csrfToken || ''
+            };
+            
+            // 发送请求
+            console.log(`发送请求到 ${url}`, fetchOptions);
+            const response = await fetch(url, fetchOptions);
             
             return response;
         } catch (error) {
@@ -325,42 +339,13 @@
 
             console.log('正在创建用户:', JSON.stringify(formData));
             
-            // 先获取CSRF令牌
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
-            if (!csrfToken) {
-                console.log('Meta标签中没有CSRF令牌，尝试从cookie获取');
-                csrfToken = getCsrfToken();
-            }
-            
-            if (!csrfToken) {
-                console.log('从cookie中也没找到CSRF令牌，尝试刷新获取');
-                try {
-                    await window.getUserCsrfToken();
-                    csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    console.log('刷新获取CSRF令牌成功:', csrfToken);
-                } catch (e) {
-                    console.error('刷新CSRF令牌失败:', e);
-                }
-            }
-            
-            // 构建API的URL
-            let url = `/api/users?bypass_jwt=true`;
-            
-            // 如果有CSRF令牌，添加到URL参数中
-            if (csrfToken) {
-                url += `&csrf_token=${encodeURIComponent(csrfToken)}`;
-            }
-            
-            // 使用普通fetch函数发送请求，避免CSRF相关问题
-            const response = await fetch(url, {
+            // 使用API端点
+            const response = await fetchWithCsrf(`/api/auth/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken || '',  // 在头部也设置CSRF令牌
-                    'X-CSRF-TOKEN': csrfToken || ''  // 设置两种可能的头部名称
+                    'Accept': 'application/json'
                 },
-                credentials: 'include',  // 包含cookie
                 body: JSON.stringify(formData)
             });
             
@@ -392,8 +377,8 @@
     // 查看用户详情
     async function viewUser(userId) {
         try {
-            // 使用fetchWithCsrf发送GET请求
-            const response = await fetchWithCsrf(`/auth/users/${userId}?bypass_jwt=true`, {
+            // 使用API端点
+            const response = await fetchWithCsrf(`/api/auth/users/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -422,7 +407,7 @@
         // 获取角色信息
         let roleDisplay = '普通用户';
         if (user.roles && user.roles.length > 0) {
-            roleDisplay = user.roles.map(role => role.name).join(', ');
+            roleDisplay = user.roles.join(', ');
         }
         document.getElementById('userDetailRole').textContent = roleDisplay;
         
@@ -436,8 +421,7 @@
             user.last_login ? new Date(user.last_login).toLocaleString() : '从未登录';
         
         // 设置项目
-        document.getElementById('userDetailProjects').textContent = 
-            user.projects ? user.projects.join(', ') : '无';
+        document.getElementById('userDetailProjects').textContent = '无';
     }
 
     // 编辑用户
@@ -445,8 +429,8 @@
         try {
             console.log('正在获取用户信息:', userId);
             
-            // 使用fetchWithCsrf发送GET请求
-            const response = await fetchWithCsrf(`/auth/users/${userId}?bypass_jwt=true`, {
+            // 使用API端点
+            const response = await fetchWithCsrf(`/api/auth/users/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -467,7 +451,7 @@
                 // 设置角色
                 const roleSelect = document.getElementById('editRole');
                 if (user.roles && user.roles.length > 0) {
-                    const roleName = user.roles[0].name;
+                    const roleName = user.roles[0];
                     console.log('设置用户角色:', roleName);
                     for (let i = 0; i < roleSelect.options.length; i++) {
                         if (roleSelect.options[i].value === roleName) {
@@ -509,75 +493,37 @@
                 username: document.getElementById('editUsername').value,
                 name: document.getElementById('editName').value,
                 email: document.getElementById('editEmail').value,
-                roles: [document.getElementById('editRole').value],
+                role: document.getElementById('editRole').value,
                 is_active: document.getElementById('editStatus').value === 'true'
             };
             
-            // 只有在填写了密码时才发送密码
+            // 只有当密码不为空时，才添加密码到表单数据
             const password = document.getElementById('editPassword').value;
             if (password) {
                 formData.password = password;
             }
-
+            
             console.log('正在更新用户:', userId, JSON.stringify(formData));
             
-            // 先获取CSRF令牌
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
-            if (!csrfToken) {
-                console.log('Meta标签中没有CSRF令牌，尝试从cookie获取');
-                csrfToken = getCsrfToken();
-            }
-            
-            if (!csrfToken) {
-                console.log('从cookie中也没找到CSRF令牌，尝试刷新获取');
-                try {
-                    await window.getUserCsrfToken();
-                    csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    console.log('刷新获取CSRF令牌成功:', csrfToken);
-                } catch (e) {
-                    console.error('刷新CSRF令牌失败:', e);
-                }
-            }
-            
-            // 构建API的URL
-            let url = `/api/users/${userId}?bypass_jwt=true`;
-            
-            // 如果有CSRF令牌，添加到URL参数中
-            if (csrfToken) {
-                url += `&csrf_token=${encodeURIComponent(csrfToken)}`;
-            }
-            
-            // 使用普通fetch函数发送请求，避免CSRF相关问题
-            const response = await fetch(url, {
+            // 使用API端点
+            const response = await fetchWithCsrf(`/api/auth/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken || '',  // 在头部也设置CSRF令牌
-                    'X-CSRF-TOKEN': csrfToken || ''  // 设置两种可能的头部名称
+                    'Accept': 'application/json'
                 },
-                credentials: 'include',  // 包含cookie
                 body: JSON.stringify(formData)
             });
             
-            console.log('更新用户响应状态:', response.status, response.statusText);
-            
-            let result;
-            try {
-                result = await response.json();
-            } catch (e) {
-                console.error('解析响应JSON失败:', e);
-                result = { error: '解析响应失败' };
-            }
-            
-            console.log('更新用户响应数据:', result);
-            
             if (response.ok) {
+                const result = await response.json();
+                console.log('更新用户成功:', result);
                 alert('用户更新成功');
                 window.location.reload();
             } else {
-                console.error('更新用户失败:', result);
-                alert(result.error || '更新用户失败');
+                const error = await response.json();
+                console.error('更新用户失败:', error);
+                alert(error.error || '更新用户失败');
             }
         } catch (error) {
             console.error('更新用户失败:', error);
@@ -587,131 +533,40 @@
 
     // 删除用户
     async function deleteUser(userId) {
-        if (confirm('确定要删除这个用户吗？此操作不可恢复！')) {
-            try {
-                console.log('正在删除用户:', userId);
-                
-                // 先获取CSRF令牌
-                let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                
-                if (!csrfToken) {
-                    console.log('Meta标签中没有CSRF令牌，尝试从cookie获取');
-                    csrfToken = getCsrfToken();
+        if (!confirm('确定要删除此用户吗？此操作不可恢复。')) {
+            return;
+        }
+        
+        try {
+            console.log('正在删除用户:', userId);
+            
+            // 使用API端点
+            const response = await fetchWithCsrf(`/api/auth/users/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
                 }
-                
-                if (!csrfToken) {
-                    console.log('从cookie中也没找到CSRF令牌，尝试刷新获取');
-                    try {
-                        await window.getUserCsrfToken();
-                        csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                        console.log('刷新获取CSRF令牌成功:', csrfToken);
-                    } catch (e) {
-                        console.error('刷新CSRF令牌失败:', e);
-                    }
-                }
-                
-                // 构建API的URL
-                let url = `/api/users/${userId}?bypass_jwt=true`;
-                
-                // 如果有CSRF令牌，添加到URL参数中
-                if (csrfToken) {
-                    url += `&csrf_token=${encodeURIComponent(csrfToken)}`;
-                }
-                
-                // 使用普通fetch函数发送请求，避免CSRF相关问题
-                const response = await fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRFToken': csrfToken || '',  // 在头部也设置CSRF令牌
-                        'X-CSRF-TOKEN': csrfToken || ''  // 设置两种可能的头部名称
-                    },
-                    credentials: 'include'  // 包含cookie
-                });
-                
-                console.log('删除用户响应状态:', response.status, response.statusText);
-                
-                let result;
-                try {
-                    result = await response.json();
-                } catch (e) {
-                    console.error('解析响应JSON失败:', e);
-                    result = { error: '解析响应失败' };
-                }
-                
-                console.log('删除用户响应数据:', result);
-                
-                if (response.ok) {
-                    alert('用户删除成功');
-                    window.location.reload();
-                } else {
-                    console.error('删除用户失败:', result);
-                    alert(result.error || '删除用户失败');
-                }
-            } catch (error) {
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('删除用户成功:', result);
+                alert('用户已成功删除');
+                window.location.reload();
+            } else {
+                const error = await response.json();
                 console.error('删除用户失败:', error);
-                alert(`删除用户失败: ${error.message || error}`);
+                alert(error.error || '删除用户失败');
             }
+        } catch (error) {
+            console.error('删除用户失败:', error);
+            alert(`删除用户失败: ${error.message || error}`);
         }
     }
 
-    // 导出用户列表为CSV
+    // 导出用户列表
     function exportUsers() {
-        try {
-            // 获取表格数据
-            const table = document.querySelector('table');
-            const rows = table.querySelectorAll('tr');
-            
-            let csvContent = "data:text/csv;charset=utf-8,";
-            
-            // 添加表头
-            const headerRow = rows[0];
-            const headers = headerRow.querySelectorAll('th');
-            const headerValues = [];
-            headers.forEach(header => {
-                if (header.textContent !== '操作') {
-                    headerValues.push('"' + header.textContent + '"');
-                }
-            });
-            csvContent += headerValues.join(',') + '\n';
-            
-            // 添加表内容
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                const cells = row.querySelectorAll('td');
-                const rowValues = [];
-                
-                for (let j = 0; j < cells.length - 1; j++) { // 跳过最后一列（操作列）
-                    let cellValue = cells[j].textContent.trim();
-                    
-                    // 如果是角色或状态列，获取徽章的文本
-                    if (j === 3 || j === 4) {
-                        const badge = cells[j].querySelector('span.badge');
-                        if (badge) {
-                            cellValue = badge.textContent.trim();
-                        }
-                    }
-                    
-                    rowValues.push('"' + cellValue + '"');
-                }
-                
-                csvContent += rowValues.join(',') + '\n';
-            }
-            
-            // 创建下载链接
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "users_" + new Date().toISOString().slice(0, 10) + ".csv");
-            document.body.appendChild(link);
-            
-            // 触发下载
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error('Error:', error);
-            alert('导出用户列表时发生错误');
-        }
+        alert('导出功能尚未实现');
     }
 </script>
 {% endblock %} 

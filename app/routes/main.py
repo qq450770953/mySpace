@@ -814,8 +814,49 @@ def users():
             logger.warning(f"User {current_user} attempted to access users without permission")
             return render_template('error.html', error='您没有访问用户管理的权限')
         
-        # 获取所有用户
-        users = User.query.all()
+        # 使用no_autoflush上下文，避免SQLAlchemy在处理视图期间自动刷新
+        with db.session.no_autoflush:
+            # 获取所有用户
+            users = User.query.all()
+            
+            # 为每个用户添加角色颜色和状态信息
+            for user_obj in users:
+                try:
+                    # 获取主要角色，加入安全检查防止空指针异常
+                    primary_role = None
+                    if hasattr(user_obj, 'roles') and user_obj.roles and len(user_obj.roles) > 0:
+                        primary_role = user_obj.roles[0].name 
+                    else:
+                        primary_role = 'user'  # 默认为普通用户
+                        
+                    # 存储格式化用于显示的属性，不影响原始属性
+                    user_obj.display_role = primary_role
+                    
+                    # 设置角色颜色
+                    if primary_role == 'admin':
+                        user_obj.role_color = 'danger'
+                    elif primary_role == 'manager':
+                        user_obj.role_color = 'warning'
+                    else:
+                        user_obj.role_color = 'info'
+                        
+                    # 设置状态信息
+                    user_obj.status = '活跃' if user_obj.is_active else '已禁用'
+                    user_obj.status_color = 'success' if user_obj.is_active else 'secondary'
+                    
+                    # 格式化日期以供显示，但不修改原始datetime对象
+                    if user_obj.last_login:
+                        user_obj.last_login_display = user_obj.last_login.strftime('%Y-%m-%d %H:%M')
+                    else:
+                        user_obj.last_login_display = '从未登录'
+                except Exception as inner_e:
+                    logger.error(f"处理用户对象失败: {str(inner_e)}", exc_info=True)
+                    # 设置默认值以保证模板渲染不会失败
+                    user_obj.display_role = 'user'
+                    user_obj.role_color = 'secondary'
+                    user_obj.status = '未知'
+                    user_obj.status_color = 'secondary'
+                    user_obj.last_login_display = '-'
         
         # 返回HTML响应
         return render_template(
@@ -825,7 +866,7 @@ def users():
             current_user_data=user_data
         )
     except Exception as e:
-        logger.error(f"Error in users: {str(e)}")
+        logger.error(f"Error in users: {str(e)}", exc_info=True)
         if request.headers.get('Accept') == 'application/json':
             return jsonify({'error': 'Internal server error'}), 500
         return render_template('error.html', error='Internal server error'), 500

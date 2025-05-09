@@ -77,10 +77,11 @@ def create_risk():
             project_id=data['project_id'],
             probability=data.get('probability', 'medium'),
             impact=data.get('impact', 'medium'),
+            severity=data.get('severity', 'medium'),  # 确保设置severity字段
             status=data.get('status', 'open'),
             mitigation_plan=data.get('mitigation_plan', ''),
-            created_by=current_user,
-            updated_by=current_user
+            contingency_plan=data.get('contingency_plan', ''),
+            owner_id=current_user  # 使用owner_id而不是created_by
         )
         
         db.session.add(risk)
@@ -89,9 +90,7 @@ def create_risk():
         # 创建风险日志
         log = RiskLog(
             risk_id=risk.id,
-            action='created',
-            details=f'Risk created by user {current_user}',
-            user_id=current_user
+            content=f'风险创建成功'  # 修改字段为content
         )
         
         db.session.add(log)
@@ -127,12 +126,22 @@ def update_risk(risk_id):
         risk.description = data.get('description', risk.description)
         risk.impact = data.get('impact', risk.impact)
         risk.probability = data.get('probability', risk.probability)
+        risk.severity = data.get('severity', risk.severity)
         risk.status = data.get('status', risk.status)
         risk.mitigation_plan = data.get('mitigation_plan', risk.mitigation_plan)
-        risk.updated_by = current_user
+        risk.contingency_plan = data.get('contingency_plan', risk.contingency_plan)
         risk.updated_at = datetime.utcnow()
         
         db.session.commit()
+        
+        # 创建更新日志
+        log = RiskLog(
+            risk_id=risk.id,
+            content=f'风险已更新'
+        )
+        db.session.add(log)
+        db.session.commit()
+        
         return jsonify(risk.to_dict())
     except Exception as e:
         db.session.rollback()
@@ -167,7 +176,18 @@ def delete_risk(risk_id):
 def get_risk_logs(risk_id):
     try:
         logs = RiskLog.query.filter_by(risk_id=risk_id).order_by(RiskLog.created_at.desc()).all()
-        return jsonify([log.to_dict() for log in logs])
+        
+        # 手动构建日志数据
+        logs_data = []
+        for log in logs:
+            logs_data.append({
+                'id': log.id,
+                'risk_id': log.risk_id,
+                'content': log.content,
+                'created_at': log.created_at.isoformat() if log.created_at else None
+            })
+            
+        return jsonify(logs_data)
     except Exception as e:
         logger.error(f"Error getting risk logs: {str(e)}")
         return jsonify({'error': str(e)}), 500
@@ -183,21 +203,27 @@ def add_risk_log(risk_id):
         data = request.get_json()
         
         # 验证必须的字段
-        if 'action' not in data or 'details' not in data:
-            return jsonify({'error': 'Missing required fields: action, details'}), 400
+        if 'content' not in data:
+            return jsonify({'error': 'Missing required field: content'}), 400
             
         # 创建风险日志
         log = RiskLog(
             risk_id=risk_id,
-            action=data['action'],
-            details=data['details'],
-            user_id=current_user
+            content=data['content']
         )
         
         db.session.add(log)
         db.session.commit()
         
-        return jsonify(log.to_dict()), 201
+        # 构建日志数据
+        log_data = {
+            'id': log.id,
+            'risk_id': log.risk_id,
+            'content': log.content,
+            'created_at': log.created_at.isoformat() if log.created_at else None
+        }
+        
+        return jsonify(log_data), 201
     except Exception as e:
         db.session.rollback()
         logger.error(f"Error adding risk log: {str(e)}")

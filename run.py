@@ -137,24 +137,45 @@ def cleanup_old_data(app):
     """清理旧数据"""
     with app.app_context():
         try:
-            # 删除30天前的资源使用记录
-            old_date = datetime.utcnow() - timedelta(days=30)
-            ResourceUsage.query.filter(ResourceUsage.recorded_at < old_date).delete()
+            logger.info('开始清理旧数据')
             
-            # 删除7天前已解决的警报
-            old_date = datetime.utcnow() - timedelta(days=7)
-            SystemAlert.query.filter(
-                SystemAlert.is_resolved == True,
-                SystemAlert.created_at < old_date
-            ).delete()
+            # 添加异常捕获，确保日志文件操作不会中断清理过程
+            try:
+                # 删除30天前的资源使用记录
+                old_date = datetime.utcnow() - timedelta(days=30)
+                deleted_count = ResourceUsage.query.filter(ResourceUsage.recorded_at < old_date).delete()
+                logger.info(f'删除了 {deleted_count} 条过期的资源使用记录')
+            except Exception as e:
+                logger.error(f'清理资源使用记录失败: {str(e)}')
+                # 继续执行其他清理，不要提前退出
             
-            db.session.commit()
-            logger.info('旧数据清理完成')
+            try:
+                # 删除7天前已解决的警报
+                old_date = datetime.utcnow() - timedelta(days=7)
+                deleted_count = SystemAlert.query.filter(
+                    SystemAlert.is_resolved == True,
+                    SystemAlert.created_at < old_date
+                ).delete()
+                logger.info(f'删除了 {deleted_count} 条已解决的过期警报')
+            except Exception as e:
+                logger.error(f'清理系统警报失败: {str(e)}')
+                # 继续执行其他清理，不要提前退出
+            
+            # 提交事务
+            try:
+                db.session.commit()
+                logger.info('旧数据清理完成')
+            except Exception as e:
+                logger.error(f'提交清理事务失败: {str(e)}')
+                db.session.rollback()
             
         except Exception as e:
-            logger.error(f'旧数据清理失败: {str(e)}')
+            logger.error(f'旧数据清理过程中出现未处理异常: {str(e)}')
             logger.error(traceback.format_exc())
-            db.session.rollback()
+            try:
+                db.session.rollback()
+            except Exception as rollback_e:
+                logger.error(f'回滚事务失败: {str(rollback_e)}')
 
 def main():
     """主函数"""

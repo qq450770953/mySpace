@@ -37,43 +37,36 @@
 </div>
 
 <!-- 资源分配视图 -->
-<div class="card">
-    <div class="card-header">
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">资源分配</h5>
+        <div>
+            <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#newAllocationModal">
+                <i class="bi bi-plus-circle"></i> 新建分配
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="refreshAllocations()">
+                <i class="bi bi-arrow-clockwise"></i> 刷新
+            </button>
+        </div>
     </div>
     <div class="card-body">
-        <div class="resource-allocation">
-            <div class="timeline">
-                <div class="timeline-header">
-                    <div class="resource-name">资源</div>
-                    <div class="timeline-dates">
-                        {% for date in timeline_dates %}
-                        <div class="timeline-date">{{ date }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="timeline-body">
-                    {% for resource in resources %}
-                    <div class="timeline-row">
-                        <div class="resource-name">{{ resource.name }}</div>
-                        <div class="timeline-cells">
-                            {% for date in timeline_dates %}
-                            <div class="timeline-cell {% if date >= resource.start_date and date <= resource.end_date %}allocated{% endif %}"
-                                 data-resource-id="{{ resource.id }}"
-                                 data-date="{{ date }}">
-                                {% if date >= resource.start_date and date <= resource.end_date %}
-                                <div class="allocation-info">
-                                    <span class="project-name">{{ resource.project_name }}</span>
-                                    <span class="assignee">{{ resource.assignee }}</span>
-                                </div>
-                                {% endif %}
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
+        <div id="resourceAllocations" class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>资源名称</th>
+                        <th>分配任务</th>
+                        <th>分配数量</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 资源分配数据将通过JavaScript动态加载 -->
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -122,6 +115,136 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" onclick="saveResource()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 资源分配详情模态框 -->
+<div class="modal fade" id="viewAllocationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">资源分配详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">资源名称</label>
+                            <p id="viewAllocationResource"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">分配任务</label>
+                            <p id="viewAllocationTask"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">分配数量</label>
+                            <p id="viewAllocationQuantity"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">开始时间</label>
+                            <p id="viewAllocationStartTime"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">结束时间</label>
+                            <p id="viewAllocationEndTime"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">状态</label>
+                    <p id="viewAllocationStatus"></p>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <label class="form-label fw-bold">创建和更新信息</label>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                创建时间
+                                <span id="viewAllocationCreatedAt" class="badge bg-primary rounded-pill"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                更新时间
+                                <span id="viewAllocationUpdatedAt" class="badge bg-info rounded-pill"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-danger" onclick="deleteAllocationFromModal()">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新建资源分配模态框 -->
+<div class="modal fade" id="newAllocationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">新建资源分配</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newAllocationForm">
+                    <div class="mb-3">
+                        <label for="allocation_resource_id" class="form-label">资源 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="allocation_resource_id" required>
+                            <option value="">请选择资源</option>
+                            <!-- 资源选项将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="allocation_task_id" class="form-label">任务 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="allocation_task_id" required>
+                            <option value="">请选择任务</option>
+                            <!-- 任务选项将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="allocation_quantity" class="form-label">分配数量 <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="allocation_quantity" min="1" value="1" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="allocation_start_time" class="form-label">开始时间 <span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" id="allocation_start_time" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="allocation_end_time" class="form-label">结束时间 <span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" id="allocation_end_time" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="allocation_status" class="form-label">状态</label>
+                        <select class="form-select" id="allocation_status">
+                            <option value="pending">待审批</option>
+                            <option value="active">已分配</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveAllocation()">保存</button>
             </div>
         </div>
     </div>
@@ -212,6 +335,7 @@
 <script>
     // 初始化变量
     let editingResourceId = null; // 当前正在编辑的资源ID，为null表示新建资源
+    let currentViewingAllocationId = null; // 当前正在查看的资源分配ID
     
     // 初始化模态框功能
     document.addEventListener('DOMContentLoaded', function() {
@@ -275,21 +399,339 @@
             });
         });
         
-        initializeResourceTimeline();
         loadResources(); // 加载资源数据
-    });
-    
-    // 初始化资源时间线
-    function initializeResourceTimeline() {
-        document.querySelectorAll('.timeline-cell').forEach(cell => {
-            cell.addEventListener('click', function() {
-                const resourceId = this.getAttribute('data-resource-id');
-                const date = this.getAttribute('data-date');
-                if (resourceId && date) {
-                    viewResourceAllocation(resourceId, date);
+        loadResourceAllocations(); // 加载资源分配数据
+        
+        // 初始化新建资源分配模态框
+        const newAllocationBtn = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#newAllocationModal"]');
+        if (newAllocationBtn) {
+            newAllocationBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 重置表单
+                document.getElementById('newAllocationForm').reset();
+                
+                // 设置默认时间
+                const now = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(now.getDate() + 1);
+                
+                // 格式化日期时间为HTML datetime-local格式 (YYYY-MM-DDThh:mm)
+                const formatDatetimeLocal = (date) => {
+                    return date.toISOString().slice(0, 16);
+                };
+                
+                document.getElementById('allocation_start_time').value = formatDatetimeLocal(now);
+                document.getElementById('allocation_end_time').value = formatDatetimeLocal(tomorrow);
+                
+                // 加载资源和任务选项
+                loadResourceOptions();
+                loadTaskOptions();
+                
+                // 显示模态框
+                const modal = document.getElementById('newAllocationModal');
+                if (modal) {
+                    modal.style.display = 'block';
+                    modal.classList.add('show');
+                    document.body.classList.add('modal-open');
+                    
+                    // 添加背景遮罩
+                    let backdrop = document.querySelector('.modal-backdrop');
+                    if (!backdrop) {
+                        backdrop = document.createElement('div');
+                        backdrop.className = 'modal-backdrop fade show';
+                        document.body.appendChild(backdrop);
+                    }
                 }
             });
+        }
+        
+        // 设置关闭新建资源分配模态框的按钮
+        const closeAllocationBtns = document.querySelectorAll('#newAllocationModal .btn-close, #newAllocationModal [data-bs-dismiss="modal"]');
+        closeAllocationBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                closeNewAllocationModal();
+            });
         });
+    });
+    
+    // 加载资源分配
+    async function loadResourceAllocations() {
+        try {
+            showLoadingIndicator('resourceAllocations');
+            
+            // 获取所有资源的分配
+            const response = await fetch('/api/resource-allocations?bypass_jwt=true', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`获取资源分配失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('资源分配数据:', data);
+            
+            updateResourceAllocationsTable(data);
+            hideLoadingIndicator('resourceAllocations');
+        } catch (error) {
+            console.error('加载资源分配错误:', error);
+            hideLoadingIndicator('resourceAllocations');
+            showAlert('danger', '加载资源分配失败，请重试');
+        }
+    }
+    
+    // 更新资源分配表格
+    function updateResourceAllocationsTable(data) {
+        const tableBody = document.querySelector('#resourceAllocations tbody');
+        if (!tableBody) {
+            console.error('找不到资源分配表格的tbody元素');
+            return;
+        }
+        
+        // 清空表格内容
+        tableBody.innerHTML = '';
+        
+        if (!data || !data.allocations || data.allocations.length === 0) {
+            // 显示无数据提示
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = '<td colspan="7" class="text-center">暂无资源分配数据</td>';
+            tableBody.appendChild(emptyRow);
+            return;
+        }
+        
+        // 填充表格
+        data.allocations.forEach(allocation => {
+            // 格式化状态显示
+            let statusBadgeClass = 'badge bg-secondary';
+            let statusText = allocation.status || '未知';
+            
+            if (statusText === 'pending') {
+                statusBadgeClass = 'badge bg-warning';
+                statusText = '待审批';
+            } else if (statusText === 'active') {
+                statusBadgeClass = 'badge bg-success';
+                statusText = '已分配';
+            } else if (statusText === 'completed') {
+                statusBadgeClass = 'badge bg-info';
+                statusText = '已完成';
+            } else if (statusText === 'cancelled') {
+                statusBadgeClass = 'badge bg-danger';
+                statusText = '已取消';
+            }
+            
+            // 格式化日期
+            const startTime = allocation.start_time ? new Date(allocation.start_time).toLocaleString() : '未设置';
+            const endTime = allocation.end_time ? new Date(allocation.end_time).toLocaleString() : '未设置';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${allocation.resource_name || '未知资源'}</td>
+                <td>${allocation.task_name || '未知任务'}</td>
+                <td>${allocation.quantity || 0} ${allocation.unit || '单位'}</td>
+                <td>${startTime}</td>
+                <td>${endTime}</td>
+                <td><span class="${statusBadgeClass}">${statusText}</span></td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewAllocation(${allocation.id})">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteAllocation(${allocation.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+    
+    // 刷新资源分配
+    function refreshAllocations() {
+        loadResourceAllocations();
+    }
+    
+    // 显示加载中提示
+    function showLoadingIndicator(containerId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            const loader = document.createElement('div');
+            loader.className = 'text-center my-3 loading-indicator';
+            loader.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+            
+            // 如果是表格容器，特殊处理
+            if (container.querySelector('table')) {
+                const tableBody = container.querySelector('tbody');
+                if (tableBody) {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center p-3"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>';
+                    return;
+                }
+            }
+            
+            container.appendChild(loader);
+        }
+    }
+    
+    // 隐藏加载中提示
+    function hideLoadingIndicator(containerId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            const loaders = container.querySelectorAll('.loading-indicator');
+            loaders.forEach(loader => loader.remove());
+        }
+    }
+    
+    // 查看资源分配详情
+    async function viewAllocation(allocationId) {
+        try {
+            currentViewingAllocationId = allocationId;
+            
+            // 获取资源分配详情
+            const response = await fetch(`/api/resource-allocations/${allocationId}?bypass_jwt=true`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`获取资源分配详情失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const allocation = data.allocation;
+            
+            console.log('资源分配详情:', allocation);
+            
+            // 填充模态框内容
+            document.getElementById('viewAllocationResource').textContent = allocation.resource_name || '未知资源';
+            document.getElementById('viewAllocationTask').textContent = allocation.task_name || '未知任务';
+            document.getElementById('viewAllocationQuantity').textContent = `${allocation.quantity || 0} ${allocation.unit || '单位'}`;
+            
+            // 格式化日期时间
+            const startTime = allocation.start_time ? new Date(allocation.start_time).toLocaleString() : '未设置';
+            const endTime = allocation.end_time ? new Date(allocation.end_time).toLocaleString() : '未设置';
+            document.getElementById('viewAllocationStartTime').textContent = startTime;
+            document.getElementById('viewAllocationEndTime').textContent = endTime;
+            
+            // 格式化状态
+            let statusHTML = '未知';
+            let statusClass = 'text-secondary';
+            
+            if (allocation.status === 'pending') {
+                statusHTML = '<span class="badge bg-warning">待审批</span>';
+            } else if (allocation.status === 'active') {
+                statusHTML = '<span class="badge bg-success">已分配</span>';
+            } else if (allocation.status === 'completed') {
+                statusHTML = '<span class="badge bg-info">已完成</span>';
+            } else if (allocation.status === 'cancelled') {
+                statusHTML = '<span class="badge bg-danger">已取消</span>';
+            }
+            
+            document.getElementById('viewAllocationStatus').innerHTML = statusHTML;
+            
+            // 设置创建和更新时间
+            const createdAt = allocation.created_at ? new Date(allocation.created_at).toLocaleString() : '未知';
+            const updatedAt = allocation.updated_at ? new Date(allocation.updated_at).toLocaleString() : '未知';
+            document.getElementById('viewAllocationCreatedAt').textContent = createdAt;
+            document.getElementById('viewAllocationUpdatedAt').textContent = updatedAt;
+            
+            // 显示模态框
+            const modal = document.getElementById('viewAllocationModal');
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                document.body.classList.add('modal-open');
+                
+                // 添加背景遮罩
+                let backdrop = document.querySelector('.modal-backdrop');
+                if (!backdrop) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'modal-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                }
+                
+                // 设置关闭按钮事件
+                const closeBtns = document.querySelectorAll('#viewAllocationModal .btn-close, #viewAllocationModal [data-bs-dismiss="modal"]');
+                closeBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        closeViewAllocationModal();
+                    });
+                });
+            }
+        } catch (error) {
+            console.error('查看资源分配详情错误:', error);
+            showAlert('danger', '获取资源分配详情失败');
+        }
+    }
+    
+    // 关闭资源分配详情模态框
+    function closeViewAllocationModal() {
+        const modal = document.getElementById('viewAllocationModal');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                
+                // 移除背景遮罩
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+                
+                // 重置当前查看的分配ID
+                currentViewingAllocationId = null;
+            }, 300);
+        }
+    }
+    
+    // 从模态框中删除资源分配
+    function deleteAllocationFromModal() {
+        if (currentViewingAllocationId) {
+            // 关闭模态框
+            closeViewAllocationModal();
+            
+            // 调用删除函数
+            deleteAllocation(currentViewingAllocationId);
+        }
+    }
+    
+    // 删除资源分配
+    async function deleteAllocation(allocationId) {
+        if (confirm('确定要删除这个资源分配吗？')) {
+            try {
+                // 获取CSRF令牌
+                let csrfToken = getCsrfToken();
+                
+                if (!csrfToken) {
+                    console.warn('删除资源分配时未找到CSRF令牌，尝试刷新获取');
+                    csrfToken = await refreshCsrfToken();
+                }
+                
+                const response = await fetchWithCsrf(`/api/resource-allocations/${allocationId}?bypass_jwt=true`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    showAlert('success', '资源分配删除成功');
+                    loadResourceAllocations(); // 重新加载资源分配列表
+                } else {
+                    const error = await response.json();
+                    showAlert('danger', error.error || '删除资源分配失败');
+                }
+            } catch (error) {
+                console.error('删除资源分配错误:', error);
+                showAlert('danger', '删除资源分配失败，请重试');
+            }
+        }
     }
     
     // 收集表单数据
@@ -439,12 +881,6 @@
     function viewResource(resourceId) {
         alert('查看资源 ID: ' + resourceId);
         // 实现查看资源详情逻辑
-    }
-    
-    // 查看资源分配
-    function viewResourceAllocation(resourceId, date) {
-        alert(`查看资源 ID: ${resourceId} 在 ${date} 的分配情况`);
-        // 实现资源分配查看逻辑
     }
     
     // 编辑资源
@@ -633,6 +1069,167 @@
                 alertElement.remove();
             }, 150);
         }, 5000);
+    }
+    
+    // 关闭新建资源分配模态框
+    function closeNewAllocationModal() {
+        const modal = document.getElementById('newAllocationModal');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                
+                // 移除背景遮罩
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }, 300);
+        }
+    }
+    
+    // 加载资源选项
+    async function loadResourceOptions() {
+        try {
+            const response = await fetch('/api/resources?bypass_jwt=true', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`获取资源列表失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // 更新资源选择器
+            const select = document.getElementById('allocation_resource_id');
+            if (select) {
+                // 保留第一个选项
+                const firstOption = select.options[0];
+                select.innerHTML = '';
+                select.appendChild(firstOption);
+                
+                // 添加资源选项
+                if (data.resources && data.resources.length > 0) {
+                    data.resources.forEach(resource => {
+                        const option = document.createElement('option');
+                        option.value = resource.id;
+                        option.textContent = resource.name;
+                        select.appendChild(option);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('加载资源选项失败:', error);
+            showAlert('danger', '加载资源选项失败');
+        }
+    }
+    
+    // 加载任务选项
+    async function loadTaskOptions() {
+        try {
+            const response = await fetch('/api/tasks?bypass_jwt=true', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`获取任务列表失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // 更新任务选择器
+            const select = document.getElementById('allocation_task_id');
+            if (select) {
+                // 保留第一个选项
+                const firstOption = select.options[0];
+                select.innerHTML = '';
+                select.appendChild(firstOption);
+                
+                // 添加任务选项
+                if (data.tasks && data.tasks.length > 0) {
+                    data.tasks.forEach(task => {
+                        const option = document.createElement('option');
+                        option.value = task.id;
+                        option.textContent = task.title;
+                        select.appendChild(option);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('加载任务选项失败:', error);
+            showAlert('danger', '加载任务选项失败');
+        }
+    }
+    
+    // 保存资源分配
+    async function saveAllocation() {
+        try {
+            // 验证表单
+            const form = document.getElementById('newAllocationForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // 收集表单数据
+            const formData = {
+                resource_id: parseInt(document.getElementById('allocation_resource_id').value),
+                task_id: parseInt(document.getElementById('allocation_task_id').value),
+                quantity: parseFloat(document.getElementById('allocation_quantity').value),
+                start_time: document.getElementById('allocation_start_time').value,
+                end_time: document.getElementById('allocation_end_time').value,
+                status: document.getElementById('allocation_status').value
+            };
+            
+            console.log('提交资源分配数据:', formData);
+            
+            // 获取CSRF令牌
+            let csrfToken = getCsrfToken();
+            
+            if (!csrfToken) {
+                console.warn('创建资源分配时未找到CSRF令牌，尝试刷新获取');
+                csrfToken = await refreshCsrfToken();
+            }
+            
+            // 发送请求
+            const response = await fetchWithCsrf('/api/resource-allocations?bypass_jwt=true', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || '创建资源分配失败');
+            }
+            
+            const result = await response.json();
+            console.log('资源分配创建成功:', result);
+            
+            // 关闭模态框
+            closeNewAllocationModal();
+            
+            // 刷新资源分配列表
+            loadResourceAllocations();
+            
+            // 显示成功消息
+            showAlert('success', '资源分配创建成功');
+            
+        } catch (error) {
+            console.error('创建资源分配错误:', error);
+            showAlert('danger', error.message || '创建资源分配失败，请重试');
+        }
     }
 </script>
 {% endblock %} 
