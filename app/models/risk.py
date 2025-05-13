@@ -27,29 +27,73 @@ class Risk(db.Model):
     mitigations = db.relationship('RiskMitigation', back_populates='risk', lazy='dynamic', cascade='all, delete-orphan')
     logs = db.relationship('RiskLog', back_populates='risk', lazy='dynamic', cascade='all, delete-orphan')
     
-    def to_dict(self):
-        return {
+    def __repr__(self):
+        return f'<Risk {self.title}>'
+    
+    def to_dict(self, include_relationships=False):
+        """转换为字典表示"""
+        risk_dict = {
             'id': self.id,
             'title': self.title,
             'description': self.description,
             'status': self.status,
-            'severity': self.severity,
             'probability': self.probability,
             'impact': self.impact,
+            'severity': self.severity,
+            'risk_level': self.risk_level,
             'mitigation_plan': self.mitigation_plan,
-            'contingency_plan': self.contingency_plan,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'project_id': self.project_id,
-            'project_name': self.project.name if self.project else '未分配',
-            'owner_id': self.owner_id,
-            'owner_name': self.owner.name if self.owner else '未分配',
             'task_id': self.task_id,
-            'owner': self.owner.to_dict() if self.owner else None
+            'project_id': self.project_id,
+            'owner_id': self.owner_id
         }
-    
-    def __repr__(self):
-        return f'<Risk {self.title}>'
+        
+        # 添加关联对象数据
+        if include_relationships:
+            risk_dict.update({
+                'task': self.task.to_dict() if self.task else None,
+                'project': self.project.to_dict() if self.project else None,
+                'owner': self.owner.to_dict() if self.owner else None,
+                'logs_count': self.logs.count() if hasattr(self, 'logs') else 0
+            })
+            
+        return risk_dict
+
+    # 风险级别计算属性
+    @property
+    def risk_level(self):
+        """计算风险级别 - 基于概率和影响的组合"""
+        # 风险级别映射：低、中、高
+        risk_matrix = {
+            # 概率: { 影响: 风险级别 }
+            'low': {
+                'low': 'low',
+                'medium': 'low',
+                'high': 'medium'
+            },
+            'medium': {
+                'low': 'low',
+                'medium': 'medium',
+                'high': 'high'
+            },
+            'high': {
+                'low': 'medium',
+                'medium': 'high',
+                'high': 'high'
+            }
+        }
+        
+        prob = self.probability.lower() if self.probability else 'medium'
+        impact = self.impact.lower() if self.impact else 'medium'
+        
+        # 如果概率或影响不在矩阵中，使用默认值
+        if prob not in risk_matrix:
+            prob = 'medium'
+        if impact not in risk_matrix[prob]:
+            impact = 'medium'
+            
+        return risk_matrix[prob][impact]
 
 class RiskLog(db.Model):
     """风险日志模型"""
@@ -60,9 +104,11 @@ class RiskLog(db.Model):
     risk_id = db.Column(db.Integer, db.ForeignKey('risks.id'))
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     
     # 关系
     risk = db.relationship('Risk', back_populates='logs')
+    user = db.relationship('User', backref='risk_logs')
     
     def __repr__(self):
         return f'<RiskLog {self.id}>'

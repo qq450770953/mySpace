@@ -7,7 +7,7 @@ window.navigateTo = async function(url) {
             ?.split('=')[1];
             
         if (!token) {
-            window.location.href = '/login';
+            window.location.href = '/auth/login';
             return;
         }
 
@@ -27,7 +27,7 @@ window.navigateTo = async function(url) {
         if (response.status === 401) {
             // Token expired or invalid
             document.cookie = 'access_token_cookie=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-            window.location.href = '/login';
+            window.location.href = '/auth/login';
             return;
         }
 
@@ -170,7 +170,7 @@ window.loadDashboard = function() {
         ?.split('=')[1];
         
     if (!token) {
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
         return;
     }
     
@@ -187,7 +187,7 @@ window.loadDashboard = function() {
         if (!response.ok) {
             if (response.status === 401) {
                 document.cookie = 'access_token_cookie=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                window.location.href = '/login';
+                window.location.href = '/auth/login';
                 return;
             }
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -219,7 +219,7 @@ window.loadProjects = async function() {
             
         if (!token) {
             showError('未登录或登录已过期');
-            window.location.href = '/login';
+            window.location.href = '/auth/login';
             return;
         }
 
@@ -313,7 +313,7 @@ function getStatusClass(status) {
 window.showCreateProjectForm = function() {
     const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
         return;
     }
     window.location.href = '/projects/list#create';
@@ -367,7 +367,7 @@ window.logout = function() {
         .then(response => {
             if (response.ok) {
                 localStorage.removeItem('access_token');
-                window.location.href = '/login';
+                window.location.href = '/auth/login';
             } else {
                 console.error('Logout failed:', response.status);
             }
@@ -376,7 +376,7 @@ window.logout = function() {
             console.error('Logout error:', error);
         });
     } else {
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
     }
 }
 

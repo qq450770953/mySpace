@@ -931,4 +931,36 @@ main {
     .task-operations .btn {
         width: 100%;
     }
+}
+
+/* 为头像提供默认图标的CSS类 */
+.default-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    color: #6c757d;
+}
+
+.default-avatar-sm {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: #6c757d;
+}
+
+/* 使用data URI作为默认头像背景，作为最后的备选方案 */
+.avatar-fallback {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23f8f9fa'/%3E%3Ccircle cx='100' cy='80' r='40' fill='%236c757d'/%3E%3Cpath d='M100,130 C60,130 30,155 30,195 L170,195 C170,155 140,130 100,130 Z' fill='%236c757d'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
 } 

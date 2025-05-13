@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试API接口 - 项目管理系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            max-height: 300px;
+            overflow: auto;
+        }
+        
+        .console-log {
+            background-color: #212529;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            max-height: 400px;
+            overflow: auto;
+            font-family: monospace;
+        }
+        
+        .console-log-entry {
+            margin-bottom: 0.5rem;
+            word-wrap: break-word;
+        }
+        
+        .console-log-entry.error {
+            color: #ff6b6b;
+        }
+        
+        .console-log-entry.warn {
+            color: #ffa600;
+        }
+        
+        .console-log-entry.info {
+            color: #4dabf7;
+        }
+        
+        .debug-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">API调试工具</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                CSRF令牌
+            </div>
+            <div class="card-body">
+                <button id="getCsrfTokenBtn" class="btn btn-primary mb-3">获取CSRF令牌</button>
+                <div id="csrfTokenResult" class="mt-3"></div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                项目API测试
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="projectId" class="form-label">项目ID</label>
+                    <input type="number" class="form-control" id="projectId" value="1">
+                </div>
+                
+                <div class="d-flex gap-2 mb-3">
+                    <button id="standardApiBtn" class="btn btn-primary">标准API</button>
+                    <button id="editorApiBtn" class="btn btn-success">编辑器API</button>
+                    <button id="noauthApiBtn" class="btn btn-warning">无认证API</button>
+                </div>
+                
+                <h5 class="mt-4">更新项目测试</h5>
+                <div class="mb-3">
+                    <textarea id="projectData" class="form-control" rows="6">
+{
+    "name": "测试更新项目",
+    "description": "这是一个测试更新",
+    "status": "active",
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31"
+}
+                    </textarea>
+                </div>
+                <button id="updateApiBtn" class="btn btn-danger">更新项目</button>
+                
+                <div id="apiResult" class="mt-3"></div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                控制台日志
+            </div>
+            <div class="card-body">
+                <div id="consoleOutput" class="console-log"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/debug-api.js') }}"></script>
+    <script>
+        // 拦截控制台日志
+        (function() {
+            const consoleOutput = document.getElementById('consoleOutput');
+            const oldConsoleLog = console.log;
+            const oldConsoleError = console.error;
+            const oldConsoleWarn = console.warn;
+            const oldConsoleInfo = console.info;
+            
+            console.log = function(...args) {
+                oldConsoleLog.apply(console, args);
+                appendToConsole('log', args);
+            };
+            
+            console.error = function(...args) {
+                oldConsoleError.apply(console, args);
+                appendToConsole('error', args);
+            };
+            
+            console.warn = function(...args) {
+                oldConsoleWarn.apply(console, args);
+                appendToConsole('warn', args);
+            };
+            
+            console.info = function(...args) {
+                oldConsoleInfo.apply(console, args);
+                appendToConsole('info', args);
+            };
+            
+            function appendToConsole(type, args) {
+                const entry = document.createElement('div');
+                entry.className = `console-log-entry ${type}`;
+                
+                // 格式化参数
+                const formattedArgs = args.map(arg => {
+                    if (typeof arg === 'object') {
+                        try {
+                            return JSON.stringify(arg, null, 2);
+                        } catch (e) {
+                            return String(arg);
+                        }
+                    }
+                    return String(arg);
+                }).join(' ');
+                
+                entry.textContent = `[${new Date().toLocaleTimeString()}] ${formattedArgs}`;
+                consoleOutput.appendChild(entry);
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
+        })();
+        
+        // 格式化JSON结果
+        function formatResult(result) {
+            const pre = document.createElement('pre');
+            pre.textContent = JSON.stringify(result, null, 2);
+            return pre.outerHTML;
+        }
+        
+        // 绑定按钮事件
+        document.getElementById('getCsrfTokenBtn').addEventListener('click', async () => {
+            const result = await window.debugApi.getCsrfToken();
+            document.getElementById('csrfTokenResult').innerHTML = formatResult({ csrf_token: result });
+        });
+        
+        document.getElementById('standardApiBtn').addEventListener('click', async () => {
+            const projectId = document.getElementById('projectId').value;
+            const result = await window.debugApi.getProject(projectId);
+            document.getElementById('apiResult').innerHTML = formatResult(result);
+        });
+        
+        document.getElementById('editorApiBtn').addEventListener('click', async () => {
+            const projectId = document.getElementById('projectId').value;
+            const result = await window.debugApi.getProjectEditor(projectId);
+            document.getElementById('apiResult').innerHTML = formatResult(result);
+        });
+        
+        document.getElementById('noauthApiBtn').addEventListener('click', async () => {
+            const projectId = document.getElementById('projectId').value;
+            const result = await window.debugApi.getNoauthProject(projectId);
+            document.getElementById('apiResult').innerHTML = formatResult(result);
+        });
+        
+        document.getElementById('updateApiBtn').addEventListener('click', async () => {
+            const projectId = document.getElementById('projectId').value;
+            let projectData;
+            
+            try {
+                projectData = JSON.parse(document.getElementById('projectData').value);
+            } catch (e) {
+                console.error('项目数据解析失败:', e);
+                document.getElementById('apiResult').innerHTML = formatResult({ error: '项目数据不是有效的JSON' });
+                return;
+            }
+            
+            const result = await window.debugApi.updateProject(projectId, projectData);
+            document.getElementById('apiResult').innerHTML = formatResult(result);
+        });
+        
+        // 初始化
+        console.log('调试页面已加载，准备好测试API');
+    </script>
+</body>
+</html> 

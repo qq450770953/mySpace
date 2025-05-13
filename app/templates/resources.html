@@ -756,6 +756,9 @@
     async function saveResource() {
         try {
             const formData = gatherFormData();
+            if (!formData) {
+                return; // 表单验证失败
+            }
             
             console.log('提交资源数据:', formData);
             
@@ -780,100 +783,50 @@
                 csrfToken = await refreshCsrfToken();
             }
             
-            // 使用fetchWithCsrf函数发送请求，自动处理CSRF令牌
-            const response = await fetchWithCsrf(url, {
+            // 确保URL包含CSRF令牌参数
+            if (!url.includes('csrf_token=')) {
+                const separator = url.includes('?') ? '&' : '?';
+                url = `${url}${separator}csrf_token=${encodeURIComponent(csrfToken)}`;
+            }
+            
+            console.log('最终请求URL:', url);
+            console.log('使用的CSRF令牌:', csrfToken);
+            
+            // 发送请求
+            const response = await fetch(url, {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
                 },
+                credentials: 'include',
                 body: JSON.stringify(formData)
             });
             
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
-            
-            // 检查响应类型
-            const contentType = response.headers.get('content-type');
-            console.log('Content type:', contentType);
-            
             if (!response.ok) {
-                // 获取原始响应文本
-                const errorText = await response.text();
-                console.error('错误响应原文:', errorText.substring(0, 200));
-                
-                if (contentType && contentType.includes('application/json')) {
-                    let errorData;
-                    try {
-                        errorData = JSON.parse(errorText);
-                        throw new Error(errorData.error || '创建资源失败');
-                    } catch (e) {
-                        throw new Error('创建资源失败: ' + errorText.substring(0, 100) + '...');
-                    }
-                } else {
-                    throw new Error('创建资源失败: 服务器返回了错误的数据类型');
-                }
+                const errorData = await response.json();
+                throw new Error('创建资源失败: ' + (errorData.error || response.statusText));
             }
             
-            // 获取原始响应文本
-            const responseText = await response.text();
-            console.log('响应原文:', responseText.substring(0, 200));
+            const result = await response.json();
+            console.log('资源操作成功:', result);
             
-            let result;
-            if (contentType && contentType.includes('application/json')) {
-                try {
-                    result = JSON.parse(responseText);
-                } catch (e) {
-                    console.error('JSON解析失败:', e);
-                    throw new Error('服务器返回的数据格式不正确');
-                }
-            } else {
-                console.error('服务器没有返回JSON数据，而是返回了:', contentType);
-                throw new Error('服务器返回了错误的数据类型');
-            }
-            
-            console.log('资源创建成功:', result);
-            
-            // 获取操作类型消息（新建或更新）
-            const successMessage = editingResourceId ? '资源更新成功！' : '资源创建成功！';
+            // 重置表单和UI状态
+            document.getElementById('resourceForm').reset();
+            editingResourceId = null;
             
             // 关闭模态框
-            const modal = document.getElementById('newResourceModal');
-            if (modal) {
-                modal.classList.remove('show');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                    document.body.classList.remove('modal-open');
-                    
-                    // 移除背景遮罩
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.remove();
-                    }
-                    
-                    // 重置编辑状态
-                    editingResourceId = null;
-                    
-                    // 刷新资源列表
-                    loadResources();
-                    
-                    // 显示成功消息
-                    showAlert('success', successMessage);
-                }, 300);
-            } else {
-                // 重置编辑状态
-                editingResourceId = null;
-                
-                // 刷新资源列表
-                loadResources();
-                
-                // 显示成功消息
-                showAlert('success', successMessage);
-            }
+            closeNewResourceModal();
             
+            // 重新加载资源列表
+            await loadResources();
+            
+            // 显示成功消息
+            showAlert('success', editingResourceId ? '资源更新成功' : '资源创建成功');
         } catch (error) {
-            console.error('创建资源错误:', error);
-            showAlert('danger', error.message || '创建资源失败，请重试');
+            console.error('保存资源时出错:', error);
+            showAlert('danger', error.message);
         }
     }
     
@@ -1229,6 +1182,24 @@
         } catch (error) {
             console.error('创建资源分配错误:', error);
             showAlert('danger', error.message || '创建资源分配失败，请重试');
+        }
+    }
+    
+    // 关闭新建资源模态框
+    function closeNewResourceModal() {
+        const modal = document.getElementById('newResourceModal');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                
+                // 移除背景遮罩
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }, 300);
         }
     }
 </script>

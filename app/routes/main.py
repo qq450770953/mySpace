@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, current_app
-from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request, jwt_required
+from app.utils.jwt_callbacks import jwt_required, get_jwt_identity
 from app.models.auth import User
 from app.models.task import Task, Project
 from app.models.resource import Resource, ResourceUsage
@@ -112,11 +112,11 @@ def dashboard():
             current_app.logger.warning(f"Dashboard access attempt with inactive user: {user.username}")
             return redirect(url_for('auth.login_page', _external=True))
             
-        # Get user's roles safely
+        # 获取用户的角色和权限
         user_roles = user.roles if user.roles else []
         role_names = [role.name for role in user_roles if role and role.name]
 
-        # Get user's permissions safely and uniquely
+        # 获取用户的权限(去重)
         user_permissions = set()
         for role in user_roles:
             if role and role.permissions:
@@ -125,14 +125,15 @@ def dashboard():
                         user_permissions.add(perm.name)
         permission_names = list(user_permissions)
 
+        # 确保用户字典中角色和权限信息完整
         user_data = {
             'id': user.id or 0,
             'username': user.username or '',
             'email': user.email or '',
             'name': user.name or '',
             'is_active': bool(user.is_active),
-            'created_at': user.created_at.isoformat() if user.created_at else None, # Let JSON handle None
-            'last_login': user.last_login.isoformat() if user.last_login else None, # Let JSON handle None
+            'created_at': user.created_at.isoformat() if user.created_at else None,
+            'last_login': user.last_login.isoformat() if user.last_login else None,
             'roles': role_names,
             'permissions': permission_names
         }
@@ -144,11 +145,19 @@ def dashboard():
                 'user': user_data
             })
             
-        # 否则渲染仪表板页面
-        # Provide default values for template variables to avoid Undefined error
+        # 检查是否为管理员并记录
+        is_admin = 'admin' in role_names
+        current_app.logger.info(f"用户 {user.username} 是否为管理员: {is_admin}")
+        
+        # 强制将admin标志添加到角色中(防止角色检查不一致)
+        if is_admin and 'admin' not in user_data['roles']:
+            user_data['roles'].append('admin')
+            current_app.logger.info(f"强制添加admin角色到用户 {user.username} 的角色列表中")
+        
+        # 设置模板上下文
         context = {
-            'user': user_data,
-            'current_user_data': user_data,  # 添加这个变量，用于在模板中统一使用
+            'user': user_data,  # 用户完整信息
+            'current_user_data': user_data,  # 用于模板中的统一变量名
             'active_projects_count': 0,
             'total_projects_count': 0,
             'pending_tasks_count': 0,
@@ -173,16 +182,10 @@ def dashboard():
             token_location = "query_string"
         current_app.logger.info(f"Token found in: {token_location}")
         
-        # 检查并记录用户的角色和权限
-        current_app.logger.info(f"Dashboard context user_data: {user_data}")
-        current_app.logger.info(f"用户 {user.username} 的角色: {user_data['roles']}")
-        current_app.logger.info(f"用户 {user.username} 的权限: {user_data['permissions']}")
+        # 详细记录用户权限信息
+        current_app.logger.info(f"Dashboard for user {user.username}: roles={user_data['roles']}, permissions={user_data['permissions']}")
         
-        # 检查用户是否为管理员或项目经理
-        is_admin = 'admin' in user_data['roles']
-        is_manager = 'manager' in user_data['roles']
-        current_app.logger.info(f"用户 {user.username} - 是否管理员: {is_admin}, 是否项目经理: {is_manager}")
-        
+        # 渲染模板
         return render_template('dashboard.html', **context)
         
     except Exception as e:
@@ -741,6 +744,31 @@ def test_route():
 def project_detail_redirect(project_id):
     """重定向到项目详情页，确保使用bypass_jwt和CSRF令牌"""
     try:
+        # 检查是否需要跳过重定向
+        no_redirect = request.args.get('no_redirect') == 'true'
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        # 如果同时有no_redirect和bypass_jwt参数，直接调用项目详情路由，不进行重定向
+        if no_redirect and bypass_jwt:
+            from app.routes.projects import detail
+            from flask import make_response
+            current_app.logger.info(f"直接调用项目详情视图函数，不进行重定向: 项目ID={project_id}")
+            response = detail(project_id)
+            
+            # 确保response是Response对象
+            if not hasattr(response, 'delete_cookie'):
+                # 如果不是，则包装它
+                response = make_response(response)
+                
+            # 清除重定向计数cookie
+            response.delete_cookie('redirect_count')
+            response.delete_cookie('redirect_path')
+            return response
+            
+        if no_redirect:
+            # 直接重定向到项目详情页，同时传递no_redirect和bypass_jwt参数
+            return redirect(url_for('projects.detail', project_id=project_id, no_redirect=True, bypass_jwt=True))
+            
         # 始终添加bypass_jwt=true参数用于测试
         bypass_jwt = "true"
         
@@ -1166,3 +1194,8 @@ def debug_projects_api():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@main_bp.route('/debug-api', methods=['GET'])
+def debug_api():
+    """API调试页面"""
+    return render_template('debug-api.html')

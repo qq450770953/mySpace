@@ -3417,3 +3417,953 @@ Traceback (most recent call last):
                                                   ^^^^^^^^^^^^^^^^^
 AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
 2025-05-09 16:42:46,856 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-10 09:09:51,902 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-10 09:37:53,492 - app - ERROR - 更新用户信息出错: You must call `@jwt_required()` or `verify_jwt_in_request()` before using this method
+2025-05-10 10:07:42,568 - app.routes.tasks - ERROR - Error getting task: name 'Risk' is not defined
+2025-05-10 11:46:30,741 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,745 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,747 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,748 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,750 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,764 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,787 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,789 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,789 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:30,790 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,821 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,822 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,824 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,827 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,833 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,838 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,853 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,883 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,885 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,891 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:46:43,891 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:56:25,051 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:56:32,628 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 11:56:41,062 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 13:56:55,048 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-10 13:56:55,080 - app - ERROR - 验证JWT时出错: Signature has expired
+2025-05-10 14:37:22,458 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-10 14:38:41,879 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-10 14:43:24,988 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-10 14:43:55,754 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-10 14:44:06,002 - app - ERROR - 验证JWT时出错: Missing CSRF token
+2025-05-10 14:53:56,363 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-10 15:34:15,083 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-10 15:34:26,624 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 15:40:52,745 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 16:13:34,342 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-10 16:14:48,219 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 16:24:04,448 - app.routes.tasks - ERROR - 任务模块CSRF验证失败: 400 Bad Request: The CSRF token is missing.
+2025-05-10 16:28:56,333 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-10 17:28:41,860 - app - ERROR - 处理任务API豁免路由出错: cannot import name 'task_risks_front_path' from 'app.routes.risks' (D:\tmp\work\app\routes\risks.py)
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 274, in task_api_exempt_route
+    from app.routes.risks import create_task_risk_api, task_risks_front_path
+ImportError: cannot import name 'task_risks_front_path' from 'app.routes.risks' (D:\tmp\work\app\routes\risks.py)
+2025-05-10 17:29:00,945 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:29:06,871 - app - ERROR - 处理任务API豁免路由出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Invalid content-type. Must be application/json.)
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 277, in task_api_exempt_route
+    return get_task_risks(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 356, in _decode_jwt_from_request
+    raise NoAuthorizationError(err_msg)
+flask_jwt_extended.exceptions.NoAuthorizationError: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Invalid content-type. Must be application/json.)
+2025-05-10 17:30:13,551 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:30:13,560 - app.routes.risks - ERROR - 创建风险失败: 'user_id' is an invalid keyword argument for RiskLog
+2025-05-10 17:30:19,988 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:30:19,991 - app.routes.risks - ERROR - 创建风险失败: 'user_id' is an invalid keyword argument for RiskLog
+2025-05-10 17:31:45,348 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:31:45,362 - app.routes.risks - ERROR - 创建风险日志时出错: (sqlite3.OperationalError) table risk_logs has no column named user_id
+[SQL: INSERT INTO risk_logs (risk_id, content, created_at, user_id) VALUES (?, ?, ?, ?)]
+[parameters: (None, '风险已创建。初始状态：open，概率：medium，影响：medium', '2025-05-10 09:31:45.359441', None)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-10 17:31:45,362 - app.routes.risks - ERROR - 创建风险失败: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) table risk_logs has no column named user_id
+[SQL: INSERT INTO risk_logs (risk_id, content, created_at, user_id) VALUES (?, ?, ?, ?)]
+[parameters: (None, '风险已创建。初始状态：open，概率：medium，影响：medium', '2025-05-10 09:31:45.359441', None)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+2025-05-10 17:32:56,547 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:32:56,561 - app.routes.risks - ERROR - 创建风险失败: 'type' is an invalid keyword argument for Notification
+2025-05-10 17:34:12,478 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:34:12,564 - app.routes.risks - ERROR - 创建风险失败: 'Risk' object has no attribute 'risk_level'
+2025-05-10 17:35:03,525 - app.utils.permissions - ERROR - 权限验证出错: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Missing "access_token" key in json data.)
+2025-05-10 17:35:19,300 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies, query_string or json (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater; Invalid content-type. Must be application/json.)
+2025-05-11 10:27:12,618 - app - ERROR - 豁免路由处理出错: /auth/csrf-token - cannot access local variable 'jsonify' where it is not associated with a value
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 137, in handler
+    return jsonify({"csrf_token": token})
+           ^^^^^^^
+UnboundLocalError: cannot access local variable 'jsonify' where it is not associated with a value
+2025-05-11 10:27:15,775 - app - ERROR - 豁免路由处理出错: /auth/csrf-token - cannot access local variable 'jsonify' where it is not associated with a value
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 137, in handler
+    return jsonify({"csrf_token": token})
+           ^^^^^^^
+UnboundLocalError: cannot access local variable 'jsonify' where it is not associated with a value
+2025-05-11 10:33:38,214 - app - ERROR - 处理任务API豁免路由出错: 'Task' object has no attribute 'is_accessible_by'
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 329, in task_api_exempt_route
+    return get_task_risks(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\routes\risks.py", line 341, in get_task_risks
+    if not task.is_accessible_by(current_user):
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Task' object has no attribute 'is_accessible_by'
+2025-05-11 12:42:21,898 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 12:51:04,579 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 12:57:36,803 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 13:03:30,243 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 13:21:16,415 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:01:25,974 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:06:53,994 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:11:30,671 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:17:22,451 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:23:29,095 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:29:24,185 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 16:35:24,605 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 17:08:56,873 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 17:16:11,260 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 17:23:11,779 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 17:55:49,131 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 18:04:40,445 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 18:05:53,200 - app.routes.projects - ERROR - Project detail route error: 'str' object has no attribute 'delete_cookie'
+2025-05-11 18:14:21,134 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 18:14:48,001 - app - ERROR - 处理无需认证的项目API请求出错: module 'app.routes.projects' has no attribute 'get_project_noauth'
+2025-05-11 18:14:48,024 - app - ERROR - 处理无需认证的项目API请求出错: module 'app.routes.projects' has no attribute 'get_project_noauth'
+2025-05-11 18:15:17,087 - app - ERROR - 处理无需认证的项目API请求出错: module 'app.routes.projects' has no attribute 'get_project_noauth'
+2025-05-11 18:15:17,097 - app - ERROR - 处理无需认证的项目API请求出错: module 'app.routes.projects' has no attribute 'get_project_noauth'
+2025-05-11 18:18:45,447 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 18:19:00,632 - app - ERROR - 豁免路由处理出错: /auth/csrf-token - cannot access local variable 'jsonify' where it is not associated with a value
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 137, in handler
+    return jsonify({"csrf_token": token})
+           ^^^^^^^
+UnboundLocalError: cannot access local variable 'jsonify' where it is not associated with a value
+2025-05-11 18:22:52,451 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 18:40:50,854 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 18:55:05,225 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:02:54,715 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:09:27,172 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:14:05,513 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:20:08,127 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:26:59,009 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:38:02,418 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 19:39:18,387 - app - ERROR - 处理任务API豁免路由出错: CSRF double submit tokens do not match
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 293, in task_api_exempt_route
+    return update_task(task_id)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 340, in _decode_jwt_from_request
+    decoded_token = decode_token(encoded_token, csrf_token)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\utils.py", line 128, in decode_token
+    return jwt_manager._decode_jwt_from_config(encoded_token, csrf_value, allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\jwt_manager.py", line 556, in _decode_jwt_from_config
+    return _decode_jwt(**kwargs, allow_expired=allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\tokens.py", line 122, in _decode_jwt
+    raise CSRFError("CSRF double submit tokens do not match")
+flask_jwt_extended.exceptions.CSRFError: CSRF double submit tokens do not match
+2025-05-11 19:39:29,170 - app - ERROR - 处理任务API豁免路由出错: CSRF double submit tokens do not match
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 293, in task_api_exempt_route
+    return update_task(task_id)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 340, in _decode_jwt_from_request
+    decoded_token = decode_token(encoded_token, csrf_token)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\utils.py", line 128, in decode_token
+    return jwt_manager._decode_jwt_from_config(encoded_token, csrf_value, allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\jwt_manager.py", line 556, in _decode_jwt_from_config
+    return _decode_jwt(**kwargs, allow_expired=allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\tokens.py", line 122, in _decode_jwt
+    raise CSRFError("CSRF double submit tokens do not match")
+flask_jwt_extended.exceptions.CSRFError: CSRF double submit tokens do not match
+2025-05-11 21:12:24,009 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 21:27:05,408 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-11 21:56:30,244 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 09:10:59,816 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 09:22:49,470 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 09:38:42,641 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 09:50:10,543 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 09:55:31,389 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:08:31,212 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:12:26,215 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:21:44,034 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:30:57,980 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:31:11,169 - app - ERROR - 处理任务API豁免路由出错: CSRF double submit tokens do not match
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 293, in task_api_exempt_route
+    return update_task(task_id)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 340, in _decode_jwt_from_request
+    decoded_token = decode_token(encoded_token, csrf_token)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\utils.py", line 128, in decode_token
+    return jwt_manager._decode_jwt_from_config(encoded_token, csrf_value, allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\jwt_manager.py", line 556, in _decode_jwt_from_config
+    return _decode_jwt(**kwargs, allow_expired=allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\tokens.py", line 122, in _decode_jwt
+    raise CSRFError("CSRF double submit tokens do not match")
+flask_jwt_extended.exceptions.CSRFError: CSRF double submit tokens do not match
+2025-05-12 10:36:30,150 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:36:37,729 - app - ERROR - 处理任务API豁免路由出错: 'Task' object has no attribute 'is_accessible_by'
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 331, in task_api_exempt_route
+    return get_task_risks(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\routes\risks.py", line 341, in get_task_risks
+    if not task.is_accessible_by(current_user):
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Task' object has no attribute 'is_accessible_by'
+2025-05-12 10:39:11,548 - app - ERROR - 处理任务API豁免路由出错: CSRF double submit tokens do not match
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 293, in task_api_exempt_route
+    return update_task(task_id)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 340, in _decode_jwt_from_request
+    decoded_token = decode_token(encoded_token, csrf_token)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\utils.py", line 128, in decode_token
+    return jwt_manager._decode_jwt_from_config(encoded_token, csrf_value, allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\jwt_manager.py", line 556, in _decode_jwt_from_config
+    return _decode_jwt(**kwargs, allow_expired=allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\tokens.py", line 122, in _decode_jwt
+    raise CSRFError("CSRF double submit tokens do not match")
+flask_jwt_extended.exceptions.CSRFError: CSRF double submit tokens do not match
+2025-05-12 10:57:04,030 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 10:57:13,846 - app - ERROR - 处理任务API豁免路由出错: CSRF double submit tokens do not match
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 293, in task_api_exempt_route
+    return update_task(task_id)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 340, in _decode_jwt_from_request
+    decoded_token = decode_token(encoded_token, csrf_token)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\utils.py", line 128, in decode_token
+    return jwt_manager._decode_jwt_from_config(encoded_token, csrf_value, allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\jwt_manager.py", line 556, in _decode_jwt_from_config
+    return _decode_jwt(**kwargs, allow_expired=allow_expired)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\tokens.py", line 122, in _decode_jwt
+    raise CSRFError("CSRF double submit tokens do not match")
+flask_jwt_extended.exceptions.CSRFError: CSRF double submit tokens do not match
+2025-05-12 11:01:32,508 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 11:01:44,073 - app.models.task - ERROR - 更新项目进度时出错: Session is already flushing
+2025-05-12 11:08:32,655 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 11:33:51,167 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 11:33:55,733 - app - ERROR - Exception on /api/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 11:33:55,759 - app - ERROR - Exception on /api/auth/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 11:39:56,928 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 11:40:00,093 - app - ERROR - Exception on /api/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 11:40:00,115 - app - ERROR - Exception on /api/auth/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 11:48:24,646 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 11:54:00,258 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 11:57:28,460 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 13:32:55,861 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 13:40:15,092 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 13:41:01,847 - app - ERROR - Exception on /api/risks/1 [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 13:41:52,745 - app.utils.jwt_callbacks - ERROR - Missing token: CSRF double submit tokens do not match
+2025-05-12 14:32:09,243 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 14:32:23,798 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 15:28:41,753 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 15:46:03,907 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 16:15:12,715 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:02:06,248 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:09:34,607 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:21:38,897 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:26:44,144 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:40:04,826 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:40:58,765 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:41:01,890 - app - ERROR - Exception on /api/noauth/projects [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 17:41:01,903 - app - ERROR - Exception on /api/noauth/projects [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 17:49:37,709 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 17:49:40,877 - app - ERROR - Exception on /api/noauth/projects [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 17:49:40,889 - app - ERROR - Exception on /api/noauth/projects [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 17:50:17,048 - app.routes.risks - ERROR - Error deleting risk 7: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE ? = risk_logs.risk_id]
+[parameters: (7,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:50:17,097 - app.routes.risk - ERROR - Error deleting risk: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE risk_logs.risk_id = ?]
+[parameters: (7,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:50:17,139 - app.routes.risks - ERROR - Error deleting risk 7: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE ? = risk_logs.risk_id]
+[parameters: (7,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:50:40,634 - app - ERROR - 检测到重定向循环: /projects/all, 重定向次数: 4
+2025-05-12 17:50:41,109 - app - ERROR - 检测到重定向循环: /projects/all, 重定向次数: 4
+2025-05-12 17:50:46,519 - app.routes.risks - ERROR - Error deleting risk 6: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE ? = risk_logs.risk_id]
+[parameters: (6,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:50:46,567 - app.routes.risk - ERROR - Error deleting risk: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE risk_logs.risk_id = ?]
+[parameters: (6,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:50:46,608 - app.routes.risks - ERROR - Error deleting risk 6: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE ? = risk_logs.risk_id]
+[parameters: (6,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:50:55,356 - app - ERROR - 检测到重定向循环: /projects/all, 重定向次数: 4
+2025-05-12 17:50:59,194 - app - ERROR - 检测到重定向循环: /projects/all, 重定向次数: 4
+2025-05-12 17:51:08,497 - app.routes.risks - ERROR - Error deleting risk 6: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE ? = risk_logs.risk_id]
+[parameters: (6,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:51:08,539 - app.routes.risk - ERROR - Error deleting risk: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE risk_logs.risk_id = ?]
+[parameters: (6,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:51:08,576 - app.routes.risks - ERROR - Error deleting risk 6: (sqlite3.OperationalError) no such column: risk_logs.user_id
+[SQL: SELECT risk_logs.id AS risk_logs_id, risk_logs.risk_id AS risk_logs_risk_id, risk_logs.content AS risk_logs_content, risk_logs.created_at AS risk_logs_created_at, risk_logs.user_id AS risk_logs_user_id 
+FROM risk_logs 
+WHERE ? = risk_logs.risk_id]
+[parameters: (6,)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-12 17:51:17,781 - app - ERROR - 检测到重定向循环: /projects/all, 重定向次数: 4
+2025-05-12 18:01:55,659 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 18:01:59,109 - app - ERROR - Exception on /api/noauth/projects [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 18:01:59,123 - app - ERROR - Exception on /api/noauth/projects [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    @app.after_request
+     ^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 18:05:13,670 - app - ERROR - 检测到重定向循环: /.well-known/appspecific/com.chrome.devtools.json, 重定向次数: 4
+2025-05-12 21:41:30,251 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 21:46:59,763 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 21:55:49,470 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:05:40,651 - app - ERROR - 处理任务API豁免路由出错: Missing CSRF token
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 304, in task_api_exempt_route
+    return create_task()
+           ^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 339, in _decode_jwt_from_request
+    encoded_token, csrf_token = get_encoded_token_function()
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 318, in <lambda>
+    (location, lambda: _decode_jwt_from_cookies(refresh))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 252, in _decode_jwt_from_cookies
+    raise CSRFError("Missing CSRF token")
+flask_jwt_extended.exceptions.CSRFError: Missing CSRF token
+2025-05-12 22:07:36,055 - app - ERROR - 处理任务API豁免路由出错: Missing CSRF token
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 304, in task_api_exempt_route
+    return create_task()
+           ^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 339, in _decode_jwt_from_request
+    encoded_token, csrf_token = get_encoded_token_function()
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 318, in <lambda>
+    (location, lambda: _decode_jwt_from_cookies(refresh))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 252, in _decode_jwt_from_cookies
+    raise CSRFError("Missing CSRF token")
+flask_jwt_extended.exceptions.CSRFError: Missing CSRF token
+2025-05-12 22:10:28,697 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:30:55,858 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:34:27,513 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:39:17,889 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:40:41,553 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:42:06,373 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)
+2025-05-12 22:43:06,267 - app - ERROR - Exception on /api/projects/1/risks [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,269 - app - ERROR - Exception on /api/projects/1/risks [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,283 - app - ERROR - Exception on /api/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,284 - app - ERROR - Exception on /api/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,305 - app - ERROR - Exception on /api/users/list [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,305 - app - ERROR - Exception on /api/users/list [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,329 - app - ERROR - Exception on /api/auth/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:06,332 - app - ERROR - Exception on /api/auth/users [GET]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:43:23,257 - app - ERROR - 处理任务API豁免路由出错: Missing CSRF token
+Traceback (most recent call last):
+  File "D:\tmp\work\app\__init__.py", line 304, in task_api_exempt_route
+    elif request.method == 'POST':
+               ^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 167, in decorator
+    verify_jwt_in_request(
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 94, in verify_jwt_in_request
+    jwt_data, jwt_header, jwt_location = _decode_jwt_from_request(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 339, in _decode_jwt_from_request
+    encoded_token, csrf_token = get_encoded_token_function()
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 318, in <lambda>
+    (location, lambda: _decode_jwt_from_cookies(refresh))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_jwt_extended\view_decorators.py", line 252, in _decode_jwt_from_cookies
+    raise CSRFError("Missing CSRF token")
+flask_jwt_extended.exceptions.CSRFError: Missing CSRF token
+2025-05-12 22:43:23,278 - app - ERROR - Exception on /api/projects/1/tasks [POST]
+Traceback (most recent call last):
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tmp\work\app\__init__.py", line 499, in bypass_csrf_with_jwt_bypass
+    # 如果没有CSRF令牌，尝试生成一个并添加到响应中
+        ^^^^^^^^^^^^^^
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\scaffold.py", line 46, in wrapper_func
+    self._check_setup_finished(f_name)
+  File "D:\tmp\work\venv\Lib\site-packages\flask\sansio\app.py", line 415, in _check_setup_finished
+    raise AssertionError(
+AssertionError: The setup method 'after_request' can no longer be called on the application. It has already handled its first request, any changes will not be applied consistently.
+Make sure all imports, decorators, functions, etc. needed to set up the application are done before running it.
+2025-05-12 22:48:28,517 - app.utils.jwt_callbacks - ERROR - Missing token: Missing JWT in headers, cookies or query_string (Missing Authorization Header; Missing cookie "access_token_cookie"; Missing 'jwt' query paramater)

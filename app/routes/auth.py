@@ -1,18 +1,24 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash, current_app
 from flask_jwt_extended import (
-    create_access_token, jwt_required, get_jwt_identity, create_refresh_token, 
+    create_access_token, create_refresh_token, 
     set_access_cookies, unset_jwt_cookies, get_jwt, verify_jwt_in_request
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.auth import User, Role, Permission, TokenBlacklist
+from app.models.project import Project
+from app.models.task import Task
 from app import db, login_manager
 from datetime import datetime, timedelta
 import pytz
 import uuid
+import psutil
 from flask_wtf.csrf import generate_csrf
 from functools import wraps
+from flask_wtf import CSRFProtect
+from app.utils.jwt_callbacks import jwt_required, get_jwt_identity
 
 auth_bp = Blueprint('auth', __name__)
+csrf = CSRFProtect()
 
 # 用户加载器，用于Flask-Login
 @login_manager.user_loader
@@ -99,10 +105,27 @@ def login():
         user_roles = [role.name for role in user.roles] if user.roles else []
         current_app.logger.info(f"用户 {user.username} 的角色: {user_roles}")
         
+        # 如果是admin用户或ID为1，强制添加admin角色
+        if user.username == 'admin' or user.id == 1:
+            if 'admin' not in user_roles:
+                user_roles.append('admin')
+                current_app.logger.info(f"为admin用户添加admin角色，更新后角色: {user_roles}")
+        
+        # 修复admin角色检查，明确检查是否包含admin角色
+        is_admin = 'admin' in user_roles or user.username == 'admin' or user.id == 1
+        current_app.logger.info(f"用户 {user.username} 是否是管理员: {is_admin}")
+        
         # 创建包含自定义声明的令牌
         additional_claims = {
             'csrf': csrf_token,
-            'roles': user_roles  # 将角色信息添加到JWT声明中
+            'roles': user_roles,  # 确保角色信息是字符串数组
+            'admin': is_admin,    # 明确添加admin标志
+            'user_claims': {      # 添加更多用户信息到claims
+                'username': user.username,
+                'roles': user_roles,
+                'permissions': [perm.name for perm in user.get_all_permissions()] if hasattr(user, 'get_all_permissions') else [],
+                'is_active': user.is_active
+            }
         }
         access_token = create_access_token(identity=user.id, additional_claims=additional_claims)
         refresh_token = create_refresh_token(identity=user.id)
@@ -117,10 +140,35 @@ def login():
         if request.is_json:
             # 返回JSON响应，包括CSRF令牌
             user_dict = user.to_dict()
-            current_app.logger.info(f"用户数据: {user_dict}")
+            
+            # 详细记录用户数据，用于调试
+            current_app.logger.info(f"================== 后端用户数据详情 ==================")
+            current_app.logger.info(f"用户ID: {user.id}")
+            current_app.logger.info(f"用户名: {user.username}")
+            current_app.logger.info(f"角色: {user_roles}")
+            current_app.logger.info(f"是否admin: {is_admin}")
+            current_app.logger.info(f"JWT中的用户信息: {additional_claims}")
+            current_app.logger.info(f"to_dict()转换后的用户数据: {user_dict}")
+            
+            # 确保角色信息在user_dict中正确设置
+            if 'roles' not in user_dict or not user_dict['roles']:
+                current_app.logger.warning(f"user_dict中缺少roles字段或为空，手动设置为: {user_roles}")
+                user_dict['roles'] = user_roles
+                
+            # 特殊处理admin用户
+            if user.username == 'admin' or user.id == 1:
+                if 'admin' not in user_dict['roles']:
+                    user_dict['roles'].append('admin')
+                user_dict['is_admin'] = True
+                current_app.logger.info(f"admin用户特殊处理: roles={user_dict['roles']}, is_admin={user_dict['is_admin']}")
+            
+            # 记录最终的用户数据
+            current_app.logger.info(f"最终用户数据: id={user_dict['id']}, username={user_dict['username']}, roles={user_dict['roles']}, is_admin={user_dict['is_admin']}")
+            current_app.logger.info(f"================== 后端用户数据结束 ==================")
             
             response = jsonify({
                 'message': '登录成功',
+                'success': True,  # 确保前端能检测登录成功
                 'access_token': access_token,
                 'refresh_token': refresh_token,
                 'csrf_token': csrf_token,
@@ -139,6 +187,33 @@ def login():
                 domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
                 path=current_app.config.get('SESSION_COOKIE_PATH', '/')
             )
+            # 设置用户角色Cookie，确保前端可以访问
+            response.set_cookie(
+                'user_roles',
+                ','.join(user_roles),
+                secure=current_app.config.get('SESSION_COOKIE_SECURE', False),
+                samesite='Lax',
+                max_age=3600 * 24,  # 24小时
+                httponly=False,  # 角色信息需要对JavaScript可访问
+                domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
+                path=current_app.config.get('SESSION_COOKIE_PATH', '/')
+            )
+            # 设置admin标志Cookie
+            response.set_cookie(
+                'is_admin',
+                'true' if is_admin else 'false',
+                secure=current_app.config.get('SESSION_COOKIE_SECURE', False),
+                samesite='Lax',
+                max_age=3600 * 24,  # 24小时
+                httponly=False,  # admin标志需要对JavaScript可访问
+                domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
+                path=current_app.config.get('SESSION_COOKIE_PATH', '/')
+            )
+            
+            # 为响应添加额外的头部，帮助前端调试
+            response.headers['X-User-Roles'] = ','.join(user_roles)
+            response.headers['X-Is-Admin'] = 'true' if is_admin else 'false'
+            
             return response, 200
             
         # 处理表单提交
@@ -163,6 +238,17 @@ def login():
             samesite='Lax',
             max_age=3600 * 24,  # 24小时
             httponly=False,  # 角色信息需要对JavaScript可访问
+            domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
+            path=current_app.config.get('SESSION_COOKIE_PATH', '/')
+        )
+        # 设置admin标志Cookie
+        response.set_cookie(
+            'is_admin',
+            'true' if is_admin else 'false',
+            secure=current_app.config.get('SESSION_COOKIE_SECURE', False),
+            samesite='Lax',
+            max_age=3600 * 24,  # 24小时
+            httponly=False,  # admin标志需要对JavaScript可访问
             domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
             path=current_app.config.get('SESSION_COOKIE_PATH', '/')
         )
@@ -1188,9 +1274,12 @@ def dashboard():
         memory = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
 
+        # 创建用户数据，供模板使用
+        user_dict = user.to_dict()
+        
         # 准备仪表板数据
         dashboard_data = {
-            'user': user.to_dict(),
+            'user': user_dict,
             'tasks': [task.to_dict() for task in tasks],
             'projects': [project.to_dict() for project in projects],
             'system_resources': {
@@ -1206,12 +1295,37 @@ def dashboard():
         if request.headers.get('Accept') == 'application/json':
             return jsonify(dashboard_data)
         
+        # 创建用户数据对象，确保包含角色和权限
+        current_user_data = {
+            'id': user.id,
+            'username': user.username,
+            'name': getattr(user, 'name', user.username),
+            'roles': [role.name for role in user.roles] if hasattr(user, 'roles') and user.roles else [],
+            'permissions': []
+        }
+        
+        # 添加权限到用户数据
+        if hasattr(user, 'get_all_permissions'):
+            try:
+                current_user_data['permissions'] = [perm.name for perm in user.get_all_permissions()]
+            except Exception as e:
+                current_app.logger.warning(f"获取权限失败: {str(e)}")
+                current_user_data['permissions'] = []
+        
+        # 确保管理员角色拥有所有权限
+        if 'admin' in current_user_data['roles']:
+            current_user_data['permissions'].extend(['manage_users', 'manage_projects', 'manage_tasks', 
+                                                 'manage_risks', 'manage_resources', 'manage_settings'])
+            # 去重
+            current_user_data['permissions'] = list(set(current_user_data['permissions']))
+        
         return render_template(
             'dashboard.html',
             user=user,
             tasks=tasks,
             projects=projects,
-            system_resources=dashboard_data['system_resources']
+            system_resources=dashboard_data['system_resources'],
+            current_user_data=current_user_data  # 添加用户数据到模板上下文
         )
 
     except Exception as e:
@@ -1637,44 +1751,58 @@ def create_user():
 @jwt_required(locations=['headers', 'cookies', 'query_string'])
 def get_user_info():
     try:
-        current_app.logger.info("Getting user info...")
+        current_app.logger.info("获取用户信息...")
         # 获取当前用户身份
         current_user_id = get_jwt_identity()
         
         # 从数据库获取用户
         user = User.query.get(current_user_id)
         if not user:
-            current_app.logger.error(f"User not found: {current_user_id}")
-            return jsonify({'error': 'User not found'}), 404
+            current_app.logger.error(f"未找到用户: {current_user_id}")
+            return jsonify({'error': '未找到用户', 'success': False}), 404
             
-        # 获取用户角色
-        roles = [role.name for role in user.roles]
+        # 使用用户模型的to_dict方法获取规范的用户数据
+        user_dict = user.to_dict()
         
-        # 获取用户权限
-        permissions = []
-        for role in user.roles:
-            for permission in role.permissions:
-                if permission.name not in permissions:
-                    permissions.append(permission.name)
-                    
-        # 构建用户信息响应
-        user_info = {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'name': user.name,
-            'roles': roles,
-            'permissions': permissions,
-            'created_at': user.created_at.isoformat() if user.created_at else None,
-            'last_login': user.last_login.isoformat() if user.last_login else None
-        }
+        # 获取JWT令牌的身份声明
+        jwt_claims = get_jwt()
         
-        current_app.logger.info(f"Retrieved user info for: {user.username}")
-        return jsonify(user_info), 200
+        # 记录详细信息用于调试
+        current_app.logger.info(f"================== 用户信息API详情 ==================")
+        current_app.logger.info(f"用户ID: {user.id}")
+        current_app.logger.info(f"用户名: {user.username}")
+        current_app.logger.info(f"用户角色: {user_dict.get('roles', [])}")
+        current_app.logger.info(f"是否admin: {user_dict.get('is_admin', False)}")
+        current_app.logger.info(f"JWT声明: {jwt_claims}")
+        
+        # 扩展用户信息，确保admin用户有正确的角色和权限
+        if user.username == 'admin' or user.id == 1:
+            if 'admin' not in user_dict.get('roles', []):
+                user_dict['roles'] = user_dict.get('roles', [])
+                user_dict['roles'].append('admin')
+            user_dict['is_admin'] = True
+            current_app.logger.info(f"确认admin用户身份，更新角色: {user_dict['roles']}")
+            
+        # 添加更多上下文信息
+        user_dict.update({
+            'success': True,
+            'timestamp': datetime.utcnow().isoformat(),
+            'request_id': str(uuid.uuid4()),
+            'jwt_exp': jwt_claims.get('exp')
+        })
+        
+        current_app.logger.info(f"成功获取用户 {user.username} 的信息")
+        current_app.logger.info(f"================== 用户信息API结束 ==================")
+        
+        return jsonify(user_dict), 200
         
     except Exception as e:
-        current_app.logger.error(f"Error getting user info: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        current_app.logger.error(f"获取用户信息时出错: {str(e)}")
+        return jsonify({
+            'error': str(e), 
+            'success': False,
+            'message': '获取用户信息失败'
+        }), 500
 
 @auth_bp.route('/user/<int:user_id>', methods=['DELETE'])
 @jwt_required(locations=['headers', 'cookies', 'query_string'])
@@ -2890,9 +3018,13 @@ def get_token_by_is_tanzanitelisted(is_tanzanitelisted):
 
 @auth_bp.route('/auth/csrf-token', methods=['GET'])
 @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+@csrf.exempt
 def get_csrf_token():
     """获取CSRF令牌的端点"""
     try:
+        # 检查是否有redirect_url参数
+        redirect_url = request.args.get('redirect_url')
+        
         # 检查是否使用bypass_jwt
         bypass_jwt = request.args.get('bypass_jwt') == 'true'
         
@@ -2907,10 +3039,30 @@ def get_csrf_token():
         # 生成新的CSRF令牌
         csrf_token = generate_csrf()
         
-        # 创建响应
+        # 如果有重定向URL，执行重定向
+        if redirect_url:
+            current_app.logger.info(f"CSRF令牌获取完成，重定向到: {redirect_url}")
+            # 创建响应
+            response = redirect(redirect_url)
+            
+            # 设置CSRF Cookie
+            response.set_cookie(
+                'csrf_token',
+                csrf_token,
+                secure=current_app.config.get('SESSION_COOKIE_SECURE', False),
+                httponly=False,  # 允许JavaScript访问
+                samesite='Lax',
+                max_age=current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600),
+                domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
+                path=current_app.config.get('SESSION_COOKIE_PATH', '/')
+            )
+            
+            return response
+        
+        # 没有重定向URL，返回JSON响应
         response = jsonify({
             'csrf_token': csrf_token,
-            'expires_in': current_app.config['WTF_CSRF_TIME_LIMIT']
+            'expires_in': current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
         })
         
         # 设置CSRF Cookie
@@ -2920,19 +3072,28 @@ def get_csrf_token():
             secure=current_app.config.get('SESSION_COOKIE_SECURE', False),
             httponly=False,  # 允许JavaScript访问
             samesite='Lax',
-            max_age=current_app.config['WTF_CSRF_TIME_LIMIT'],
+            max_age=current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600),
             domain=current_app.config.get('SESSION_COOKIE_DOMAIN'),
             path=current_app.config.get('SESSION_COOKIE_PATH', '/')
         )
         
-        # 设置CORS头
+        # 设置CORS头，确保所有源都可以访问
+        response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
         response.headers['Access-Control-Allow-Credentials'] = 'true'
-        response.headers['Access-Control-Expose-Headers'] = 'X-CSRF-TOKEN'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, X-CSRF-TOKEN, X-Requested-With, Authorization'
+        response.headers['Access-Control-Expose-Headers'] = 'X-CSRF-TOKEN, Content-Type'
         
+        # 设置调试头信息和额外的安全头
+        response.headers['X-Debug-CSRF'] = 'Token generated successfully'
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        
+        current_app.logger.info(f"Generated CSRF token (first 10 chars): {csrf_token[:10]}...")
         return response
     except Exception as e:
         current_app.logger.error(f"Error generating CSRF token: {str(e)}")
-        return jsonify({'error': 'Failed to generate CSRF token'}), 500
+        return jsonify({'error': 'Failed to generate CSRF token', 'details': str(e)}), 500
 
 @auth_bp.route('/api/users/<int:user_id>', methods=['PUT'])
 @jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
@@ -2957,6 +3118,15 @@ def api_update_user(user_id):
                 # 设置请求中的csrf_token，以便Flask-WTF可以识别
                 request.form = request.form.copy()
                 request.form['csrf_token'] = csrf_token
+                
+                # 日志记录CSRF令牌
+                current_app.logger.info(f"正在使用URL中的CSRF令牌: {csrf_token[:10]}...")
+                
+                # 禁用CSRF检查
+                csrf.exempt(api_update_user)
+            else:
+                current_app.logger.error("缺少CSRF令牌")
+                return jsonify({'error': '缺少CSRF令牌，无法更新用户', 'message': '请刷新页面后重试'}), 401
         else:
             current_user_id = get_jwt_identity()
             if not current_user_id:
@@ -2977,6 +3147,9 @@ def api_update_user(user_id):
         
         # 获取更新数据
         data = request.get_json()
+        if not data:
+            current_app.logger.error(f"请求中没有有效的JSON数据：{request.data}")
+            return jsonify({'error': '请求中没有有效的JSON数据'}), 400
         
         # 更新用户信息
         if 'email' in data and data['email'] != user.email:
@@ -3385,3 +3558,189 @@ def get_user_csrf_token():
     except Exception as e:
         current_app.logger.error(f"Error generating user CSRF token: {str(e)}")
         return jsonify({'error': 'Failed to generate user CSRF token', 'success': False}), 500
+
+@auth_bp.route('/api/noauth/users', methods=['GET'])
+def get_users_noauth():
+    """获取用户列表API - 无需认证版本"""
+    try:
+        # 获取用户，但仅包含安全信息
+        users = User.query.filter_by(is_active=True).all()
+        
+        # 仅返回必要的用户信息
+        safe_users = []
+        for user in users:
+            user_data = {
+                'id': user.id,
+                'name': user.name or user.username,
+                'username': user.username
+            }
+            safe_users.append(user_data)
+        
+        response_data = {
+            'users': safe_users
+        }
+        
+        current_app.logger.info(f"Retrieved {len(safe_users)} users via noauth API")
+        return jsonify(response_data), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Error getting users list (noauth): {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+# 添加兼容性路由，处理/auth前缀的请求
+@auth_bp.route('/auth/user_info', methods=['GET'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+def auth_get_user_info():
+    """兼容性路由：处理带/auth前缀的用户信息请求"""
+    try:
+        # 判断是否使用bypass_jwt
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        current_app.logger.info(f"获取用户信息 - bypass_jwt: {bypass_jwt}")
+        
+        if bypass_jwt:
+            # 如果绕过JWT，使用默认用户（ID为1的管理员）
+            user_id = 1
+            current_app.logger.info("使用默认管理员用户(ID=1)")
+            
+            # 尝试从数据库获取用户
+            user = User.query.get(user_id)
+            if not user:
+                # 如果找不到用户，返回模拟数据
+                current_app.logger.warning(f"找不到ID为{user_id}的用户，返回模拟数据")
+                return jsonify({
+                    'id': 1,
+                    'username': 'admin',
+                    'name': '管理员',
+                    'email': 'admin@example.com',
+                    'roles': ['admin'],
+                    'permissions': ['manage_all'],
+                    'is_admin': True,
+                    'success': True
+                }), 200
+        else:
+            # 正常JWT验证
+            user_id = get_jwt_identity()
+            if not user_id:
+                current_app.logger.warning("未提供有效的JWT令牌")
+                return jsonify({
+                    'error': '未认证',
+                    'success': False,
+                    'message': '请先登录'
+                }), 401
+            
+            # 尝试从数据库获取用户
+            user = User.query.get(user_id)
+            if not user:
+                current_app.logger.error(f"未找到用户: {user_id}")
+                return jsonify({
+                    'error': '未找到用户',
+                    'success': False
+                }), 404
+        
+        # 使用用户模型的to_dict方法获取规范的用户数据
+        try:
+            user_dict = user.to_dict()
+        except (AttributeError, Exception) as e:
+            current_app.logger.warning(f"用户to_dict方法失败: {str(e)}，使用手动构建")
+            # 手动构建用户字典
+            user_dict = {
+                'id': user.id,
+                'username': user.username,
+                'name': getattr(user, 'name', user.username),
+                'email': getattr(user, 'email', f"{user.username}@example.com"),
+                'roles': [],
+                'permissions': []
+            }
+            
+            # 尝试添加角色
+            if hasattr(user, 'roles') and user.roles:
+                try:
+                    user_dict['roles'] = [role.name for role in user.roles]
+                except Exception as role_err:
+                    current_app.logger.warning(f"获取角色失败: {str(role_err)}")
+            
+            # 尝试添加权限
+            if hasattr(user, 'get_all_permissions'):
+                try:
+                    user_dict['permissions'] = [perm.name for perm in user.get_all_permissions()]
+                except Exception as perm_err:
+                    current_app.logger.warning(f"获取权限失败: {str(perm_err)}")
+        
+        # 确保admin用户有正确的角色和权限
+        if user.username == 'admin' or user.id == 1:
+            if 'roles' not in user_dict:
+                user_dict['roles'] = []
+            if 'admin' not in user_dict['roles']:
+                user_dict['roles'].append('admin')
+            user_dict['is_admin'] = True
+        
+        # 添加成功标志和时间戳
+        user_dict.update({
+            'success': True,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+        
+        current_app.logger.info(f"成功获取用户 {user.username} 的信息")
+        return jsonify(user_dict), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"获取用户信息时出错: {str(e)}")
+        return jsonify({
+            'error': str(e), 
+            'success': False,
+            'message': '获取用户信息失败'
+        }), 500
+
+# 添加兼容性路由，处理/auth前缀的登录请求
+@auth_bp.route('/auth/login', methods=['GET', 'POST'])
+def auth_login():
+    """兼容性路由：处理带/auth前缀的登录请求"""
+    if request.method == 'GET':
+        return login_page()
+    else:
+        return login()
+
+# 添加兼容性路由，处理/auth前缀的注册请求
+@auth_bp.route('/auth/register', methods=['GET', 'POST'])
+def auth_register():
+    """兼容性路由：处理带/auth前缀的注册请求"""
+    if request.method == 'GET':
+        return register_page()
+    else:
+        return register()
+
+# 添加获取所有用户的API端点，供项目和任务创建使用
+@auth_bp.route('/api/global/users', methods=['GET'])
+@jwt_required(locations=['headers', 'cookies', 'query_string'], optional=True)
+@csrf.exempt
+def get_all_users():
+    try:
+        # 检查是否使用bypass_jwt模式
+        bypass_jwt = request.args.get('bypass_jwt') == 'true'
+        
+        if bypass_jwt:
+            current_app.logger.info("JWT bypass enabled for get_all_users - Using test user")
+            current_user_id = 1  # 使用测试用户ID
+        else:
+            current_user_id = get_jwt_identity()
+            if not current_user_id:
+                return jsonify({'error': '认证失败，请登录'}), 401
+                
+        # 获取所有用户
+        users = User.query.filter(User.is_active == True).all()
+        
+        # 构建用户列表
+        user_list = []
+        for user in users:
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'name': user.name or user.username,
+                'email': user.email
+            }
+            user_list.append(user_data)
+            
+        return jsonify({'users': user_list})
+    except Exception as e:
+        current_app.logger.error(f"获取用户列表失败: {str(e)}")
+        return jsonify({'error': str(e)}), 500

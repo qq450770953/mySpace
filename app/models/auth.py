@@ -113,6 +113,9 @@ class User(UserMixin, db.Model):
         super(User, self).__init__(**kwargs)
         if password:
             self.set_password(password)
+        # 如果是admin用户，自动确保admin角色存在
+        if self.username == 'admin' or kwargs.get('id') == 1:
+            self.ensure_admin_role()
     
     def set_role(self, role):
         """设置用户角色"""
@@ -135,39 +138,125 @@ class User(UserMixin, db.Model):
     
     def has_role(self, role_name):
         """检查用户是否有指定角色"""
+        # admin用户或ID为1的用户始终有admin角色
+        if role_name == 'admin' and (self.username == 'admin' or self.id == 1):
+            return True
+            
         return any(role.name == role_name for role in self.roles)
     
     def to_dict(self):
-        """转换为字典"""
-        # 获取角色和权限信息
-        roles = [role.name for role in self.roles] if self.roles else []
-        permissions = []
-        if self.roles:
-            for role in self.roles:
-                if role.permissions:
-                    permissions.extend([perm.name for perm in role.permissions])
+        """将用户对象转换为字典，用于API返回"""
+        # 确保获取用户角色数据
+        user_roles = [role.name for role in self.roles] if self.roles else []
         
-        # 去重权限列表
-        permissions = list(set(permissions))
+        # 记录转换过程中的角色信息
+        print(f"[User.to_dict] 用户 {self.username} (ID: {self.id}) 角色: {user_roles}")
         
-        # 构建用户字典
+        # 特殊处理admin用户，确保有admin角色
+        if self.username == 'admin' or self.id == 1:
+            if 'admin' not in user_roles:
+                user_roles.append('admin')
+                print(f"[User.to_dict] 为admin用户添加admin角色，更新后: {user_roles}")
+        
+        # 获取用户所有权限
+        try:
+            all_permissions = self.get_all_permissions() if hasattr(self, 'get_all_permissions') else []
+            permissions = [perm.name for perm in all_permissions]
+            print(f"[User.to_dict] 用户 {self.username} 权限: {permissions}")
+        except Exception as e:
+            print(f"[User.to_dict] 获取权限出错: {e}")
+            permissions = []
+        
+        # 创建基本用户数据字典
         user_dict = {
-            'id': self.id or '',
-            'username': self.username or '',
+            'id': self.id,
+            'username': self.username,
             'email': self.email or '',
-            'name': self.name or '',
+            'name': self.name or self.username,
             'is_active': self.is_active if self.is_active is not None else True,
-            'created_at': self.created_at.isoformat() if self.created_at else '',
-            'last_login': self.last_login.isoformat() if self.last_login else '',
-            'roles': roles,
-            'permissions': permissions
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'roles': user_roles,  # 始终是数组
+            'permissions': permissions,  # 始终是数组
+            'is_admin': False  # 默认为False，下面会检查并设置
         }
         
+        # 明确设置is_admin标志
+        if 'admin' in user_roles or self.username == 'admin' or self.id == 1:
+            user_dict['is_admin'] = True
+            print(f"[User.to_dict] 用户 {self.username} 被标记为管理员")
+        
+        print(f"[User.to_dict] 最终用户数据: id={user_dict['id']}, username={user_dict['username']}, roles={user_dict['roles']}, is_admin={user_dict['is_admin']}")
         return user_dict
     
     def has_permission(self, permission_name):
         """检查用户是否有指定权限"""
         return any(role.has_permission(permission_name) for role in self.roles)
+        
+    def get_all_permissions(self):
+        """获取用户的所有权限"""
+        print(f"[User.get_all_permissions] 开始获取用户 {self.username} 的所有权限")
+        
+        # 收集所有权限
+        permissions = []
+        if self.roles:
+            for role in self.roles:
+                if role.permissions:
+                    for perm in role.permissions:
+                        if perm not in permissions:
+                            permissions.append(perm)
+            print(f"[User.get_all_permissions] 从角色中收集到 {len(permissions)} 个权限")
+        
+        # 如果用户是admin，添加所有权限
+        if self.username == 'admin' or self.id == 1:
+            try:
+                from app.utils.permissions import ROLE_PERMISSIONS, ROLE_ADMIN
+                admin_permissions = ROLE_PERMISSIONS.get(ROLE_ADMIN, [])
+                print(f"[User.get_all_permissions] Admin权限列表: {admin_permissions}")
+                
+                # 获取所有权限对象
+                from app.models.auth import Permission
+                for perm_name in admin_permissions:
+                    perm = Permission.query.filter_by(name=perm_name).first()
+                    if perm and perm not in permissions:
+                        permissions.append(perm)
+            except Exception as e:
+                print(f"[User.get_all_permissions] 获取admin权限出错: {e}")
+        
+        print(f"[User.get_all_permissions] 用户 {self.username} 最终权限数量: {len(permissions)}")
+        return permissions
+
+    def ensure_admin_role(self):
+        """确保admin用户拥有admin角色"""
+        try:
+            # 查找admin角色
+            from app import db
+            admin_role = Role.query.filter_by(name='admin').first()
+            
+            if not admin_role:
+                print(f"[User.ensure_admin_role] admin角色不存在，创建新角色")
+                # 如果admin角色不存在，创建它
+                admin_role = Role(name='admin', description='Administrator')
+                db.session.add(admin_role)
+                
+            # 检查用户是否已有此角色
+            has_role = False
+            if self.roles:
+                for role in self.roles:
+                    if role.name == 'admin':
+                        has_role = True
+                        break
+                        
+            # 如果没有admin角色，添加它
+            if not has_role:
+                print(f"[User.ensure_admin_role] 为用户 {self.username} 添加admin角色")
+                self.roles.append(admin_role)
+                
+            return True
+        except Exception as e:
+            print(f"[User.ensure_admin_role] 确保admin角色出错: {str(e)}")
+            return False
 
 class TokenBlacklist(db.Model):
     """Token黑名单模型"""

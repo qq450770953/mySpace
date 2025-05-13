@@ -14,6 +14,9 @@ function init() {
     // 检查认证状态
     checkAuth();
     
+    // 加载用户信息和权限
+    loadUserInfoAndPermissions();
+    
     // 初始化工具提示
     initTooltips();
     
@@ -28,12 +31,62 @@ function init() {
     
     // 初始化文件上传
     initFileUpload();
+    
+    // 设置按钮权限
+    setupEditDeleteButtons();
+}
+
+// 加载用户信息和权限
+function loadUserInfoAndPermissions() {
+    // 尝试从JWT token中获取用户信息
+    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    if (token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            
+            if (payload && payload.sub) {
+                // 获取用户信息
+                fetch(`/api/users/${payload.sub}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('获取用户信息失败');
+                })
+                .then(userData => {
+                    // 将用户信息存储到localStorage
+                    localStorage.setItem('user_info', JSON.stringify(userData));
+                    
+                    // 将角色和权限设置为全局变量
+                    window.userRoles = userData.roles || [];
+                    window.userPermissions = userData.permissions || [];
+                    
+                    // 更新用户角色cookie
+                    if (userData.roles && Array.isArray(userData.roles)) {
+                        document.cookie = `user_roles=${userData.roles.join(',')}; path=/; max-age=86400`;
+                    }
+                    
+                    // 更新按钮显示
+                    setupEditDeleteButtons();
+                })
+                .catch(error => {
+                    console.error('加载用户信息失败:', error);
+                });
+            }
+        } catch (e) {
+            console.warn('从JWT解析用户信息失败:', e);
+        }
+    }
 }
 
 // 检查认证状态
 function checkAuth() {
-    if (!accessToken && !window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
-        window.location.href = '/login';
+    if (!accessToken && !window.location.pathname.includes('/auth/login') && !window.location.pathname.includes('/register')) {
+        window.location.href = '/auth/login';
         return;
     }
     
@@ -57,7 +110,7 @@ function checkAuth() {
         .catch(error => {
             console.error('Error:', error);
             localStorage.removeItem('access_token');
-            window.location.href = '/login';
+            window.location.href = '/auth/login';
         });
     }
 }
@@ -307,16 +360,36 @@ function hasPermission(permissionName) {
         userInfo = sessionStorage.getItem('user_info');
     }
     
+    // 管理员和项目经理角色应该拥有特定权限
     if (userInfo) {
         try {
             const user = JSON.parse(userInfo);
             // 检查用户是否有指定权限
             if (user.permissions && Array.isArray(user.permissions)) {
-                return user.permissions.includes(permissionName);
+                if (user.permissions.includes(permissionName)) {
+                    return true;
+                }
             }
-            // 如果是管理员角色，默认拥有所有权限
-            if (user.roles && Array.isArray(user.roles) && user.roles.includes('admin')) {
-                return true;
+            
+            // 特殊角色处理
+            if (user.roles && Array.isArray(user.roles)) {
+                // 管理员拥有所有权限
+                if (user.roles.includes('admin')) {
+                    return true;
+                }
+                
+                // 项目经理拥有项目管理和任务管理权限
+                if (user.roles.includes('manager') || user.roles.includes('project_manager')) {
+                    // 项目管理相关权限
+                    if (['create_project', 'manage_project', 'manage_all_projects', 'change_project_status'].includes(permissionName)) {
+                        return true;
+                    }
+                    
+                    // 任务管理相关权限
+                    if (['create_task', 'manage_task', 'manage_all_tasks', 'assign_task', 'change_task_status'].includes(permissionName)) {
+                        return true;
+                    }
+                }
             }
         } catch (e) {
             console.error('解析用户信息时出错:', e);
@@ -335,14 +408,57 @@ function hasPermission(permissionName) {
             // 尝试从JWT令牌中解析权限
             const payload = JSON.parse(atob(token.split('.')[1]));
             if (payload && payload.permissions && Array.isArray(payload.permissions)) {
-                return payload.permissions.includes(permissionName);
+                if (payload.permissions.includes(permissionName)) {
+                    return true;
+                }
             }
-            // 如果令牌中有角色信息且用户是管理员，默认拥有所有权限
-            if (payload && payload.roles && Array.isArray(payload.roles) && payload.roles.includes('admin')) {
-                return true;
+            
+            // 特殊角色处理
+            if (payload && payload.roles && Array.isArray(payload.roles)) {
+                // 管理员拥有所有权限
+                if (payload.roles.includes('admin')) {
+                    return true;
+                }
+                
+                // 项目经理拥有项目管理和任务管理权限
+                if (payload.roles.includes('manager') || payload.roles.includes('project_manager')) {
+                    // 项目管理相关权限
+                    if (['create_project', 'manage_project', 'manage_all_projects', 'change_project_status'].includes(permissionName)) {
+                        return true;
+                    }
+                    
+                    // 任务管理相关权限
+                    if (['create_task', 'manage_task', 'manage_all_tasks', 'assign_task', 'change_task_status'].includes(permissionName)) {
+                        return true;
+                    }
+                }
             }
         } catch (e) {
             console.warn('从JWT解析权限信息失败:', e);
+        }
+    }
+    
+    // 从cookie中获取角色信息
+    const userRolesCookie = document.cookie.split('; ').find(row => row.startsWith('user_roles='));
+    if (userRolesCookie) {
+        const userRoles = userRolesCookie.split('=')[1].split(',');
+        
+        // 管理员拥有所有权限
+        if (userRoles.includes('admin')) {
+            return true;
+        }
+        
+        // 项目经理拥有项目管理和任务管理权限
+        if (userRoles.includes('manager') || userRoles.includes('project_manager')) {
+            // 项目管理相关权限
+            if (['create_project', 'manage_project', 'manage_all_projects', 'change_project_status'].includes(permissionName)) {
+                return true;
+            }
+            
+            // 任务管理相关权限
+            if (['create_task', 'manage_task', 'manage_all_tasks', 'assign_task', 'change_task_status'].includes(permissionName)) {
+                return true;
+            }
         }
     }
     
@@ -492,5 +608,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error('应用初始化失败:', error);
         showError('应用初始化失败，请刷新页面重试');
+    }
+});
+
+// 当localStorage或sessionStorage中的用户信息变化时重新检查权限
+window.addEventListener('storage', function(e) {
+    if (e.key === 'user_info' || e.key === 'access_token') {
+        setupEditDeleteButtons();
     }
 });

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>甘特图API测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #result { white-space: pre-wrap; background: #f5f5f5; padding: 10px; border: 1px solid #ddd; max-height: 400px; overflow: auto; }
+        button { padding: 10px; background: #4CAF50; color: white; border: none; cursor: pointer; margin-bottom: 10px; }
+        .error { color: red; font-weight: bold; }
+        .success { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>甘特图数据API测试</h1>
+    <button id="testBtn">测试甘特图API</button>
+    <div id="status"></div>
+    <h3>结果：</h3>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('testBtn').addEventListener('click', function() {
+            const statusEl = document.getElementById('status');
+            const resultEl = document.getElementById('result');
+            
+            statusEl.innerHTML = '正在请求数据...';
+            statusEl.className = '';
+            
+            fetch('/tasks/project/all/gantt/data?bypass_jwt=true')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误! 状态码: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    statusEl.innerHTML = '✅ 请求成功!';
+                    statusEl.className = 'success';
+                    
+                    const taskCount = data.data ? data.data.length : 0;
+                    const linksCount = data.links ? data.links.length : 0;
+                    
+                    // 显示摘要信息
+                    resultEl.innerHTML = `
+                        <div>
+                            <h4>数据摘要:</h4>
+                            <p>任务数量: ${taskCount}</p>
+                            <p>链接数量: ${linksCount}</p>
+                        </div>
+                        <h4>完整响应数据:</h4>
+                    `;
+                    
+                    // 添加完整的JSON响应
+                    const pre = document.createElement('pre');
+                    pre.textContent = JSON.stringify(data, null, 2);
+                    resultEl.appendChild(pre);
+                })
+                .catch(error => {
+                    statusEl.innerHTML = `❌ 错误: ${error.message}`;
+                    statusEl.className = 'error';
+                    resultEl.innerHTML = `请求失败: ${error.message}`;
+                });
+        });
+    </script>
+</body>
+</html> 

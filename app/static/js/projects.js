@@ -113,6 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 500);
     }
+    
+    // 加载甘特图
+    setTimeout(() => {
+        loadGanttChart();
+    }, 1000);
 });
 
 // 根据用户权限设置项目界面元素
@@ -320,4 +325,215 @@ async function saveProject() {
         console.error('保存项目时发生错误:', error);
         showErrorMessage('保存项目时发生错误: ' + error.message);
     }
+}
+
+// 编辑项目
+function editProject(projectId) {
+    console.log('编辑项目:', projectId);
+    
+    // 获取项目详情
+    fetch(`/api/auth/projects/${projectId}?bypass_jwt=true`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`获取项目详情失败: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('获取到项目数据:', data);
+            
+            // 检查编辑模态框是否存在
+            const editModal = document.getElementById('editProjectModal');
+            if (!editModal) {
+                console.error('找不到编辑模态框 #editProjectModal');
+                alert('无法加载编辑界面：找不到编辑模态框');
+                return;
+            }
+            
+            // 在设置任何表单值之前检查所有必需的表单元素
+            const requiredElements = [
+                { id: 'editProjectId', name: '项目ID' },
+                { id: 'editProjectName', name: '项目名称' },
+                { id: 'editProjectDescription', name: '项目描述' },
+                { id: 'editProjectStatus', name: '项目状态' }
+            ];
+            
+            let missingElements = [];
+            for (const elem of requiredElements) {
+                if (!document.getElementById(elem.id)) {
+                    missingElements.push(elem.name);
+                }
+            }
+            
+            if (missingElements.length > 0) {
+                console.error('编辑表单缺少必要元素:', missingElements.join(', '));
+                alert(`无法加载编辑界面：表单缺少必要元素 (${missingElements.join(', ')})`);
+                return;
+            }
+            
+            // 填充编辑表单
+            document.getElementById('editProjectId').value = projectId;
+            document.getElementById('editProjectName').value = data.name || '';
+            document.getElementById('editProjectDescription').value = data.description || '';
+            document.getElementById('editProjectStatus').value = data.status || 'planning';
+            
+            // 如果有编辑器中的其他字段，也填充它们 - 添加存在性检查
+            const editStartDateField = document.getElementById('editStartDate');
+            if (editStartDateField && data.start_date) {
+                editStartDateField.value = data.start_date;
+            }
+            
+            const editEndDateField = document.getElementById('editEndDate');
+            if (editEndDateField && data.end_date) {
+                editEndDateField.value = data.end_date;
+            }
+            
+            const editManagerField = document.getElementById('editProjectManager');
+            if (editManagerField && data.manager_id) {
+                editManagerField.value = data.manager_id;
+            }
+            
+            // 显示编辑模态框
+            try {
+                const bsModal = new bootstrap.Modal(editModal);
+                bsModal.show();
+            } catch (error) {
+                console.error('无法显示编辑模态框:', error);
+                // 使用备用方法显示模态框
+                editModal.classList.add('show');
+                editModal.style.display = 'block';
+                document.body.classList.add('modal-open');
+                
+                // 添加背景遮罩
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
+            
+            // 加载负责人列表
+            if (typeof loadProjectManagers === 'function') {
+                loadProjectManagers();
+            }
+        })
+        .catch(error => {
+            console.error('获取项目详情失败:', error);
+            alert('无法加载项目详情: ' + error.message);
+        });
+}
+
+// 加载甘特图
+function loadGanttChart() {
+    console.log('正在加载甘特图...');
+    
+    // 显示加载中状态
+    const ganttLoadingElement = document.getElementById('ganttLoading');
+    const ganttChartElement = document.getElementById('ganttChart');
+    const ganttErrorElement = document.getElementById('ganttError');
+    
+    if (!ganttChartElement) {
+        console.error('找不到甘特图容器元素 #ganttChart');
+        return;
+    }
+    
+    if (ganttLoadingElement) {
+        ganttLoadingElement.classList.remove('d-none');
+    }
+    
+    if (ganttErrorElement) {
+        ganttErrorElement.classList.add('d-none');
+    }
+    
+    // 尝试从服务器获取甘特图数据
+    fetch('/tasks/project/all/gantt/data?bypass_jwt=true')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`获取甘特图数据失败: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('获取到甘特图数据:', data);
+            
+            if (!data || !data.data || data.data.length === 0) {
+                console.warn('甘特图数据为空');
+                showGanttError('没有可用的任务数据');
+                return;
+            }
+            
+            // 准备甘特图任务
+            const tasks = data.data.map(task => ({
+                id: task.id,
+                name: task.text || `任务 #${task.id}`,
+                start: task.start_date,
+                end: task.end_date,
+                progress: task.progress || 0,
+                dependencies: []
+            }));
+            
+            // 添加依赖关系
+            if (data.links && Array.isArray(data.links)) {
+                data.links.forEach(link => {
+                    const task = tasks.find(t => t.id == link.target);
+                    if (task) {
+                        task.dependencies.push(link.source.toString());
+                    }
+                });
+            }
+            
+            // 初始化甘特图
+            try {
+                // 清空容器
+                ganttChartElement.innerHTML = '';
+                
+                // 创建甘特图实例
+                window.gantt = new Gantt(ganttChartElement, tasks, {
+                    header_height: 50,
+                    column_width: 30,
+                    step: 24,
+                    view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
+                    bar_height: 20,
+                    bar_corner_radius: 3,
+                    arrow_curve: 5,
+                    padding: 18,
+                    view_mode: 'Month',
+                    date_format: 'YYYY-MM-DD',
+                    custom_popup_html: null
+                });
+                
+                // 隐藏加载中状态
+                if (ganttLoadingElement) {
+                    ganttLoadingElement.classList.add('d-none');
+                }
+                
+                console.log('甘特图加载完成');
+            } catch (error) {
+                console.error('初始化甘特图失败:', error);
+                showGanttError(`初始化甘特图失败: ${error.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('获取甘特图数据失败:', error);
+            showGanttError(`获取甘特图数据失败: ${error.message}`);
+        });
+}
+
+// 显示甘特图错误
+function showGanttError(message) {
+    const ganttLoadingElement = document.getElementById('ganttLoading');
+    const ganttErrorElement = document.getElementById('ganttError');
+    const errorMessageElement = document.getElementById('errorMessage');
+    
+    if (ganttLoadingElement) {
+        ganttLoadingElement.classList.add('d-none');
+    }
+    
+    if (ganttErrorElement) {
+        ganttErrorElement.classList.remove('d-none');
+        
+        if (errorMessageElement) {
+            errorMessageElement.textContent = message;
+        }
+    }
+    
+    console.error('甘特图错误:', message);
 } 

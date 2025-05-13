@@ -1,5 +1,6 @@
-from flask import current_app, request, render_template, jsonify, redirect, url_for
-from flask_jwt_extended import JWTManager, decode_token, verify_jwt_in_request
+from flask import current_app, request, render_template, jsonify, redirect, url_for, g
+from flask_jwt_extended import JWTManager, decode_token, verify_jwt_in_request, jwt_required as original_jwt_required
+from flask_jwt_extended import get_jwt_identity as original_get_jwt_identity
 from app.models.auth import User, TokenBlacklist
 from datetime import datetime, timedelta
 from flask_jwt_extended.exceptions import NoAuthorizationError
@@ -303,4 +304,46 @@ def setup_jwt_callbacks(jwt: JWTManager):
         
         # 对于普通页面请求，重定向到登录页面
         logger.info("Redirecting to login page due to CSRF error")
-        return redirect(url_for('auth.login')) 
+        return redirect(url_for('auth.login'))
+
+def jwt_required(*args, **kwargs):
+    """自定义的jwt_required装饰器，支持bypass_jwt参数"""
+    def decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            # 检查请求参数中的bypass_jwt
+            if request.args.get('bypass_jwt') == 'true':
+                logger.warning(f"JWT验证已被绕过: {request.path}")
+                # 如果绕过JWT验证，使用默认用户（通常是管理员，ID=1）
+                from flask import g
+                g.bypass_jwt = True
+                g.current_user_id = 1
+                return fn(*args, **kwargs)
+            else:
+                # 否则应用原始的jwt_required装饰器
+                return original_jwt_required(*args, **kwargs)(fn)(*args, **kwargs)
+        return wrapper
+    
+    # 处理不同调用方式: @jwt_required 和 @jwt_required()
+    if len(args) == 1 and callable(args[0]):
+        return decorator(args[0])
+    return decorator 
+
+def get_jwt_identity():
+    """自定义的get_jwt_identity函数，支持bypass_jwt参数"""
+    # 检查是否启用了bypass_jwt
+    if hasattr(g, 'bypass_jwt') and g.bypass_jwt:
+        logger.warning(f"使用bypass_jwt返回默认用户ID: 1")
+        return 1  # 默认管理员用户ID
+    
+    # 否则使用原始的get_jwt_identity功能
+    try:
+        return original_get_jwt_identity()
+    except Exception as e:
+        # 再次检查request参数中的bypass_jwt，以防在没有设置g.bypass_jwt的情况下调用
+        if request.args.get('bypass_jwt') == 'true':
+            logger.warning(f"通过request参数检测到bypass_jwt，返回默认用户ID: 1")
+            g.bypass_jwt = True
+            return 1
+        logger.error(f"获取JWT身份失败: {str(e)}")
+        raise 

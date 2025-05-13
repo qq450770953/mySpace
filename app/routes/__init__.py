@@ -13,6 +13,8 @@ from .team import team_bp
 from .users import users_bp
 from .notifications import notification_bp
 from .audit import audit_bp
+# 暂时注释掉全局用户蓝图导入，避免启动错误
+# from .global_users import global_users_bp
 
 # 导出蓝图
 __all__ = [
@@ -20,6 +22,8 @@ __all__ = [
     'risk_bp', 'main_bp', 'kanban_bp', 'gantt_bp', 
     'comments_bp', 'chat_bp', 'team_bp', 'users_bp',
     'notification_bp', 'audit_bp'
+    # 注释掉全局用户蓝图，避免启动错误
+    # ,'global_users_bp'
 ]
 
 def register_routes(app):

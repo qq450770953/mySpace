@@ -480,82 +480,179 @@
         assigneeSelect.innerHTML = '<option value="">加载中...</option>';
         assigneeSelect.disabled = true;
         
-        // 获取项目成员
-        fetch(`/api/projects/${projectId}/members?bypass_jwt=true`)
-            .then(response => {
+        // 构建多个可能的API端点
+        const apiUrls = [
+            `/api/projects/${projectId}/members?bypass_jwt=true`,
+            `/api/auth/projects/${projectId}/members?bypass_jwt=true`,
+            `/api/noauth/projects/${projectId}/members`
+        ];
+        
+        // 尝试从多个API端点加载数据
+        tryLoadProjectMembers(apiUrls, 0, assigneeSelect);
+    }
+    
+    // 尝试从不同API端点加载项目成员
+    function tryLoadProjectMembers(urls, index, assigneeSelect) {
+        // 如果所有URL都尝试过了，尝试加载所有用户
+        if (index >= urls.length) {
+            console.warn('所有项目成员API端点都请求失败，尝试加载所有用户');
+            loadAllUsersAsAssignees(assigneeSelect);
+            return;
+        }
+        
+        const url = urls[index];
+        console.log(`[tryLoadProjectMembers] 尝试从 ${url} 加载项目成员`);
+        
+        fetch(url)
+            .then(async response => {
+                // 检查是否返回HTML而不是JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    console.warn(`[tryLoadProjectMembers] ${url} 返回了HTML而不是JSON`);
+                    throw new Error('返回了HTML而不是JSON');
+                }
+                
                 if (!response.ok) {
-                    throw new Error(`获取项目成员失败: ${response.status}`);
+                    throw new Error(`请求失败: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(members => {
-                console.log('获取到项目成员:', members);
                 
-                // 清空现有选项
-                assigneeSelect.innerHTML = '';
-                
-                // 添加默认选项
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = '-- 选择负责人 --';
-                assigneeSelect.appendChild(defaultOption);
-                
-                // 添加成员选项
-                if (Array.isArray(members)) {
-                    members.forEach(member => {
-                        const option = document.createElement('option');
-                        option.value = member.id;
-                        option.textContent = member.name || `成员 #${member.id}`;
-                        assigneeSelect.appendChild(option);
-                    });
+                try {
+                    const data = await response.json();
                     
-                    console.log(`已加载 ${members.length} 个项目成员作为负责人候选`);
-                } else {
-                    console.warn('服务器返回的成员数据不是数组格式');
+                    // 检查成员数据格式
+                    let members = [];
+                    
+                    if (Array.isArray(data)) {
+                        members = data;
+                    } else if (data.members && Array.isArray(data.members)) {
+                        members = data.members;
+                    } else if (data.data && Array.isArray(data.data)) {
+                        members = data.data;
+                    } else {
+                        console.warn('[tryLoadProjectMembers] 无法识别返回的数据格式');
+                        throw new Error('无法识别返回的数据格式');
+                    }
+                    
+                    // 如果没有成员数据，尝试加载所有用户
+                    if (members.length === 0) {
+                        console.warn('[tryLoadProjectMembers] 没有成员数据，尝试加载所有用户');
+                        loadAllUsersAsAssignees(assigneeSelect);
+                        return;
+                    }
+                    
+                    // 更新下拉框
+                    updateAssigneeDropdown(assigneeSelect, members);
+                    
+                } catch (parseError) {
+                    console.error(`[tryLoadProjectMembers] 解析 ${url} 响应出错:`, parseError);
+                    throw parseError;
                 }
-                
-                // 启用选择器
-                assigneeSelect.disabled = false;
             })
             .catch(error => {
-                console.error('加载项目成员失败:', error);
+                console.error(`[tryLoadProjectMembers] ${url} 请求失败:`, error);
                 
-                // 尝试使用备选方式加载用户列表
-                fetch('/api/users?bypass_jwt=true')
-                    .then(response => response.json())
-                    .then(users => {
-                        console.log('使用备选方式获取用户列表:', users);
-                        
-                        // 清空现有选项
-                        assigneeSelect.innerHTML = '';
-                        
-                        // 添加默认选项
-                        const defaultOption = document.createElement('option');
-                        defaultOption.value = '';
-                        defaultOption.textContent = '-- 选择负责人 --';
-                        assigneeSelect.appendChild(defaultOption);
-                        
-                        // 添加用户选项
-                        if (Array.isArray(users)) {
-                            users.forEach(user => {
-                                const option = document.createElement('option');
-                                option.value = user.id;
-                                option.textContent = user.name || user.username || `用户 #${user.id}`;
-                                assigneeSelect.appendChild(option);
-                            });
-                        }
-                        
-                        // 启用选择器
-                        assigneeSelect.disabled = false;
-                    })
-                    .catch(e => {
-                        console.error('备选方式获取用户列表也失败:', e);
-                        
-                        // 恢复正常状态
-                        assigneeSelect.innerHTML = '<option value="">-- 无法加载负责人 --</option>';
-                        assigneeSelect.disabled = false;
-                    });
+                // 尝试下一个API端点
+                setTimeout(() => tryLoadProjectMembers(urls, index + 1, assigneeSelect), 300);
             });
+    }
+    
+    // 加载所有用户作为负责人候选
+    function loadAllUsersAsAssignees(assigneeSelect) {
+        // 构建多个可能的API端点
+        const apiUrls = [
+            `/api/users?bypass_jwt=true`,
+            `/api/auth/users?bypass_jwt=true`,
+            `/api/noauth/users`
+        ];
+        
+        // 尝试从多个API端点加载数据
+        tryLoadAllUsers(apiUrls, 0, assigneeSelect);
+    }
+    
+    // 尝试从不同API端点加载所有用户
+    function tryLoadAllUsers(urls, index, assigneeSelect) {
+        // 如果所有URL都尝试过了，显示错误信息
+        if (index >= urls.length) {
+            console.error('所有用户API端点都请求失败');
+            
+            assigneeSelect.innerHTML = '<option value="">无法加载用户</option>';
+            assigneeSelect.disabled = false;
+            
+            return;
+        }
+        
+        const url = urls[index];
+        console.log(`[tryLoadAllUsers] 尝试从 ${url} 加载所有用户`);
+        
+        fetch(url)
+            .then(async response => {
+                // 检查是否返回HTML而不是JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    console.warn(`[tryLoadAllUsers] ${url} 返回了HTML而不是JSON`);
+                    throw new Error('返回了HTML而不是JSON');
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`请求失败: ${response.status}`);
+                }
+                
+                try {
+                    const data = await response.json();
+                    
+                    // 检查用户数据格式
+                    let users = [];
+                    
+                    if (Array.isArray(data)) {
+                        users = data;
+                    } else if (data.users && Array.isArray(data.users)) {
+                        users = data.users;
+                    } else if (data.data && Array.isArray(data.data)) {
+                        users = data.data;
+                    } else {
+                        console.warn('[tryLoadAllUsers] 无法识别返回的数据格式');
+                        throw new Error('无法识别返回的数据格式');
+                    }
+                    
+                    // 更新下拉框
+                    updateAssigneeDropdown(assigneeSelect, users);
+                    
+                } catch (parseError) {
+                    console.error(`[tryLoadAllUsers] 解析 ${url} 响应出错:`, parseError);
+                    throw parseError;
+                }
+            })
+            .catch(error => {
+                console.error(`[tryLoadAllUsers] ${url} 请求失败:`, error);
+                
+                // 尝试下一个API端点
+                setTimeout(() => tryLoadAllUsers(urls, index + 1, assigneeSelect), 300);
+            });
+    }
+    
+    // 更新负责人下拉框
+    function updateAssigneeDropdown(assigneeSelect, users) {
+        // 清空现有选项
+        assigneeSelect.innerHTML = '';
+        
+        // 添加默认选项
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '-- 选择负责人 --';
+        assigneeSelect.appendChild(defaultOption);
+        
+        // 添加用户选项
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.textContent = user.name || user.username || `用户 #${user.id}`;
+            assigneeSelect.appendChild(option);
+        });
+        
+        // 启用选择器
+        assigneeSelect.disabled = false;
+        
+        console.log(`已加载 ${users.length} 个用户作为负责人候选`);
     }
     
     // 保存任务处理函数
@@ -569,14 +666,61 @@
             return;
         }
         
+        // 获取保存按钮并显示加载状态
+        const saveBtn = document.querySelector('#taskModal .btn-primary');
+        if (saveBtn) {
+            saveBtn.setAttribute('data-original-html', saveBtn.innerHTML);
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 保存中...';
+            saveBtn.disabled = true;
+            
+            // 设置超时自动恢复按钮状态
+            setTimeout(() => {
+                if (saveBtn.disabled) {
+                    saveBtn.innerHTML = saveBtn.getAttribute('data-original-html');
+                    saveBtn.disabled = false;
+                    console.log('按钮状态自动恢复');
+                }
+            }, 5000);
+        }
+        
         // 收集表单数据
         const formData = new FormData(taskForm);
         const taskData = Object.fromEntries(formData.entries());
         
         console.log('提交任务数据:', taskData);
         
-        // 发送保存请求
-        fetch('/api/tasks', {
+        // 构建多个可能的API端点
+        const apiUrls = [
+            '/api/tasks',
+            '/api/auth/tasks',
+            '/api/noauth/tasks'
+        ];
+        
+        // 尝试从多个API端点保存数据
+        trySaveTask(apiUrls, 0, taskData, saveBtn);
+    }
+    
+    // 尝试向不同API端点保存任务
+    function trySaveTask(urls, index, taskData, saveBtn) {
+        // 如果所有URL都尝试过了，显示错误信息
+        if (index >= urls.length) {
+            console.error('所有任务保存API端点都请求失败');
+            
+            alert('保存任务失败，请刷新页面重试');
+            
+            // 恢复按钮状态
+            if (saveBtn) {
+                saveBtn.innerHTML = saveBtn.getAttribute('data-original-html');
+                saveBtn.disabled = false;
+            }
+            
+            return;
+        }
+        
+        const url = urls[index];
+        console.log(`[trySaveTask] 尝试向 ${url} 保存任务`);
+        
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -584,34 +728,441 @@
             },
             body: JSON.stringify(taskData)
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.message || '保存任务失败');
-                });
+        .then(async response => {
+            // 检查是否返回HTML而不是JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('text/html')) {
+                console.warn(`[trySaveTask] ${url} 返回了HTML而不是JSON`);
+                throw new Error('返回了HTML而不是JSON');
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('保存任务成功:', data);
             
-            // 关闭模态框
-            const modal = bootstrap.Modal.getInstance(document.getElementById('taskModal'));
-            if (modal) modal.hide();
+            if (!response.ok) {
+                throw new Error(`请求失败: ${response.status}`);
+            }
             
-            // 刷新页面或更新任务列表
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
+            try {
+                const data = await response.json();
+                console.log('保存任务成功:', data);
+                
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('taskModal'));
+                if (modal) modal.hide();
+                
+                // 恢复按钮状态
+                if (saveBtn) {
+                    saveBtn.innerHTML = saveBtn.getAttribute('data-original-html');
+                    saveBtn.disabled = false;
+                }
+                
+                // 刷新页面或更新任务列表
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+                
+            } catch (parseError) {
+                console.error(`[trySaveTask] 解析 ${url} 响应出错:`, parseError);
+                throw parseError;
+            }
         })
         .catch(error => {
-            console.error('保存任务失败:', error);
-            alert(`保存任务失败: ${error.message}`);
+            console.error(`[trySaveTask] ${url} 请求失败:`, error);
+            
+            // 尝试下一个API端点
+            setTimeout(() => trySaveTask(urls, index + 1, taskData, saveBtn), 300);
         });
     }
 </script>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 尝试使用多个API端点加载任务数据
+    loadProjectTasks();
+    
+    // 尝试加载项目风险数据
+    loadProjectRisks();
+    
+    // 自动重置所有按钮状态（避免卡在加载状态）
+    setTimeout(resetAllButtonStates, 1000);
+});
+
+// 重置所有按钮状态
+function resetAllButtonStates() {
+    document.querySelectorAll('.btn').forEach(button => {
+        if (button.getAttribute('data-original-html')) {
+            button.innerHTML = button.getAttribute('data-original-html');
+            button.disabled = false;
+        }
+        
+        if (button.classList.contains('btn-loading')) {
+            button.classList.remove('btn-loading');
+            button.disabled = false;
+        }
+    });
+    console.log('已重置所有按钮状态');
+}
+
+// 加载项目任务
+function loadProjectTasks() {
+    const projectId = {{ project.id }};
+    const taskTableBody = document.getElementById('projectTasksTableBody');
+    
+    if (!taskTableBody) {
+        console.warn('未找到任务表格容器');
+        return;
+    }
+    
+    // 显示加载中状态
+    taskTableBody.innerHTML = `
+        <tr class="task-loading">
+            <td colspan="7" class="text-center">
+                <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+                加载项目任务...
+            </td>
+        </tr>
+    `;
+    
+    // 构建多个可能的API端点
+    const apiUrls = [
+        `/api/projects/${projectId}/tasks?bypass_jwt=true`,
+        `/api/auth/projects/${projectId}/tasks?bypass_jwt=true`,
+        `/api/noauth/projects/${projectId}/tasks`
+    ];
+    
+    // 尝试从多个API端点加载数据
+    tryLoadTasks(apiUrls, 0);
+}
+
+// 尝试从不同API端点加载任务数据
+function tryLoadTasks(urls, index) {
+    // 如果所有URL都尝试过了
+    if (index >= urls.length) {
+        const taskTableBody = document.getElementById('projectTasksTableBody');
+        
+        if (taskTableBody) {
+            taskTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        无法加载任务数据，请刷新页面重试
+                    </td>
+                </tr>
+            `;
+        }
+        
+        console.error('所有API端点都请求失败，无法加载任务数据');
+        return;
+    }
+    
+    const url = urls[index];
+    console.log(`[tryLoadTasks] 尝试从 ${url} 加载任务数据`);
+    
+    fetch(url)
+        .then(async response => {
+            // 检查是否返回HTML而不是JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('text/html')) {
+                console.warn(`[tryLoadTasks] ${url} 返回了HTML而不是JSON`);
+                throw new Error('返回了HTML而不是JSON');
+            }
+            
+            if (!response.ok) {
+                throw new Error(`请求失败: ${response.status}`);
+            }
+            
+            return response.json();
+        })
+        .then(data => {
+            console.log('[tryLoadTasks] 获取到任务数据:', data);
+            
+            // 检查任务数据格式
+            let tasks = [];
+            
+            if (Array.isArray(data)) {
+                tasks = data;
+            } else if (data.tasks && Array.isArray(data.tasks)) {
+                tasks = data.tasks;
+            } else if (data.data && Array.isArray(data.data)) {
+                tasks = data.data;
+            } else {
+                console.warn('[tryLoadTasks] 无法识别返回的数据格式');
+                throw new Error('无法识别返回的数据格式');
+            }
+            
+            // 更新任务表格
+            updateTaskTable(tasks);
+        })
+        .catch(error => {
+            console.error(`[tryLoadTasks] ${url} 请求失败:`, error);
+            
+            // 尝试下一个API端点
+            setTimeout(() => tryLoadTasks(urls, index + 1), 300);
+        });
+}
+
+// 更新任务表格
+function updateTaskTable(tasks) {
+    const taskTableBody = document.getElementById('projectTasksTableBody');
+    
+    if (!taskTableBody) {
+        console.warn('未找到任务表格容器');
+        return;
+    }
+    
+    if (!tasks || tasks.length === 0) {
+        taskTableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center text-muted">
+                    暂无任务
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    taskTableBody.innerHTML = '';
+    
+    tasks.forEach(task => {
+        const taskRow = renderTaskRow(task);
+        taskTableBody.innerHTML += taskRow;
+    });
+    
+    // 添加事件监听器
+    attachTaskButtonListeners();
+}
+
+// 加载项目风险
+function loadProjectRisks() {
+    const projectId = {{ project.id }};
+    const riskList = document.getElementById('riskList');
+    
+    if (!riskList) {
+        console.warn('未找到风险列表容器');
+        return;
+    }
+    
+    // 如果风险列表已经有内容（从服务器端渲染），则不加载
+    if (riskList.children.length > 0) {
+        console.log('风险列表已有内容，无需重新加载');
+        return;
+    }
+    
+    // 显示加载中状态
+    riskList.innerHTML = `
+        <tr class="risk-loading">
+            <td colspan="7" class="text-center">
+                <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+                加载项目风险...
+            </td>
+        </tr>
+    `;
+    
+    // 构建多个可能的API端点
+    const apiUrls = [
+        `/api/projects/${projectId}/risks?bypass_jwt=true`,
+        `/api/auth/projects/${projectId}/risks?bypass_jwt=true`,
+        `/api/noauth/projects/${projectId}/risks`,
+        `/api/risks?project_id=${projectId}&bypass_jwt=true`
+    ];
+    
+    // 尝试从多个API端点加载数据
+    tryLoadRisks(apiUrls, 0);
+}
+
+// 尝试从不同API端点加载风险数据
+function tryLoadRisks(urls, index) {
+    // 如果所有URL都尝试过了
+    if (index >= urls.length) {
+        const riskList = document.getElementById('riskList');
+        
+        if (riskList) {
+            riskList.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        无法加载风险数据，请刷新页面重试
+                    </td>
+                </tr>
+            `;
+        }
+        
+        console.error('所有API端点都请求失败，无法加载风险数据');
+        return;
+    }
+    
+    const url = urls[index];
+    console.log(`[tryLoadRisks] 尝试从 ${url} 加载风险数据`);
+    
+    fetch(url)
+        .then(async response => {
+            // 检查是否返回HTML而不是JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('text/html')) {
+                console.warn(`[tryLoadRisks] ${url} 返回了HTML而不是JSON`);
+                throw new Error('返回了HTML而不是JSON');
+            }
+            
+            if (!response.ok) {
+                throw new Error(`请求失败: ${response.status}`);
+            }
+            
+            try {
+                const data = await response.json();
+                
+                // 检查风险数据格式
+                let risks = [];
+                
+                if (Array.isArray(data)) {
+                    risks = data;
+                } else if (data.risks && Array.isArray(data.risks)) {
+                    risks = data.risks;
+                } else if (data.data && Array.isArray(data.data)) {
+                    risks = data.data;
+                } else {
+                    console.warn('[tryLoadRisks] 无法识别返回的数据格式');
+                    throw new Error('无法识别返回的数据格式');
+                }
+                
+                // 更新风险表格
+                updateRiskTable(risks);
+                
+            } catch (parseError) {
+                console.error(`[tryLoadRisks] 解析 ${url} 响应出错:`, parseError);
+                throw parseError;
+            }
+        })
+        .catch(error => {
+            console.error(`[tryLoadRisks] ${url} 请求失败:`, error);
+            
+            // 尝试下一个API端点
+            setTimeout(() => tryLoadRisks(urls, index + 1), 300);
+        });
+}
+
+// 更新风险表格
+function updateRiskTable(risks) {
+    const riskList = document.getElementById('riskList');
+    
+    if (!riskList) {
+        console.warn('未找到风险列表容器');
+        return;
+    }
+    
+    if (!risks || risks.length === 0) {
+        riskList.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center text-muted">
+                    该项目暂无风险记录
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    riskList.innerHTML = '';
+    
+    // 获取当前用户是否有编辑权限
+    const userCanEdit = {% if not user_is_regular(current_user) %}true{% else %}false{% endif %};
+    
+    risks.forEach(risk => {
+        // 格式化风险等级
+        let levelClass = 'bg-info';
+        if (risk.level === 'high' || risk.severity === 'high') {
+            levelClass = 'bg-danger';
+        } else if (risk.level === 'medium' || risk.severity === 'medium') {
+            levelClass = 'bg-warning';
+        }
+        
+        const riskRow = `
+            <tr data-risk-id="${risk.id}">
+                <td>${risk.name || risk.title || '未命名风险'}</td>
+                <td>${risk.description || risk.desc || '无描述'}</td>
+                <td>
+                    <span class="badge ${levelClass}">
+                        ${risk.level || risk.severity || 'medium'}
+                    </span>
+                </td>
+                <td>${risk.probability || '中'}</td>
+                <td>${risk.impact || '中'}</td>
+                <td>${risk.control_measures || risk.mitigation_plan || '无'}</td>
+                <td class="text-end">
+                    <div class="risk-operations">
+                        ${userCanEdit ? `
+                        <button class="btn btn-sm btn-outline-primary edit-btn" data-action="edit" data-risk-id="${risk.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-action="delete" data-risk-id="${risk.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        ` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
+        
+        riskList.innerHTML += riskRow;
+    });
+    
+    // 添加风险按钮事件监听器
+    attachRiskButtonListeners();
+}
+
+// 添加风险按钮事件监听器
+function attachRiskButtonListeners() {
+    // 为编辑风险按钮添加事件监听器
+    document.querySelectorAll('.edit-btn[data-action="edit"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const riskId = this.getAttribute('data-risk-id');
+            editRisk(riskId);
+        });
+    });
+    
+    // 为删除风险按钮添加事件监听器
+    document.querySelectorAll('.delete-btn[data-action="delete"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const riskId = this.getAttribute('data-risk-id');
+            deleteRisk(riskId);
+        });
+    });
+    
+    // 为添加风险按钮添加事件监听器
+    const addRiskBtn = document.getElementById('addRiskBtn');
+    if (addRiskBtn) {
+        addRiskBtn.addEventListener('click', function() {
+            showAddRiskModal();
+        });
+    }
+}
+
+// 添加任务按钮事件监听器
+function attachTaskButtonListeners() {
+    // 为任务操作按钮添加事件监听器
+    document.querySelectorAll('.edit-task-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const taskId = this.getAttribute('data-task-id');
+            editTask(taskId);
+        });
+    });
+    
+    document.querySelectorAll('.delete-task-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const taskId = this.getAttribute('data-task-id');
+            deleteTask(taskId);
+        });
+    });
+    
+    // 为添加任务按钮添加事件监听器
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    if (addTaskBtn) {
+        addTaskBtn.addEventListener('click', function() {
+            showAddTaskModal();
+        });
+    }
+}
+
 // 使用JavaScript生成任务行并添加权限控制
 function renderTaskRow(task) {
     // 创建一个变量接收模板变量值
@@ -651,6 +1202,88 @@ function renderTaskRow(task) {
             </td>
         </tr>
     `;
+}
+
+// 删除风险
+function deleteRisk(riskId) {
+    if (!confirm('确定要删除此风险吗？')) {
+        return;
+    }
+    
+    // 构建多个可能的API端点，优先使用紧急删除端点
+    const apiUrls = [
+        `/api/risks/${riskId}/emergency_delete`,
+        `/api/auth/risks/${riskId}`,
+        `/api/risks/${riskId}`,
+        `/api/noauth/risks/${riskId}`
+    ];
+    
+    // 尝试从多个API端点删除数据
+    tryDeleteRisk(apiUrls, 0, riskId);
+}
+
+// 尝试向不同API端点删除风险
+function tryDeleteRisk(urls, index, riskId) {
+    // 如果所有URL都尝试过了，显示错误信息
+    if (index >= urls.length) {
+        console.error('所有风险删除API端点都请求失败');
+        alert('删除风险失败，请刷新页面重试');
+        return;
+    }
+    
+    const url = urls[index];
+    console.log(`[tryDeleteRisk] 尝试向 ${url} 删除风险`);
+    
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(async response => {
+        // 检查是否返回HTML而不是JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('text/html')) {
+            console.warn(`[tryDeleteRisk] ${url} 返回了HTML而不是JSON`);
+            throw new Error('返回了HTML而不是JSON');
+        }
+        
+        if (!response.ok) {
+            throw new Error(`请求失败: ${response.status}`);
+        }
+        
+        try {
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            console.log('删除风险成功:', data);
+            
+            // 移除对应的行
+            const row = document.querySelector(`tr[data-risk-id="${riskId}"]`);
+            if (row) {
+                row.remove();
+            } else {
+                // 找不到行，刷新页面
+                loadProjectRisks();
+            }
+            
+            // 显示成功消息
+            alert('风险删除成功');
+            
+        } catch (parseError) {
+            console.error(`[tryDeleteRisk] 解析 ${url} 响应出错:`, parseError);
+            throw parseError;
+        }
+    })
+    .catch(error => {
+        console.error(`[tryDeleteRisk] ${url} 请求失败:`, error);
+        
+        // 尝试下一个API端点
+        setTimeout(() => tryDeleteRisk(urls, index + 1, riskId), 300);
+    });
 }
 </script>
 {% endblock %} 

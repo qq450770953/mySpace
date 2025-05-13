@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}项目详情 - {{ project.name }}{% endblock %}
+
+{% block header %}项目详情 - {{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="alert alert-info">
+    <h4 class="alert-heading">简化视图</h4>
+    <p>由于检测到重定向循环问题，系统将显示简化版的项目详情页面。</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="card-title">项目基本信息</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>项目ID:</strong> {{ project.id }}</p>
+                <p><strong>项目名称:</strong> {{ project.name }}</p>
+                <p><strong>项目负责人:</strong> {{ project.manager }}</p>
+                <p><strong>项目状态:</strong> {{ project.status }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>开始日期:</strong> {{ project.start_date }}</p>
+                <p><strong>结束日期:</strong> {{ project.end_date }}</p>
+                <p><strong>项目进度:</strong> {{ project.progress }}%</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h6>项目描述:</h6>
+                <p>{{ project.description or '无项目描述' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="card-title">错误恢复指南</h5>
+    </div>
+    <div class="card-body">
+        <p>如果您需要查看完整的项目详情，请尝试以下操作：</p>
+        <ol>
+            <li>返回<a href="{{ url_for('main.dashboard') }}">仪表盘</a>或<a href="{{ url_for('main.projects') }}">项目列表</a></li>
+            <li>清除浏览器缓存和Cookie</li>
+            <li>重新登录系统</li>
+            <li>重新访问项目详情页面</li>
+        </ol>
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> 如果问题持续存在，请联系系统管理员
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between">
+    <a href="{{ url_for('main.projects') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> 返回项目列表
+    </a>
+</div>
+{% endblock %} 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gantt Chart Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #result { white-space: pre-wrap; background: #f5f5f5; padding: 10px; border: 1px solid #ddd; }
+        .status { margin: 10px 0; }
+        button { padding: 8px 16px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Gantt Chart Data Test</h1>
+    <button id="fetchBtn">Fetch Gantt Data</button>
+    <p class="status" id="status">Click the button to fetch data</p>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('fetchBtn').addEventListener('click', function() {
+            const statusEl = document.getElementById('status');
+            const resultEl = document.getElementById('result');
+            
+            statusEl.textContent = 'Fetching data...';
+            resultEl.textContent = '';
+            
+            fetch('/tasks/project/all/gantt/data?bypass_jwt=true', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                statusEl.textContent = 'Data fetched successfully!';
+                resultEl.textContent = JSON.stringify(data, null, 2);
+                
+                // Display summary
+                const taskCount = data.data ? data.data.length : 0;
+                const linksCount = data.links ? data.links.length : 0;
+                
+                const summaryEl = document.createElement('div');
+                summaryEl.innerHTML = `<h3>Summary</h3>
+                <p>Tasks: ${taskCount}</p>
+                <p>Links: ${linksCount}</p>`;
+                
+                resultEl.prepend(summaryEl);
+            })
+            .catch(error => {
+                statusEl.textContent = `Error: ${error.message}`;
+                resultEl.textContent = `Failed to fetch data: ${error.message}`;
+            });
+        });
+    </script>
+</body>
+</html> 

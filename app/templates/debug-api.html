@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API调试工具 - 项目管理系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .json-key {
+            color: #e83e8c;
+        }
+        .json-string {
+            color: #28a745;
+        }
+        .json-number {
+            color: #17a2b8;
+        }
+        .json-boolean {
+            color: #fd7e14;
+        }
+        .json-null {
+            color: #6c757d;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .result-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">项目API调试工具</h1>
+        
+        <div class="alert alert-info">
+            此页面用于测试和调试项目相关的API端点。可以帮助识别和解决API调用中的问题。
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">API测试</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="projectId" class="form-label">项目ID</label>
+                            <input type="number" class="form-control" id="projectId" value="1">
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button id="csrfTokenBtn" class="btn btn-secondary">获取CSRF令牌</button>
+                            <button id="editorApiBtn" class="btn btn-primary">测试项目编辑器API</button>
+                            <button id="standardApiBtn" class="btn btn-primary">测试标准项目API</button>
+                            <button id="noauthApiBtn" class="btn btn-primary">测试项目无认证API</button>
+                            <button id="comprehensiveTestBtn" class="btn btn-success">综合测试与问题诊断</button>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <label for="projectData" class="form-label">项目数据 (用于更新测试)</label>
+                            <textarea class="form-control" id="projectData" rows="5">{
+  "name": "测试更新项目",
+  "description": "API测试更新",
+  "status": "active",
+  "start_date": "2023-01-01",
+  "end_date": "2023-12-31"
+}</textarea>
+                        </div>
+                        
+                        <button id="updateApiBtn" class="btn btn-warning mt-2">测试更新项目API</button>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">问题诊断与修复</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <button id="refreshCsrfBtn" class="btn btn-info">刷新CSRF令牌</button>
+                            <button id="clearCacheBtn" class="btn btn-danger">清除本地缓存</button>
+                        </div>
+                        <div class="mb-3">
+                            <button id="fixCsrfBtn" class="btn btn-success">修复CSRF问题</button>
+                        </div>
+                        <div class="alert alert-secondary">
+                            <strong>提示:</strong> 如果API调用失败，您可以尝试刷新CSRF令牌或清除本地缓存，然后重试。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">结果</div>
+                    <div class="card-body result-container">
+                        <pre id="apiResult">等待API测试结果...</pre>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">调试状态</div>
+                    <div class="card-body">
+                        <p><strong>CSRF令牌:</strong> <span id="csrfStatus">未获取</span></p>
+                        <p><strong>Cookie状态:</strong> <span id="cookieStatus">正在检查...</span></p>
+                        <p><strong>API状态:</strong> <span id="apiStatus">未测试</span></p>
+                        <div id="recommendations" class="alert alert-light" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/debug-api.js') }}"></script>
+    <script>
+        // 格式化JSON显示
+        function formatJSON(obj) {
+            return JSON.stringify(obj, null, 2);
+        }
+        
+        // 高亮显示JSON
+        function syntaxHighlight(json) {
+            if (typeof json !== 'string') {
+                json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'json-number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+        
+        function formatResult(result) {
+            if (!result) return "无结果";
+            
+            try {
+                return syntaxHighlight(formatJSON(result));
+            } catch (e) {
+                return String(result);
+            }
+        }
+        
+        // 检查Cookie状态
+        function checkCookieStatus() {
+            const cookieStatus = document.getElementById('cookieStatus');
+            const cookies = document.cookie.split(';').map(c => c.trim());
+            const csrfCookie = cookies.find(c => c.startsWith('csrf_token='));
+            
+            if (csrfCookie) {
+                cookieStatus.textContent = `已设置 (${csrfCookie.split('=')[1].substring(0, 10)}...)`;
+                cookieStatus.className = "text-success";
+            } else {
+                cookieStatus.textContent = "未设置CSRF Cookie";
+                cookieStatus.className = "text-danger";
+            }
+        }
+        
+        // 显示推荐修复建议
+        function showRecommendations(recommendations) {
+            const recommendationsElement = document.getElementById('recommendations');
+            if (!recommendations || recommendations.length === 0) {
+                recommendationsElement.style.display = 'none';
+                return;
+            }
+            
+            recommendationsElement.innerHTML = `
+                <h5>修复建议:</h5>
+                <ul>
+                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            `;
+            recommendationsElement.style.display = 'block';
+        }
+        
+        // 清除本地缓存
+        function clearLocalCache() {
+            const keys = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.includes('project_info_')) {
+                    keys.push(key);
+                }
+            }
+            
+            keys.forEach(key => localStorage.removeItem(key));
+            return keys.length;
+        }
+        
+        // 修复CSRF问题
+        async function fixCsrfIssues() {
+            // 1. 刷新CSRF令牌
+            await window.debugApi.getCsrfToken();
+            
+            // 2. 清除本地存储的项目数据
+            const clearedItems = clearLocalCache();
+            
+            // 3. 设置META标签
+            let metaTag = document.querySelector('meta[name="csrf-token"]');
+            if (!metaTag) {
+                metaTag = document.createElement('meta');
+                metaTag.name = 'csrf-token';
+                document.head.appendChild(metaTag);
+            }
+            
+            const csrfCookie = document.cookie.split(';').map(c => c.trim())
+                .find(c => c.startsWith('csrf_token='));
+            
+            if (csrfCookie) {
+                const token = csrfCookie.split('=')[1];
+                metaTag.content = token;
+            }
+            
+            // 4. 更新界面状态
+            checkCookieStatus();
+            document.getElementById('csrfStatus').textContent = metaTag.content 
+                ? `已设置 (${metaTag.content.substring(0, 10)}...)` 
+                : '未设置';
+            
+            // 返回修复结果
+            return {
+                tokenRefreshed: !!metaTag.content,
+                cacheCleared: clearedItems,
+                metaTagSet: !!metaTag.content
+            };
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查初始状态
+            checkCookieStatus();
+            
+            // 初始化按钮事件
+            document.getElementById('csrfTokenBtn').addEventListener('click', async () => {
+                const result = await window.debugApi.getCsrfToken();
+                document.getElementById('apiResult').innerHTML = formatResult({token: result});
+                document.getElementById('csrfStatus').textContent = result 
+                    ? `已获取 (${result.substring(0, 10)}...)` 
+                    : '获取失败';
+                checkCookieStatus();
+            });
+            
+            document.getElementById('editorApiBtn').addEventListener('click', async () => {
+                const projectId = document.getElementById('projectId').value;
+                document.getElementById('apiStatus').textContent = '测试中...';
+                const result = await window.debugApi.getProjectEditor(projectId);
+                document.getElementById('apiResult').innerHTML = formatResult(result);
+                document.getElementById('apiStatus').textContent = result.ok ? '最后测试成功' : '最后测试失败';
+            });
+            
+            document.getElementById('standardApiBtn').addEventListener('click', async () => {
+                const projectId = document.getElementById('projectId').value;
+                document.getElementById('apiStatus').textContent = '测试中...';
+                const result = await window.debugApi.getProject(projectId);
+                document.getElementById('apiResult').innerHTML = formatResult(result);
+                document.getElementById('apiStatus').textContent = result.ok ? '最后测试成功' : '最后测试失败';
+            });
+            
+            document.getElementById('noauthApiBtn').addEventListener('click', async () => {
+                const projectId = document.getElementById('projectId').value;
+                document.getElementById('apiStatus').textContent = '测试中...';
+                const result = await window.debugApi.getNoauthProject(projectId);
+                document.getElementById('apiResult').innerHTML = formatResult(result);
+                document.getElementById('apiStatus').textContent = result.ok ? '最后测试成功' : '最后测试失败';
+            });
+            
+            document.getElementById('updateApiBtn').addEventListener('click', async () => {
+                const projectId = document.getElementById('projectId').value;
+                document.getElementById('apiStatus').textContent = '测试中...';
+                
+                let projectData;
+                try {
+                    projectData = JSON.parse(document.getElementById('projectData').value);
+                } catch (e) {
+                    document.getElementById('apiResult').innerHTML = formatResult({
+                        error: '项目数据不是有效的JSON',
+                        details: e.message
+                    });
+                    document.getElementById('apiStatus').textContent = '测试失败 - 无效JSON';
+                    return;
+                }
+                
+                const result = await window.debugApi.updateProject(projectId, projectData);
+                document.getElementById('apiResult').innerHTML = formatResult(result);
+                document.getElementById('apiStatus').textContent = result.ok ? '最后测试成功' : '最后测试失败';
+            });
+            
+            document.getElementById('refreshCsrfBtn').addEventListener('click', async () => {
+                const result = await window.debugApi.getCsrfToken();
+                document.getElementById('apiResult').innerHTML = formatResult({
+                    action: '刷新CSRF令牌',
+                    result: !!result,
+                    token: result ? result.substring(0, 10) + '...' : null
+                });
+                document.getElementById('csrfStatus').textContent = result 
+                    ? `已刷新 (${result.substring(0, 10)}...)` 
+                    : '刷新失败';
+                checkCookieStatus();
+            });
+            
+            document.getElementById('clearCacheBtn').addEventListener('click', () => {
+                const count = clearLocalCache();
+                document.getElementById('apiResult').innerHTML = formatResult({
+                    action: '清除本地缓存',
+                    itemsCleared: count
+                });
+            });
+            
+            document.getElementById('fixCsrfBtn').addEventListener('click', async () => {
+                const result = await fixCsrfIssues();
+                document.getElementById('apiResult').innerHTML = formatResult({
+                    action: '修复CSRF问题',
+                    ...result,
+                    message: '已尝试修复CSRF相关问题'
+                });
+            });
+            
+            document.getElementById('comprehensiveTestBtn').addEventListener('click', async () => {
+                const projectId = document.getElementById('projectId').value;
+                document.getElementById('apiStatus').textContent = '全面测试中...';
+                document.getElementById('apiResult').innerHTML = '正在执行综合测试，请稍候...';
+                
+                const result = await window.debugApi.testAndFix(projectId);
+                document.getElementById('apiResult').innerHTML = formatResult(result);
+                
+                // 更新状态
+                document.getElementById('apiStatus').textContent = '测试完成';
+                document.getElementById('csrfStatus').textContent = result.csrfToken 
+                    ? `有效 (${result.csrfToken.substring(0, 10)}...)` 
+                    : '无效';
+                
+                // 显示建议
+                showRecommendations(result.recommendations);
+                
+                // 更新cookie状态
+                checkCookieStatus();
+            });
+        });
+    </script>
+</body>
+</html> 

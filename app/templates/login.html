@@ -90,7 +90,7 @@
                         {% endif %}
                     {% endwith %}
 
-                    <form id="loginForm" method="POST" action="/login">
+                    <form id="loginForm" method="POST" action="/auth/login">
                         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
                         <div class="mb-3">
                             <label for="username" class="form-label">用户名</label>
@@ -134,6 +134,41 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log("登录页面加载 - 检查角色状态");
         
+        // 检查localStorage中是否已有admin用户信息
+        try {
+            const userInfoStr = localStorage.getItem('user_info');
+            if (userInfoStr) {
+                const userInfo = JSON.parse(userInfoStr);
+                if (userInfo && (userInfo.username === 'admin' || userInfo.id === 1)) {
+                    console.log("登录页面检测到admin用户信息，确保admin标志被设置");
+                    // 设置admin标志
+                    localStorage.setItem('is_admin', 'true');
+                    localStorage.setItem('admin', 'true');
+                    localStorage.setItem('admin_role', 'true');
+                    document.cookie = 'is_admin=true; path=/; max-age=604800; SameSite=Lax';
+                    document.cookie = 'admin=true; path=/; max-age=604800; SameSite=Lax';
+                    document.cookie = 'admin_role=true; path=/; max-age=604800; SameSite=Lax';
+                    
+                    // 确保roles中包含admin
+                    let roles = localStorage.getItem('user_roles') || '';
+                    roles = roles ? roles.split(',') : [];
+                    if (!roles.includes('admin')) {
+                        roles.push('admin');
+                        localStorage.setItem('user_roles', roles.join(','));
+                        document.cookie = 'user_roles=' + roles.join(',') + '; path=/; max-age=604800; SameSite=Lax';
+                    }
+                    
+                    // 自动设置表单用户名为admin
+                    const usernameField = document.getElementById('username');
+                    if (usernameField && !usernameField.value) {
+                        usernameField.value = userInfo.username;
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("检查用户信息失败:", e);
+        }
+        
         // 检查localStorage中的角色信息
         const storedRoles = localStorage.getItem('user_roles');
         console.log("localStorage中的用户角色:", storedRoles);
@@ -149,6 +184,12 @@
         const cookieRoles = getCookie('user_roles');
         console.log("Cookie中的用户角色:", cookieRoles);
         
+        // 检查是否有admin标志
+        const isAdmin = localStorage.getItem('is_admin') === 'true' || 
+                       getCookie('is_admin') === 'true' || 
+                       getCookie('admin') === 'true';
+        console.log("是否有admin标志:", isAdmin);
+        
         // 检查JWT中的角色信息
         const token = localStorage.getItem('access_token');
         if (token) {
@@ -158,9 +199,34 @@
                 // Base64解码
                 const decoded = JSON.parse(atob(payload));
                 console.log("JWT中的用户信息:", decoded);
+                
+                // 检查JWT中的admin标志或admin角色
+                if (decoded.admin === true || 
+                    (decoded.roles && 
+                     ((Array.isArray(decoded.roles) && decoded.roles.includes('admin')) || 
+                      (typeof decoded.roles === 'string' && decoded.roles.includes('admin'))))) {
+                    console.log("JWT中检测到admin权限，确保系统标志同步");
+                    localStorage.setItem('is_admin', 'true');
+                    document.cookie = 'is_admin=true; path=/; max-age=604800; SameSite=Lax';
+                }
             } catch (e) {
                 console.error("解析JWT失败:", e);
             }
+        }
+    });
+    
+    // 为登录表单添加提交检查，检查是否为admin用户
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        const username = document.getElementById('username').value;
+        
+        // 如果是admin用户，预先设置标志，以确保即使登录过程中出现问题也能识别admin
+        if (username === 'admin') {
+            console.log("检测到admin用户登录，预先设置admin标志");
+            localStorage.setItem('admin_username', 'admin');
+            localStorage.setItem('login_admin_attempt', 'true');
+            localStorage.setItem('admin_login_time', Date.now());
+            
+            // 登录成功后，这些标志会被后续代码使用，确保admin角色被正确设置
         }
     });
 </script>

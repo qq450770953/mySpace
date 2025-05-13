@@ -111,6 +111,12 @@
         // 添加CSRF令牌到请求头
         options.headers['X-CSRF-TOKEN'] = token;
         
+        // 将CSRF令牌作为URL参数添加到请求中，实现double submit
+        if (!url.includes('csrf_token=')) {
+            const separator = url.includes('?') ? '&' : '?';
+            url = `${url}${separator}csrf_token=${encodeURIComponent(token)}`;
+        }
+        
         // 确保包含credentials以发送cookie
         options.credentials = 'include';
         
@@ -120,8 +126,7 @@
             
             // 如果收到CSRF错误，尝试刷新令牌并重试一次
             if (response.status === 401 && 
-                (response.headers.get('X-CSRF-TOKEN-INVALID') || 
-                 await response.text().includes('CSRF token'))) {
+                (response.headers.get('X-CSRF-TOKEN-INVALID'))) {
                 console.log('CSRF token invalid, refreshing and retrying');
                 
                 // 清除当前token
@@ -135,7 +140,39 @@
                 
                 // 使用新token重试请求
                 options.headers['X-CSRF-TOKEN'] = token;
+                
+                // 更新URL中的token
+                url = url.replace(/csrf_token=[^&]+/, `csrf_token=${encodeURIComponent(token)}`);
+                
                 return fetch(url, options);
+            }
+            
+            // 如果是401错误，尝试检查响应体是否包含CSRF token错误信息
+            if (response.status === 401) {
+                // 克隆响应，因为response.text()只能被消费一次
+                const clonedResponse = response.clone();
+                const responseText = await clonedResponse.text();
+                
+                if (responseText.includes('CSRF token')) {
+                    console.log('CSRF token invalid in response body, refreshing and retrying');
+                    
+                    // 清除当前token
+                    _csrfToken = null;
+                    
+                    // 获取新token
+                    token = await refreshCsrfToken();
+                    if (!token) {
+                        throw new Error('Failed to refresh CSRF token');
+                    }
+                    
+                    // 使用新token重试请求
+                    options.headers['X-CSRF-TOKEN'] = token;
+                    
+                    // 更新URL中的token
+                    url = url.replace(/csrf_token=[^&]+/, `csrf_token=${encodeURIComponent(token)}`);
+                    
+                    return fetch(url, options);
+                }
             }
             
             return response;

@@ -99,4 +99,70 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<!-- 确保加载工具函数库 -->
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<!-- 加载dashboard.js -->
+<script>
+    // 首先尝试使用创建script标签的方式加载dashboard.js
+    function loadScript(src, callback) {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = src;
+        script.onerror = function() {
+            console.error('加载脚本失败:', src);
+            if (callback) callback(false);
+        };
+        script.onload = function() {
+            console.log('脚本加载成功:', src);
+            if (callback) callback(true);
+        };
+        document.head.appendChild(script);
+    }
+    
+    // 尝试加载dashboard.js
+    loadScript("{{ url_for('static', filename='js/dashboard.js') }}", function(success) {
+        if (!success) {
+            console.warn('dashboard.js加载失败，使用内联替代');
+            // 创建内联脚本进行应急处理
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.text = `
+                // 简化的dashboard.js内容
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('内联dashboard.js执行');
+                    // 检查用户角色
+                    var userInfo = localStorage.getItem('user_info');
+                    if (userInfo) {
+                        try {
+                            userInfo = JSON.parse(userInfo);
+                            console.log('当前用户:', userInfo.username);
+                            // 如果是admin用户强制设置admin角色
+                            if (userInfo.username === 'admin') {
+                                console.log('检测到admin用户，设置admin角色');
+                                localStorage.setItem('is_admin', 'true');
+                                document.cookie = 'is_admin=true; path=/; max-age=86400; SameSite=Lax';
+                                
+                                // 添加admin角色到角色列表
+                                var roles = localStorage.getItem('user_roles') || '';
+                                if (!roles.includes('admin')) {
+                                    roles = roles ? roles + ',admin' : 'admin';
+                                    localStorage.setItem('user_roles', roles);
+                                    document.cookie = \`user_roles=\${roles}; path=/; max-age=86400; SameSite=Lax\`;
+                                }
+                            }
+                        } catch(e) {
+                            console.error('处理用户信息出错:', e);
+                        }
+                    }
+                });
+            `;
+            document.head.appendChild(script);
+        }
+    });
+</script>
+<!-- 加载修复脚本 -->
+<script src="{{ url_for('static', filename='js/fix-modals.js') }}"></script>
 {% endblock %} 

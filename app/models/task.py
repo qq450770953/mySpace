@@ -58,9 +58,9 @@ class Task(db.Model):
     def __repr__(self):
         return f'<Task {self.title}>'
     
-    def to_dict(self):
+    def to_dict(self, include_relationships=False, include_details=False):
         """Convert task to dictionary representation"""
-        return {
+        task_dict = {
             'id': self.id,
             'title': self.title,
             'description': self.description,
@@ -75,17 +75,29 @@ class Task(db.Model):
             'assignee_id': self.assignee_id,
             'created_by': self.created_by,
             'team_id': self.team_id,
-            'project': self.project.to_dict() if self.project else None,
-            'assignee': self.assignee.to_dict() if self.assignee else None,
-            'creator': self.creator.to_dict() if self.creator else None,
-            'team': self.team.to_dict() if self.team else None,
-            'logs_count': self.logs.count(),
-            'comments_count': self.comments.count(),
-            'risks_count': self.risks.count(),
-            'resources_count': self.resources.count(),
-            'dependencies_count': self.dependencies.count(),
-            'dependents_count': self.dependents.count()
         }
+        
+        # 增加关联关系数据，需要包含关系数据时
+        if include_relationships:
+            task_dict.update({
+                'project': self.project.to_dict() if self.project else None,
+                'assignee': self.assignee.to_dict() if self.assignee else None,
+                'creator': self.creator.to_dict() if self.creator else None,
+                'team': self.team.to_dict() if self.team else None,
+            })
+            
+        # 增加统计数据，需要包含详细数据时
+        if include_details:
+            task_dict.update({
+                'logs_count': self.logs.count(),
+                'comments_count': self.comments.count(),
+                'risks_count': self.risks.count(),
+                'resources_count': self.resources.count() if hasattr(self, 'resources') else 0,
+                'dependencies_count': self.dependencies.count() if hasattr(self, 'dependencies') else 0,
+                'dependents_count': self.dependents.count() if hasattr(self, 'dependents') else 0
+            })
+        
+        return task_dict
     
     def calculate_progress(self):
         """计算任务进度"""

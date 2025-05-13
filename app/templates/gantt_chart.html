@@ -11,6 +11,13 @@
 <style>
     .gantt-container {
         overflow: auto;
+        height: 600px;
+        width: 100%;
+        min-width: 800px;
+        position: relative;
+        z-index: 1;
+        background-color: white;
+        display: block !important;
     }
     .gantt .bar-progress {
         fill: #2196F3;
@@ -38,6 +45,32 @@
     .gantt .bar.priority-high {
         stroke: #F44336;
         stroke-width: 2px;
+    }
+    
+    /* 确保甘特图区域可见 */
+    .gantt .grid-background {
+        fill: #ffffff;
+    }
+    .gantt svg {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+    }
+    .gantt {
+        font-family: sans-serif;
+        background-color: white;
+    }
+    
+    /* 确保错误消息正确显示 */
+    #gantt_error {
+        margin-top: 10px;
+    }
+    
+    /* 强制显示甘特图组件 */
+    #gantt, #gantt_container {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 </style>
 {% endblock %}
@@ -69,14 +102,28 @@ window.showGanttError = function(message) {
     if (loadingElement) {
         loadingElement.classList.add('d-none');
     }
-    
-    if (ganttContainer) {
-        ganttContainer.classList.add('d-none');
-    }
 };
 
 // 检查甘特图库是否加载成功
 window.addEventListener('load', function() {
+    console.log('页面加载完成，检查甘特图库...');
+    
+    // 强制移除所有d-none类
+    setTimeout(function() {
+        document.querySelectorAll('.d-none').forEach(function(el) {
+            if (el.id === 'gantt_error') return; // 保留错误容器的隐藏状态
+            el.classList.remove('d-none');
+            console.log('移除d-none类:', el.id);
+        });
+        
+        const ganttContainer = document.getElementById('gantt_container');
+        if (ganttContainer) {
+            ganttContainer.style.display = 'block';
+            ganttContainer.style.visibility = 'visible';
+            console.log('甘特图容器显示已强制设置为可见');
+        }
+    }, 500);
+    
     if (typeof Gantt === 'undefined') {
         console.error('Gantt库加载失败，尝试重新加载...');
         var script = document.createElement('script');
@@ -97,475 +144,14 @@ window.addEventListener('load', function() {
     }
 });
 </script>
+<!-- 确保甘特图库通过同步方式加载，防止初始化问题 -->
 <script src="{{ url_for('static', filename='js/frappe-gantt.js') }}"></script>
+<!-- 加载工具函数 -->
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 {% endblock %}
 
 {% block scripts %}
 <!-- 此区块已由base.html模板继承，我们将脚本放在extra_js块中 -->
-{% endblock %}
-
-{% block extra_js %}
-<script>
-function initGanttChart() {
-    console.log('开始初始化甘特图...');
-    
-    // 显示加载中
-    const loadingElement = document.getElementById('gantt_loading');
-    const errorElement = document.getElementById('gantt_error');
-    const ganttContainer = document.getElementById('gantt_container');
-    const errorMessageElement = document.getElementById('error_message');
-    
-    // 调试按钮事件处理
-    document.getElementById('debugButton').addEventListener('click', function() {
-        const debugInfo = document.getElementById('debug_info');
-        if (debugInfo.classList.contains('d-none')) {
-            debugInfo.classList.remove('d-none');
-            this.innerHTML = '<i class="bi bi-bug"></i> 隐藏调试';
-            
-            // 尝试重新获取数据并显示原始数据
-            fetch('/tasks/project/{{ project_id }}/gantt/data?bypass_jwt=true')
-                .then(response => response.json())
-                .then(data => {
-                    showDebugInfo({
-                        rawData: data,
-                        taskCount: data.data ? data.data.length : 0,
-                        linkCount: data.links ? data.links.length : 0,
-                        timestamp: new Date().toISOString()
-                    });
-                })
-                .catch(error => {
-                    showDebugInfo({
-                        error: '获取调试数据失败',
-                        message: error.message
-                    });
-                });
-        } else {
-            debugInfo.classList.add('d-none');
-            this.innerHTML = '<i class="bi bi-bug"></i> 调试';
-        }
-    });
-    
-    // 错误显示函数
-    function showError(message, details = '') {
-        loadingElement.classList.add('d-none');
-        errorElement.classList.remove('d-none');
-        ganttContainer.classList.add('d-none');
-        errorMessageElement.textContent = message;
-        console.error('甘特图错误:', message);
-        
-        // 如果有详细错误信息，保存到错误详情中
-        const errorDetailsContent = document.getElementById('error_details_content');
-        if (errorDetailsContent && details) {
-            errorDetailsContent.textContent = details;
-        }
-        
-        // 添加显示/隐藏错误详情的事件处理
-        const showErrorDetailsBtn = document.getElementById('show_error_details');
-        const errorDetailsDiv = document.getElementById('error_details');
-        
-        if (showErrorDetailsBtn && errorDetailsDiv) {
-            showErrorDetailsBtn.addEventListener('click', function() {
-                if (errorDetailsDiv.classList.contains('show')) {
-                    errorDetailsDiv.classList.remove('show');
-                    showErrorDetailsBtn.textContent = '显示详细错误';
-                } else {
-                    errorDetailsDiv.classList.add('show');
-                    showErrorDetailsBtn.textContent = '隐藏详细错误';
-                }
-            });
-        }
-    }
-    
-    // 显示甘特图
-    function showGantt() {
-        loadingElement.classList.add('d-none');
-        errorElement.classList.add('d-none');
-        ganttContainer.classList.remove('d-none');
-        console.log('甘特图已显示');
-    }
-    
-    // 显示调试信息
-    function showDebugInfo(info) {
-        const debugContent = document.getElementById('debug_content');
-        if (debugContent) {
-            debugContent.textContent = JSON.stringify(info, null, 2);
-        }
-    }
-    
-    try {
-        // 初始化错误捕获
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error('甘特图脚本错误:', message, '位置:', source, lineno, colno);
-            showError('甘特图加载出错: ' + message);
-            return false;
-        };
-        
-        if (typeof Gantt === 'undefined') {
-            console.error('错误: Gantt 对象未定义，Frappe Gantt库可能未正确加载');
-            showError('甘特图库加载失败，请检查网络连接并刷新页面');
-            return;
-        }
-        
-        console.log('初始化甘特图配置...');
-        
-        // 添加调试信息
-        console.log('项目ID: {{ project_id }}');
-        console.log('本地存储Token:', localStorage.getItem('token') || localStorage.getItem('access_token'));
-        
-        // 获取CSRF令牌
-        const csrfToken = window.getCsrfToken ? window.getCsrfToken() : document.querySelector('meta[name="csrf-token"]')?.content;
-        console.log('CSRF令牌:', csrfToken);
-        
-        // 定义重试函数
-        const fetchGanttData = (retryCount = 0, maxRetries = 3) => {
-            console.log(`尝试获取甘特图数据 (${retryCount+1}/${maxRetries+1})...`);
-            
-            // 显示加载状态
-            loadingElement.classList.remove('d-none');
-            errorElement.classList.add('d-none');
-            ganttContainer.classList.add('d-none');
-            
-            fetch('/tasks/project/{{ project_id }}/gantt/data?bypass_jwt=true', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token') || localStorage.getItem('access_token')}`,
-                    'X-CSRF-TOKEN': csrfToken || '',
-                    'Accept': 'application/json'
-                },
-                credentials: 'include'
-            })
-            .then(response => {
-                console.log(`甘特图数据请求状态: ${response.status} ${response.statusText}`);
-                console.log('响应头:', JSON.stringify([...response.headers.entries()]));
-                
-                if (!response.ok) {
-                    // 尝试获取错误详情
-                    return response.text().then(text => {
-                        let errorDetail = '';
-                        try {
-                            const errorJson = JSON.parse(text);
-                            errorDetail = errorJson.error || errorJson.detail || text;
-                            
-                            // 显示完整错误信息
-                            showDebugInfo({
-                                error: errorDetail,
-                                detail: errorJson.detail || '',
-                                trace: errorJson.trace || '',
-                                status: response.status,
-                                statusText: response.statusText,
-                                fullResponse: text
-                            });
-                        } catch (e) {
-                            errorDetail = text;
-                            showDebugInfo({
-                                error: '解析错误响应失败',
-                                rawText: text,
-                                parseError: e.message
-                            });
-                        }
-                        
-                        const error = new Error(`获取甘特图数据失败 (${response.status}): ${errorDetail}`);
-                        error.status = response.status;
-                        error.responseText = text;
-                        throw error;
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('获取到甘特图数据:', data);
-                
-                // 检查收到的数据结构是否符合预期
-                if (!data.data || !Array.isArray(data.data)) {
-                    console.error('甘特图数据格式错误:', data);
-                    showError('收到的甘特图数据格式错误');
-                    showDebugInfo({
-                        error: '甘特图数据格式错误',
-                        receivedData: data
-                    });
-                    return;
-                }
-                
-                console.log('甘特图任务数据:', data.data.length, '条任务');
-                if (data.data.length === 0) {
-                    console.warn('警告: 没有任何任务数据');
-                    // 显示空数据提示，但仍然显示甘特图
-                    showGantt();
-                    errorMessageElement.textContent = '当前项目没有任务数据，请先添加任务';
-                    errorElement.classList.remove('d-none');
-                    return;
-                }
-                
-                // 转换为Frappe Gantt格式的任务数据
-                const tasks = data.data.map(task => {
-                    // 确保日期格式正确
-                    let startDate = task.start_date;
-                    let endDate = task.end_date;
-                    
-                    if (!startDate || !/^\d{4}-\d{2}-\d{2}$/.test(startDate)) {
-                        console.warn(`任务 ${task.id} 开始日期格式不正确: ${startDate}`);
-                        startDate = new Date().toISOString().split('T')[0];
-                    }
-                    
-                    if (!endDate || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
-                        console.warn(`任务 ${task.id} 结束日期格式不正确: ${endDate}`);
-                        const tomorrow = new Date();
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        endDate = tomorrow.toISOString().split('T')[0];
-                    }
-                    
-                    return {
-                        id: task.id.toString(),
-                        name: task.text || `任务 #${task.id}`,
-                        start: startDate,
-                        end: endDate,
-                        progress: task.progress > 1 ? task.progress / 100 : task.progress,  // 确保进度是0-1之间
-                        dependencies: '',  // 初始化为空字符串，稍后填充
-                        custom_class: `status-${task.status || 'todo'} ${task.priority === 'high' ? 'priority-high' : ''}`,
-                        assignee: task.assignee,
-                        _data: task  // 保存原始数据以便后续使用
-                    };
-                });
-                
-                // 应用任务依赖关系
-                if (data.links && Array.isArray(data.links) && data.links.length > 0) {
-                    try {
-                        console.log('处理任务依赖关系:', data.links);
-                        data.links.forEach(link => {
-                            if (!link.source || !link.target) {
-                                console.warn('依赖关系缺少源或目标:', link);
-                                return;
-                            }
-                            
-                            const sourceId = String(link.source);
-                            const targetId = String(link.target);
-                            
-                            console.log(`处理依赖关系: 任务${targetId}依赖于任务${sourceId}`);
-                            
-                            const targetTask = tasks.find(t => t.id === targetId);
-                            
-                            if (targetTask) {
-                                if (targetTask.dependencies) {
-                                    targetTask.dependencies += ',' + sourceId;
-                                } else {
-                                    targetTask.dependencies = sourceId;
-                                }
-                                console.log(`已更新任务${targetId}的依赖关系: ${targetTask.dependencies}`);
-                            } else {
-                                console.warn(`找不到目标任务 ${targetId}`);
-                            }
-                        });
-                    } catch (err) {
-                        console.error('处理依赖关系时出错:', err);
-                    }
-                } else {
-                    console.log('没有任务依赖关系');
-                }
-                
-                // 初始化Frappe甘特图
-                showGantt();
-                try {
-                    window.ganttChart = new Gantt('#gantt_container', tasks, {
-                    view_mode: 'Month',
-                    language: 'zh',
-                    bar_height: 30,
-                    header_height: 50,
-                    padding: 15,
-                    popup_trigger: 'click',
-                    on_click: (task) => {
-                        console.log('任务点击：', task);
-                    },
-                    on_date_change: (task, start, end) => {
-                        console.log('日期变更：', task, start, end);
-                        updateTaskDates(task.id, start, end);
-                    },
-                    on_progress_change: (task, progress) => {
-                        console.log('进度变更：', task, progress);
-                        updateTaskProgress(task.id, progress);
-                    },
-                    custom_popup_html: (task) => {
-                        const statusLabels = {
-                            'todo': '待办',
-                            'in_progress': '进行中',
-                            'completed': '已完成'
-                        };
-                        const priorityLabels = {
-                            'low': '低',
-                            'medium': '中',
-                            'high': '高'
-                        };
-                        const status = task._data?.status || 'todo';
-                        const priority = task._data?.priority || 'medium';
-                        
-                        // 格式化日期
-                        const formatDate = (dateStr) => {
-                            try {
-                                const date = new Date(dateStr);
-                                return date.toLocaleDateString('zh-CN');
-                            } catch (e) {
-                                return dateStr;
-                            }
-                        };
-                        
-                        return `
-                            <div class="card p-3">
-                                <h6 class="text-primary">${task.name}</h6>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <small>开始日期: ${formatDate(task.start)}</small>
-                                    <small>结束日期: ${formatDate(task.end)}</small>
-                                </div>
-                                <div class="progress mb-2">
-                                    <div class="progress-bar" role="progressbar" style="width: ${Math.round(task.progress * 100)}%;" 
-                                        aria-valuenow="${Math.round(task.progress * 100)}" aria-valuemin="0" aria-valuemax="100">
-                                        ${Math.round(task.progress * 100)}%
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span class="badge ${status === 'completed' ? 'bg-success' : 
-                                                        status === 'in_progress' ? 'bg-warning' : 
-                                                        'bg-secondary'}">
-                                        ${statusLabels[status] || '未知'}
-                                    </span>
-                                    <span class="badge ${priority === 'high' ? 'bg-danger' : 
-                                                        priority === 'medium' ? 'bg-info' : 
-                                                        'bg-light text-dark'}">
-                                        优先级: ${priorityLabels[priority] || '中'}
-                                    </span>
-                                </div>
-                                ${task.assignee ? `<small class="mt-2">负责人: ${task.assignee}</small>` : ''}
-                                <div class="mt-2">
-                                    <a href="/tasks/${task.id}/view" class="btn btn-sm btn-outline-primary">查看详情</a>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-                    console.log('甘特图初始化成功');
-                    console.log('甘特图配置:', {
-                        container: '#gantt_container',
-                        taskCount: tasks.length,
-                        viewMode: 'Month',
-                        firstTaskId: tasks.length > 0 ? tasks[0].id : 'no tasks',
-                        firstTaskProgress: tasks.length > 0 ? tasks[0].progress : 'n/a'
-                    });
-                } catch (chartError) {
-                    console.error('甘特图创建失败:', chartError);
-                    showError('创建甘特图失败: ' + chartError.message, chartError.stack);
-                    showDebugInfo({
-                        error: '甘特图创建失败',
-                        errorMessage: chartError.message,
-                        errorStack: chartError.stack,
-                        tasks: tasks
-                    });
-                    }
-            })
-            .catch(error => {
-                console.error('获取甘特图数据错误:', error);
-                
-                // 显示错误信息
-                showError(`获取甘特图数据失败: ${error.message}`, error.stack);
-                
-                // 如果还有重试次数，则尝试重试
-                if (retryCount < maxRetries) {
-                    console.log(`${retryCount + 1}秒后重试...`);
-                    setTimeout(() => {
-                        fetchGanttData(retryCount + 1, maxRetries);
-                    }, (retryCount + 1) * 1000);
-                } else {
-                    console.error('达到最大重试次数，放弃尝试');
-                }
-            });
-        };
-        
-        // 更新任务日期
-                function updateTaskDates(taskId, start, end) {
-            fetch(`/tasks/${taskId}/gantt`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken || ''
-                        },
-                        body: JSON.stringify({
-                    start_date: start,
-                    end_date: end
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                    throw new Error(`服务器响应错误: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                console.log('任务日期更新成功:', data);
-                    })
-                    .catch(error => {
-                console.error('更新任务日期失败:', error);
-                        alert('更新任务日期失败: ' + error.message);
-                    });
-                }
-                
-        // 更新任务进度
-                function updateTaskProgress(taskId, progress) {
-            // 将0-1的进度值转换为0-100的百分比值
-            const progressPercent = Math.round(progress * 100);
-            
-            fetch(`/tasks/${taskId}/gantt`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken || ''
-                        },
-                        body: JSON.stringify({
-                    progress: progressPercent  // 发送百分比值给后端
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                    throw new Error(`服务器响应错误: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                console.log('任务进度更新成功:', data);
-            })
-            .catch(error => {
-                console.error('更新任务进度失败:', error);
-                alert('更新任务进度失败: ' + error.message);
-            });
-                    }
-                    
-        // 初始化：获取甘特图数据
-        fetchGanttData();
-        
-        // 添加视图模式切换功能
-        document.querySelectorAll('.view-mode-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const viewMode = this.dataset.viewMode;
-                console.log('切换视图模式:', viewMode);
-                if (window.ganttChart) {
-                    window.ganttChart.change_view_mode(viewMode);
-                }
-            });
-        });
-        
-            } catch (e) {
-        console.error('甘特图初始化出错:', e);
-        showError('甘特图初始化失败: ' + e.message, e.stack);
-        showDebugInfo({
-            error: '甘特图初始化失败',
-            errorMessage: e.message,
-            errorStack: e.stack
-        });
-            }
-}
-
-// 页面加载后执行初始化
-document.addEventListener('DOMContentLoaded', function() {
-    // 延迟一点执行初始化，确保所有DOM已完全加载
-    setTimeout(initGanttChart, 100);
-});
-</script>
 {% endblock %}
 
 {% block content %}
@@ -576,14 +162,15 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="btn-group me-2">
                 <button class="btn btn-outline-secondary view-mode-btn" data-view-mode="Day">日</button>
                 <button class="btn btn-outline-secondary view-mode-btn" data-view-mode="Week">周</button>
-                <button class="btn btn-outline-secondary view-mode-btn" data-view-mode="Month">月</button>
+                <button class="btn btn-outline-secondary view-mode-btn active" data-view-mode="Month">月</button>
                 <button class="btn btn-outline-secondary view-mode-btn" data-view-mode="Year">年</button>
             </div>
+            <button id="refreshButton" class="btn btn-outline-secondary me-2" onclick="window.location.reload()"><i class="bi bi-arrow-clockwise"></i> 刷新</button>
             <button id="debugButton" class="btn btn-outline-secondary"><i class="bi bi-bug"></i> 调试</button>
-                    </div>
-                </div>
+        </div>
+    </div>
     
-                    <!-- 加载中提示 -->
+    <!-- 加载中提示 -->
     <div id="gantt_loading" class="alert alert-info">
         <div class="d-flex align-items-center">
             <div class="spinner-border spinner-border-sm me-2" role="status">
@@ -591,35 +178,271 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <span>正在加载甘特图数据，请稍候...</span>
         </div>
-                    </div>
+    </div>
                     
-                    <!-- 错误提示 -->
-                    <div id="gantt_error" class="alert alert-danger d-none">
-        <div class="d-flex align-items-center mb-2">
+    <!-- 错误提示 -->
+    <div id="gantt_error" class="alert alert-danger d-none">
+        <div class="d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <strong id="error_message">加载甘特图时出错</strong>
-                        </div>
-        <div>
-            <button id="show_error_details" class="btn btn-sm btn-outline-danger">显示详细错误</button>
-            <div id="error_details" class="mt-2 collapse">
-                <pre id="error_details_content" class="bg-light p-3 rounded" style="max-height: 200px; overflow: auto;"></pre>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 甘特图容器 -->
-    <div id="gantt_container" class="gantt-container shadow bg-white rounded d-none" style="height: 600px; overflow-x: auto;"></div>
-
-                    <!-- 调试信息 -->
-    <div id="debug_info" class="mt-4 d-none">
-        <div class="card">
-                            <div class="card-header bg-light">
-                <h5 class="mb-0">调试信息</h5>
-                            </div>
-                            <div class="card-body">
-                <pre id="debug_content" class="bg-light p-3 rounded" style="max-height: 400px; overflow: auto;"></pre>
-            </div>
+            <span id="error_message">加载甘特图时发生错误</span>
         </div>
     </div>
+                    
+    <!-- 甘特图容器 -->
+    <div id="gantt_container" class="gantt-container">
+        <svg id="gantt"></svg>
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 项目ID
+const projectId = {{ project_id }};
+let ganttChart = null;
+let taskData = [];
+
+// 初始化甘特图
+async function initGanttChart() {
+    console.log('初始化甘特图...');
+    
+    // 显示加载中
+    document.getElementById('gantt_loading').classList.remove('d-none');
+    
+    try {
+        // 获取甘特图数据
+        const data = await fetchGanttData();
+        console.log('获取到甘特图数据:', data);
+        
+        // 检查数据
+        if (!data || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
+            throw new Error('没有可用的任务数据');
+        }
+        
+        // 保存任务数据
+        taskData = data.data;
+        
+        // 准备甘特图任务
+        const tasks = data.data.map(task => ({
+            id: task.id,
+            name: task.text || `任务 #${task.id}`,
+            start: task.start_date,
+            end: task.end_date,
+            progress: task.progress || 0,
+            dependencies: [],
+            custom_class: `status-${task.status || 'todo'} priority-${task.priority || 'medium'}`
+        }));
+        
+        // 添加依赖关系
+        if (data.links && Array.isArray(data.links)) {
+            data.links.forEach(link => {
+                const task = tasks.find(t => t.id === link.target);
+                if (task) {
+                    task.dependencies.push(link.source);
+                }
+            });
+        }
+        
+        // 创建甘特图
+        const ganttElement = document.getElementById('gantt');
+        if (!ganttElement) {
+            throw new Error('找不到甘特图容器元素');
+        }
+        
+        // 确保容器尺寸正确
+        const container = document.getElementById('gantt_container');
+        if (container) {
+            if (container.clientHeight < 100) {
+                container.style.height = '600px';
+                console.log('调整甘特图容器高度:', container.style.height);
+            }
+            if (container.clientWidth < 100) {
+                container.style.width = '100%';
+                console.log('调整甘特图容器宽度:', container.style.width);
+            }
+        }
+        
+        // 初始化甘特图
+        ganttChart = new Gantt(ganttElement, tasks, {
+            header_height: 50,
+            column_width: 30,
+            step: 24,
+            view_mode: 'Month',
+            bar_height: 20,
+            bar_corner_radius: 3,
+            arrow_curve: 5,
+            padding: 18,
+            view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month', 'Year'],
+            custom_popup_html: task => {
+                const originalTask = taskData.find(t => t.id === task.id);
+                if (!originalTask) return '';
+                
+                return `
+                <div class="gantt-popover">
+                    <h5>${task.name}</h5>
+                    <p>
+                        <strong>开始:</strong> ${task.start}<br>
+                        <strong>结束:</strong> ${task.end}<br>
+                        <strong>进度:</strong> ${Math.round(task.progress * 100)}%<br>
+                        <strong>状态:</strong> ${originalTask.status || '未开始'}<br>
+                        <strong>优先级:</strong> ${originalTask.priority || '中'}<br>
+                        <strong>负责人:</strong> ${originalTask.assignee || '未分配'}
+                    </p>
+                </div>
+                `;
+            },
+            on_click: task => {
+                console.log('点击了任务:', task);
+                // 跳转到任务详情页（可选）
+                // window.location.href = `/tasks/${task.id}/view`;
+            },
+            on_date_change: (task, start, end) => {
+                console.log('任务日期变更:', task, start, end);
+                updateTaskDates(task.id, start, end);
+            },
+            on_progress_change: (task, progress) => {
+                console.log('任务进度变更:', task, progress);
+                updateTaskProgress(task.id, progress);
+            }
+        });
+        
+        // 显示甘特图
+        document.getElementById('gantt_loading').classList.add('d-none');
+        console.log('甘特图初始化完成');
+        
+        // 注册视图切换事件
+        document.querySelectorAll('.view-mode-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const viewMode = this.getAttribute('data-view-mode');
+                document.querySelectorAll('.view-mode-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                ganttChart.change_view_mode(viewMode);
+                console.log('视图模式已切换为:', viewMode);
+            });
+        });
+        
+        // 注册调试按钮事件
+        document.getElementById('debugButton').addEventListener('click', function() {
+            console.log('当前任务数据:', taskData);
+            console.log('甘特图对象:', ganttChart);
+            alert('调试信息已输出到控制台');
+        });
+        
+    } catch (error) {
+        console.error('初始化甘特图失败:', error);
+        document.getElementById('gantt_loading').classList.add('d-none');
+        
+        const errorEl = document.getElementById('gantt_error');
+        const errorMsgEl = document.getElementById('error_message');
+        
+        if (errorEl && errorMsgEl) {
+            errorMsgEl.textContent = `加载甘特图失败: ${error.message || '未知错误'}`;
+            errorEl.classList.remove('d-none');
+        }
+    }
+}
+
+// 获取甘特图数据
+async function fetchGanttData() {
+    try {
+        const url = `/tasks/project/${projectId}/gantt/data`;
+        console.log('获取甘特图数据:', url);
+        
+        const response = await fetchWithCsrf(url, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        }, true); // 允许绕过JWT验证
+        
+        return response;
+    } catch (error) {
+        console.error('获取甘特图数据失败:', error);
+        throw error;
+    }
+}
+
+// 更新任务日期
+async function updateTaskDates(taskId, start, end) {
+    try {
+        const url = `/tasks/${taskId}/gantt`;
+        
+        const payload = {
+            start_date: formatDate(start, 'YYYY-MM-DD'),
+            end_date: formatDate(end, 'YYYY-MM-DD')
+        };
+        
+        console.log('更新任务日期:', url, payload);
+        
+        const response = await fetchWithCsrf(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }, true);
+        
+        console.log('任务日期更新成功:', response);
+        
+        // 更新本地数据
+        const task = taskData.find(t => t.id === taskId);
+        if (task) {
+            task.start_date = payload.start_date;
+            task.end_date = payload.end_date;
+        }
+        
+    } catch (error) {
+        console.error('更新任务日期失败:', error);
+        alert(`更新任务日期失败: ${error.message || '未知错误'}`);
+        
+        // 重新加载甘特图以恢复原始状态
+        initGanttChart();
+    }
+}
+
+// 更新任务进度
+async function updateTaskProgress(taskId, progress) {
+    try {
+        const url = `/tasks/${taskId}/gantt`;
+        
+        const payload = {
+            progress: Math.round(progress * 100)
+        };
+        
+        console.log('更新任务进度:', url, payload);
+        
+        const response = await fetchWithCsrf(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }, true);
+        
+        console.log('任务进度更新成功:', response);
+        
+        // 更新本地数据
+        const task = taskData.find(t => t.id === taskId);
+        if (task) {
+            task.progress = progress;
+        }
+        
+    } catch (error) {
+        console.error('更新任务进度失败:', error);
+        alert(`更新任务进度失败: ${error.message || '未知错误'}`);
+        
+        // 重新加载甘特图以恢复原始状态
+        initGanttChart();
+    }
+}
+
+// 页面加载完成后初始化甘特图
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM加载完成，延迟初始化甘特图...');
+    // 延迟初始化，确保DOM完全渲染
+    setTimeout(function() {
+        if (typeof Gantt !== 'undefined') {
+            console.log('开始初始化甘特图');
+            initGanttChart();
+        } else {
+            console.error('Gantt库未加载，无法初始化甘特图');
+            window.showGanttError('甘特图库未加载，请刷新页面重试');
+        }
+    }, 100);
+});
+</script>
 {% endblock %} 

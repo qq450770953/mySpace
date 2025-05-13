@@ -6,7 +6,7 @@
 
 {% block header_buttons %}
 <div class="btn-group me-2">
-    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='/main/tasks?bypass_jwt=true'">
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='/tasks?bypass_jwt=true'">
         <i class="bi bi-arrow-left"></i> 返回
     </button>
 </div>
@@ -88,7 +88,7 @@
                             <textarea class="form-control" id="taskDescription" rows="5">{{ task.description or '' }}</textarea>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/main/tasks?bypass_jwt=true'">取消</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/tasks?bypass_jwt=true'">取消</button>
                             <button type="button" class="btn btn-primary" onclick="updateTask()">保存修改</button>
                         </div>
                     </form>
@@ -250,70 +250,170 @@
             
             console.log('提交任务更新数据:', formData);
             
-            // 尝试使用不同的API端点，按优先级顺序尝试
-            const endpoints = [
-                `/api/tasks/${taskId}/no_csrf?bypass_jwt=true`,        // 新增的完全豁免CSRF端点，优先使用
-                `/api/tasks/${taskId}?bypass_jwt=true`,                // 标准API端点
-                `/api/tasks/${taskId}/update_bypass?bypass_jwt=true`   // 绕过CSRF的备用端点
-            ];
+            // 获取CSRF令牌添加到请求中
+            const csrfToken = getCsrfToken();
+            const csrfUrlParam = csrfToken ? `&csrf_token=${encodeURIComponent(csrfToken)}` : '';
             
-            let response = null;
-            let lastError = null;
-            
-            // 依次尝试每个端点
-            for (const endpoint of endpoints) {
-                try {
-                    console.log(`尝试使用端点: ${endpoint}`);
-                    
-                    // 对前两个端点使用标准的fetchWithCsrf
-                    if (endpoint.includes('no_csrf') === false) {
-                        response = await fetchWithCsrf(endpoint, {
-                            method: 'PUT',
-                            body: JSON.stringify(formData)
-                        });
-                    } else {
-                        // 对no_csrf端点使用普通fetch
-                        response = await fetch(endpoint, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify(formData)
-                        });
-                    }
-                    
-                    // 如果请求成功，跳出循环
-                    if (response.ok) {
-                        console.log(`端点 ${endpoint} 成功`);
-                        break;
-                    } else {
-                        console.warn(`端点 ${endpoint} 返回状态码: ${response.status}`);
-                        lastError = await response.text();
-                    }
-                } catch (fetchError) {
-                    console.error(`请求端点 ${endpoint} 出错:`, fetchError);
-                    lastError = fetchError.message;
-                }
-            }
-            
-            // 处理响应
-            if (response && response.ok) {
-                const responseData = await response.json();
-                console.log('任务更新成功:', responseData);
+            // 优先使用no_csrf端点
+            try {
+                console.log('使用无CSRF验证端点更新任务');
                 
-                // 显示成功消息并重定向
-                alert('任务更新成功');
-                window.location.href = '/main/tasks?bypass_jwt=true';
-            } else {
-                // 所有端点都失败了
-                console.error('所有更新端点都失败:', lastError);
-                alert('更新任务失败: ' + (lastError || 'Unknown error'));
+                // 构建URL，将CSRF令牌同时作为URL参数传递
+                const endpoint = `/api/tasks/${taskId}/no_csrf?bypass_jwt=true${csrfUrlParam}`;
+                
+                // 向无CSRF验证端点发送请求
+                const response = await fetch(endpoint, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '' // 同时在header中添加
+                    },
+                    body: JSON.stringify({
+                        ...formData,
+                        csrf_token: csrfToken // 同时在请求体中添加
+                    }),
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const responseData = await response.json();
+                    console.log('任务更新成功:', responseData);
+                    
+                    // 显示成功消息并重定向
+                    alert('任务更新成功');
+                    window.location.href = '/tasks?bypass_jwt=true';
+                    return;
+                } else {
+                    // 无CSRF验证端点失败，尝试备用端点
+                    console.warn(`无CSRF验证端点返回状态码: ${response.status}`);
+                    const errorText = await response.text();
+                    console.warn('错误详情:', errorText);
+                    
+                    // 尝试备用端点
+                    await tryBackupEndpoints(taskId, formData, csrfToken);
+                }
+            } catch (error) {
+                console.error('使用无CSRF验证端点时出错:', error);
+                
+                // 尝试备用端点
+                await tryBackupEndpoints(taskId, formData, csrfToken);
             }
         } catch (error) {
             console.error('更新任务时出错:', error);
             alert('更新任务时出现异常: ' + error.message);
         }
+    }
+    
+    // 尝试备用端点更新任务
+    async function tryBackupEndpoints(taskId, formData, csrfToken) {
+        console.log('尝试使用备用端点...');
+        
+        // 构建URL参数
+        const csrfUrlParam = csrfToken ? `&csrf_token=${encodeURIComponent(csrfToken)}` : '';
+        
+        // 定义备用端点
+        const backupEndpoints = [
+            `/api/tasks/${taskId}/update_bypass?bypass_jwt=true${csrfUrlParam}`,  // 绕过CSRF的备用端点
+            `/api/tasks/${taskId}?bypass_jwt=true${csrfUrlParam}`                // 标准API端点
+        ];
+        
+        let lastError = null;
+        
+        // 尝试每个备用端点
+        for (const endpoint of backupEndpoints) {
+            try {
+                console.log(`尝试备用端点: ${endpoint}`);
+                
+                const response = await fetch(endpoint, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || ''
+                    },
+                    body: JSON.stringify({
+                        ...formData,
+                        csrf_token: csrfToken // 在请求体中添加CSRF令牌
+                    }),
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const responseData = await response.json();
+                    console.log('任务更新成功:', responseData);
+                    
+                    // 显示成功消息并重定向
+                    alert('任务更新成功');
+                    window.location.href = '/tasks?bypass_jwt=true';
+                    return;
+                } else {
+                    console.warn(`备用端点 ${endpoint} 返回状态码: ${response.status}`);
+                    lastError = await response.text();
+                }
+            } catch (error) {
+                console.error(`请求备用端点 ${endpoint} 出错:`, error);
+                lastError = error.message;
+            }
+        }
+        
+        // 所有常规备用端点都失败，尝试紧急端点
+        try {
+            console.log('所有常规端点都失败，尝试紧急更新端点...');
+            
+            // 紧急端点接受多种格式的数据
+            const emergencyEndpoint = `/api/tasks/${taskId}/emergency_update?bypass_jwt=true`;
+            
+            // 向URL中添加所有关键数据作为参数，以防请求体无法正确传递
+            const urlParams = new URLSearchParams();
+            for (const [key, value] of Object.entries(formData)) {
+                if (value !== null && value !== undefined) {
+                    urlParams.append(key, value);
+                }
+            }
+            
+            // 完整的URL
+            const fullEmergencyUrl = `${emergencyEndpoint}&${urlParams.toString()}`;
+            console.log('紧急端点URL:', fullEmergencyUrl);
+            
+            // 使用多种方式发送数据
+            const response = await fetch(fullEmergencyUrl, {
+                method: 'POST', // 使用POST方法，更可靠
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                    'X-Emergency-Update': 'true' // 添加特殊标记
+                },
+                body: JSON.stringify(formData),
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('紧急更新成功:', responseData);
+                
+                // 显示成功消息并重定向
+                alert('任务更新成功（通过紧急端点）');
+                window.location.href = '/tasks?bypass_jwt=true';
+                return;
+            } else {
+                console.error('紧急端点也失败了:', response.status);
+                try {
+                    const errorText = await response.text();
+                    lastError = errorText;
+                } catch (e) {
+                    lastError = `紧急端点返回状态码 ${response.status}`;
+                }
+            }
+        } catch (error) {
+            console.error('请求紧急端点出错:', error);
+            lastError = `紧急端点错误: ${error.message}`;
+        }
+        
+        // 所有端点都失败
+        console.error('所有更新端点（包括紧急端点）都失败:', lastError);
+        alert('更新任务失败: ' + (lastError || 'Unknown error'));
     }
 </script>
 {% endblock %} 

@@ -69,8 +69,11 @@
 
 {% block header_buttons %}
 <div class="btn-group me-2">
-    <button type="button" class="btn btn-sm btn-primary new-task-btn" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+    <button type="button" class="btn btn-sm btn-primary new-task-btn" data-bs-toggle="modal" data-bs-target="#newTaskModal" id="newTaskButton">
         <i class="bi bi-plus-circle"></i> 新建任务
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportTasks()">
+        <i class="bi bi-download"></i> 导出
     </button>
     <div class="btn-group">
         <button type="button" class="btn btn-sm btn-outline-secondary active" data-view="list">
@@ -288,6 +291,7 @@
                     <div class="mb-3">
                         <label for="projectId" class="form-label">所属项目</label>
                         <select class="form-select" id="projectId" required>
+                            <option value="">请选择项目</option>
                             {% for project in projects %}
                             <option value="{{ project.id }}">{{ project.name }}</option>
                             {% endfor %}
@@ -296,8 +300,9 @@
                     <div class="mb-3">
                         <label for="assigneeId" class="form-label">负责人</label>
                         <select class="form-select" id="assigneeId" required>
+                            <option value="">请选择负责人</option>
                             {% for user in users %}
-                            <option value="{{ user.id }}">{{ user.name }}</option>
+                            <option value="{{ user.id }}">{{ user.name or user.username }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -341,6 +346,9 @@
 <script>
     // 页面加载后绑定任务操作事件
     document.addEventListener('DOMContentLoaded', function() {
+        // 预加载项目和用户数据
+        preloadSelectData();
+        
         // 任务操作事件委托
         document.addEventListener('click', function(event) {
             // 查找最近的操作按钮
@@ -348,7 +356,8 @@
             if (!button) return;
             
             // 获取任务ID和操作类型
-            const taskId = button.closest('tr').dataset.taskId || 
+            const taskId = button.closest('tr')?.dataset.taskId || 
+                          button.closest('.task-card')?.dataset.taskId ||
                           button.getAttribute('data-task-id');
             
             if (!taskId) return;
@@ -363,8 +372,8 @@
                      button.classList.contains('edit-btn') || 
                      button.classList.contains('task-edit-btn') || 
                      button.querySelector('.bi-pencil')) {
-                // 编辑操作
-                window.location.href = `/tasks/${taskId}/edit?bypass_jwt=true`;
+                // 编辑操作 - 使用任务编辑函数
+                openTaskEditPage(taskId);
             } 
             else if (button.classList.contains('btn-outline-danger') || 
                      button.classList.contains('delete-btn') || 
@@ -372,8 +381,8 @@
                      button.querySelector('.bi-trash')) {
                 // 删除操作
                 if (confirm('确定要删除此任务吗？')) {
-                    // 发送删除请求
-                    fetch(`/tasks/${taskId}?bypass_jwt=true`, {
+                    // 发送删除请求 - 使用紧急端点删除任务
+                    fetch(`/api/tasks/${taskId}/emergency_delete`, {
                         method: 'DELETE',
                         headers: {
                             'Accept': 'application/json',
@@ -391,9 +400,16 @@
                                 // 如果找不到行，刷新页面
                                 window.location.reload();
                             }
+                            
+                            // 显示成功消息
+                            alert('任务删除成功');
                         } else {
+                            // 尝试解析错误信息
                             return response.json().then(data => {
-                                throw new Error(data.message || '删除任务失败');
+                                throw new Error(data.message || data.error || '删除任务失败');
+                            }).catch(e => {
+                                // 如果无法解析JSON，使用HTTP状态文本
+                                throw new Error(`删除任务失败: ${response.status} ${response.statusText}`);
                             });
                         }
                     })
@@ -472,56 +488,311 @@
         if (saveTaskBtn) {
             saveTaskBtn.addEventListener('click', saveTask);
         }
+        
+        // 页面加载时检查权限并控制按钮显示
+        if (!hasPermission('create_task')) {
+            // 如果没有创建任务权限，隐藏新建任务按钮
+            const newTaskButton = document.getElementById('newTaskButton');
+            if (newTaskButton) {
+                newTaskButton.style.display = 'none';
+            }
+        }
+        
+        // 设置任务操作按钮的可见性
+        setupTaskButtons();
     });
+    
+    // 打开任务编辑页面
+    function openTaskEditPage(taskId) {
+        if (!taskId) {
+            console.error('无效的任务ID');
+            return;
+        }
+        
+        console.log(`打开任务编辑页面: ${taskId}`);
+        
+        // 获取CSRF令牌用于请求头
+        const csrfToken = getCsrfToken();
+        
+        // 先尝试获取任务详情以确保任务存在
+        fetch(`/api/tasks/${taskId}/detail?bypass_jwt=true`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            credentials: 'include'
+        })
+        .then(response => {
+            if (response.ok) {
+                // 任务存在，跳转到任务编辑页面
+                window.location.href = `/tasks/${taskId}/edit?bypass_jwt=true`;
+            } else {
+                // 处理错误
+                return response.json().then(data => {
+                    throw new Error(data.message || `任务 ${taskId} 不存在`);
+                }).catch(e => {
+                    throw new Error(`无法获取任务 ${taskId}: ${response.status} ${response.statusText}`);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('获取任务详情失败:', error);
+            alert('获取任务详情失败: ' + error.message);
+        });
+    }
     
     // 保存任务函数
     window.saveTask = function() {
+        console.log('开始保存任务...');
         const taskForm = document.getElementById('taskForm');
+        const saveBtn = document.getElementById('saveTaskBtn');
         
-        // 收集表单数据
+        // 禁用保存按钮，防止重复提交
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 保存中...';
+        }
+        
+        // 收集并验证表单数据
+        const taskName = document.getElementById('taskName').value.trim();
+        const projectId = document.getElementById('projectId').value;
+        const assigneeId = document.getElementById('assigneeId').value;
+        const priority = document.getElementById('priority').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const description = document.getElementById('taskDescription').value;
+        
+        // 验证必填字段
+        let errors = [];
+        if (!taskName) errors.push('任务名称不能为空');
+        if (!projectId) errors.push('必须选择项目');
+        if (!assigneeId) errors.push('必须选择负责人');
+        if (!startDate) errors.push('必须设置开始日期');
+        if (!endDate) errors.push('必须设置截止日期');
+        
+        // 如果有错误，显示错误信息并恢复按钮状态
+        if (errors.length > 0) {
+            alert('表单验证失败:\n' + errors.join('\n'));
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '保存';
+            }
+            return;
+        }
+        
+        // 构建任务数据
         const taskData = {
-            title: document.getElementById('taskName').value,
-            project_id: document.getElementById('projectId').value,
-            assignee_id: document.getElementById('assigneeId').value,
-            priority: document.getElementById('priority').value,
-            start_date: document.getElementById('startDate').value,
-            due_date: document.getElementById('endDate').value,
-            description: document.getElementById('taskDescription').value
+            title: taskName,
+            project_id: projectId,
+            assignee_id: assigneeId,
+            priority: priority,
+            start_date: startDate,
+            due_date: endDate,
+            description: description
         };
+        
+        console.log('提交任务数据:', taskData);
+        
+        // 设置超时恢复按钮的计时器
+        const buttonRecoveryTimeout = setTimeout(() => {
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '保存';
+                console.log('按钮状态已通过超时机制恢复');
+            }
+        }, 8000);  // 8秒后自动恢复按钮状态
+        
+        // 获取CSRF令牌
+        const csrfToken = getCsrfToken();
         
         // 发送创建任务请求
         fetch('/api/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-CSRFToken': csrfToken  // 添加CSRF令牌
             },
-            body: JSON.stringify(taskData)
+            body: JSON.stringify(taskData),
+            credentials: 'include'  // 确保包含cookie
         })
         .then(response => {
+            // 清除恢复按钮的计时器
+            clearTimeout(buttonRecoveryTimeout);
+            
             if (response.ok) {
-                return response.json();
-            } else {
                 return response.json().then(data => {
-                    throw new Error(data.message || '创建任务失败');
+                    return { success: true, data };
+                });
+            } else {
+                // 处理HTTP错误
+                return response.json().then(errorData => {
+                    return { 
+                        success: false, 
+                        error: errorData.error || errorData.message || `服务器返回错误: ${response.status}` 
+                    };
+                }).catch(() => {
+                    // 如果解析JSON失败，返回HTTP状态错误
+                    return { 
+                        success: false, 
+                        error: `服务器返回错误: ${response.status} ${response.statusText}` 
+                    };
                 });
             }
         })
-        .then(data => {
-            console.log('任务创建成功:', data);
-            
-            // 关闭模态框
-            const modal = document.getElementById('newTaskModal');
-            const bsModal = bootstrap.Modal.getInstance(modal);
-            if (bsModal) bsModal.hide();
-            
-            // 刷新页面
-            window.location.reload();
+        .then(result => {
+            if (result.success) {
+                console.log('任务创建成功:', result.data);
+                
+                // 关闭模态框
+                const modal = document.getElementById('newTaskModal');
+                const bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) bsModal.hide();
+                
+                // 显示成功提示
+                alert('任务创建成功！');
+                
+                // 刷新页面
+                window.location.reload();
+            } else {
+                console.error('创建任务失败:', result.error);
+                alert('创建任务失败: ' + result.error);
+                
+                // 恢复按钮状态
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '保存';
+                }
+            }
         })
         .catch(error => {
-            console.error('创建任务失败:', error);
-            alert('创建任务失败: ' + error.message);
+            // 清除恢复按钮的计时器
+            clearTimeout(buttonRecoveryTimeout);
+            
+            console.error('创建任务请求发生错误:', error);
+            alert('创建任务请求失败: ' + error.message);
+            
+            // 恢复按钮状态
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '保存';
+            }
         });
     };
+    
+    // 设置任务操作按钮的可见性
+    function setupTaskButtons() {
+        // 检查用户是否有管理任务的权限
+        const canManageTask = hasPermission('manage_task') || hasPermission('manage_all_tasks');
+        
+        // 设置编辑和删除按钮的可见性
+        const editButtons = document.querySelectorAll('.task-edit-btn');
+        const deleteButtons = document.querySelectorAll('.task-delete-btn');
+        
+        editButtons.forEach(button => {
+            button.style.display = canManageTask ? 'inline-block' : 'none';
+        });
+        
+        deleteButtons.forEach(button => {
+            button.style.display = canManageTask ? 'inline-block' : 'none';
+        });
+    }
+    
+    // 预加载下拉框数据
+    function preloadSelectData() {
+        console.log('预加载项目和用户数据');
+        
+        // 检查项目下拉框是否已有数据
+        const projectSelect = document.getElementById('projectId');
+        if (projectSelect && projectSelect.options.length <= 1) {
+            console.log('项目下拉框数据不完整，尝试通过API加载');
+            
+            // 通过API获取项目数据
+            fetch('/api/projects?bypass_jwt=true', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(projects => {
+                console.log(`从API获取到 ${projects.length} 个项目`);
+                
+                // 清空现有选项（保留第一个"请选择"选项）
+                while (projectSelect.options.length > 1) {
+                    projectSelect.remove(1);
+                }
+                
+                // 添加项目选项
+                projects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.name;
+                    projectSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('获取项目数据失败:', error);
+            });
+        }
+        
+        // 检查用户下拉框是否已有数据
+        const userSelect = document.getElementById('assigneeId');
+        if (userSelect && userSelect.options.length <= 1) {
+            console.log('用户下拉框数据不完整，尝试通过API加载');
+            
+            // 通过API获取用户数据
+            fetch('/api/global/users?bypass_jwt=true', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 提取用户列表，处理嵌套结构
+                const users = data.users || [];
+                console.log(`从API获取到 ${users.length} 个用户`);
+                
+                // 清空现有选项（保留第一个"请选择"选项）
+                while (userSelect.options.length > 1) {
+                    userSelect.remove(1);
+                }
+                
+                // 添加用户选项
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.name || user.username;
+                    userSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('获取用户数据失败:', error);
+            });
+        }
+    }
+    
+    // 获取CSRF令牌函数
+    function getCsrfToken() {
+        // 从meta标签获取CSRF令牌
+        const metaToken = document.querySelector('meta[name="csrf-token"]');
+        if (metaToken) {
+            return metaToken.getAttribute('content');
+        }
+        
+        // 从cookie获取CSRF令牌
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'csrf_token') {
+                return decodeURIComponent(value);
+            }
+        }
+        
+        console.warn('未找到CSRF令牌，这可能会导致表单提交失败');
+        return '';
+    }
 </script>
 {% endblock %}

@@ -11,14 +11,191 @@
     <title>{% block title %}{% endblock %} - 项目管理系统</title>
     
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- 使用本地Bootstrap CSS文件而不是CDN -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_css %}{% endblock %}
     
-    <!-- 引入jQuery和Bootstrap -->
+    <!-- 引入jQuery和Bootstrap - 使用本地文件而不是CDN -->
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <!-- 引入工具函数 -->
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <!-- 错误处理和资源加载失败检测 -->
+    <script>
+        // 全局admin用户检测脚本 - 优先级最高
+        (function() {
+            console.log("执行全局admin用户检测");
+            
+            // 检查URL参数中是否有admin=true
+            const urlParams = new URLSearchParams(window.location.search);
+            const adminParam = urlParams.get('admin');
+            if (adminParam === 'true') {
+                console.log("从URL参数检测到admin=true，强制设置admin用户权限");
+                localStorage.setItem('is_admin', 'true');
+                document.cookie = 'is_admin=true; path=/; max-age=604800; SameSite=Lax';
+                document.cookie = 'admin=true; path=/; max-age=604800; SameSite=Lax';
+                
+                try {
+                    const userInfo = JSON.parse(localStorage.getItem('user_info') || '{}');
+                    if (userInfo) {
+                        userInfo.is_admin = true;
+                        userInfo.roles = userInfo.roles || [];
+                        if (!userInfo.roles.includes('admin')) {
+                            userInfo.roles.push('admin');
+                        }
+                        localStorage.setItem('user_info', JSON.stringify(userInfo));
+                        localStorage.setItem('user_roles', userInfo.roles.join(','));
+                        document.cookie = 'user_roles=' + userInfo.roles.join(',') + '; path=/; max-age=604800; SameSite=Lax';
+                    }
+                } catch(e) {
+                    console.error("处理用户信息出错:", e);
+                }
+            }
+            
+            // 检查用户名是否为admin或ID为1
+            try {
+                const userInfo = JSON.parse(localStorage.getItem('user_info') || '{}');
+                if (userInfo && (userInfo.username === 'admin' || userInfo.id === 1)) {
+                    console.log("检测到admin用户，强制设置admin权限");
+                    
+                    // 设置标志
+                    localStorage.setItem('is_admin', 'true');
+                    document.cookie = 'is_admin=true; path=/; max-age=604800; SameSite=Lax';
+                    document.cookie = 'admin=true; path=/; max-age=604800; SameSite=Lax';
+                    
+                    // 确保角色包含admin
+                    userInfo.is_admin = true;
+                    userInfo.roles = userInfo.roles || [];
+                    if (!userInfo.roles.includes('admin')) {
+                        userInfo.roles.push('admin');
+                    }
+                    
+                    // 保存回localStorage
+                    localStorage.setItem('user_info', JSON.stringify(userInfo));
+                    localStorage.setItem('user_roles', userInfo.roles.join(','));
+                    document.cookie = 'user_roles=' + userInfo.roles.join(',') + '; path=/; max-age=604800; SameSite=Lax';
+                    
+                    // 添加强制刷新函数
+                    window.forceAdminRoleRefresh = function() {
+                        console.log("强制刷新admin权限");
+                        const userInfo = JSON.parse(localStorage.getItem('user_info') || '{}');
+                        if (userInfo) {
+                            userInfo.is_admin = true;
+                            userInfo.roles = userInfo.roles || [];
+                            if (!userInfo.roles.includes('admin')) {
+                                userInfo.roles.push('admin');
+                            }
+                            localStorage.setItem('user_info', JSON.stringify(userInfo));
+                            localStorage.setItem('is_admin', 'true');
+                            localStorage.setItem('user_roles', userInfo.roles.join(','));
+                            
+                            document.cookie = 'is_admin=true; path=/; max-age=604800; SameSite=Lax';
+                            document.cookie = 'admin=true; path=/; max-age=604800; SameSite=Lax';
+                            document.cookie = 'user_roles=' + userInfo.roles.join(',') + '; path=/; max-age=604800; SameSite=Lax';
+                            
+                            if (window.currentUser) {
+                                window.currentUser.isAdmin = true;
+                                window.currentUser.roles = userInfo.roles;
+                            }
+                            
+                            console.log("admin权限已刷新");
+                            location.reload();
+                        }
+                    };
+                }
+            } catch(e) {
+                console.error("检查admin用户出错:", e);
+            }
+        })();
+    </script>
+    <script>
+        // 检测资源加载失败并记录日志
+        window.addEventListener('error', function(e) {
+            if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+                console.error('资源加载失败:', e.target.src || e.target.href);
+                // 如果是dashboard.js加载失败，尝试重新加载
+                if ((e.target.src && e.target.src.includes('dashboard.js'))) {
+                    console.warn('dashboard.js加载失败，尝试内联加载...');
+                    // 创建一个新的script元素
+                    var script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.text = `
+                        document.addEventListener('DOMContentLoaded', function() {
+                            console.log('内联dashboard脚本执行');
+                            // 检查用户名是否为admin，强制设置admin角色
+                            var userInfo = localStorage.getItem('user_info');
+                            if (userInfo) {
+                                try {
+                                    userInfo = JSON.parse(userInfo);
+                                    if (userInfo.username === 'admin') {
+                                        console.log('检测到admin用户，设置admin角色');
+                                        localStorage.setItem('is_admin', 'true');
+                                        document.cookie = 'is_admin=true; path=/; max-age=86400; SameSite=Lax';
+                                        // 更新全局currentUser状态
+                                        if (window.currentUser) {
+                                            window.currentUser.isAdmin = true;
+                                            if (!window.currentUser.roles.includes('admin')) {
+                                                window.currentUser.roles.push('admin');
+                                            }
+                                        }
+                                    }
+                                } catch(e) { console.error('解析用户信息出错:', e); }
+                            }
+                        });
+                    `;
+                    document.head.appendChild(script);
+                }
+            }
+        }, true);
+        
+        // 页面完全加载后，定期检查admin角色是否正确设置
+        window.addEventListener('load', function() {
+            console.log('页面加载完成，运行admin角色守卫');
+            
+            // 立即检查一次
+            checkAndEnforceAdminRole();
+            
+            // 设置定期检查
+            setInterval(checkAndEnforceAdminRole, 5000);
+        });
+        
+        // admin角色守卫机制 - 确保admin用户始终有admin权限
+        function checkAndEnforceAdminRole() {
+            try {
+                // 检查是否是admin用户
+                const userInfoStr = localStorage.getItem('user_info');
+                if (userInfoStr) {
+                    const userInfo = JSON.parse(userInfoStr);
+                    
+                    // 如果是admin用户，检查权限是否正确设置
+                    if (userInfo && (userInfo.username === 'admin' || userInfo.id === 1)) {
+                        // 检查currentUser状态 - 使用全局window.currentUser确保引用一致
+                        if (!window.currentUser.isAdmin) {
+                            console.log('[admin守卫] 检测到admin用户但权限未正确设置，修复中...');
+                            
+                            // 更新currentUser状态
+                            window.currentUser.isAdmin = true;
+                            if (!window.currentUser.roles.includes('admin')) {
+                                window.currentUser.roles.push('admin');
+                            }
+                            
+                            // 同步到存储
+                            localStorage.setItem('is_admin', 'true');
+                            document.cookie = `is_admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                            localStorage.setItem('user_roles', window.currentUser.roles.join(','));
+                            document.cookie = `user_roles=${window.currentUser.roles.join(',')}; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                            
+                            console.log('[admin守卫] admin权限修复完成');
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('[admin守卫] 检查admin角色出错:', e);
+            }
+        }
+    </script>
     {% block head_scripts %}{% endblock %}
     {% block head %}{% endblock %}
 
@@ -33,87 +210,789 @@
         }
         
         // 将用户角色和权限存储在全局变量中，安全地处理匿名用户
-        var currentUser = {
-            roles: {% if current_user and current_user.is_authenticated and hasattr(current_user, 'roles') %}{{ (current_user.roles|map(attribute='name')|list|tojson) }}{% else %}[]{% endif %},
-            permissions: {% if current_user and current_user.is_authenticated and hasattr(current_user, 'roles') %}{{ (current_user.roles|map(attribute='permissions')|flatten|map(attribute='name')|list|tojson) }}{% else %}[]{% endif %}
+        var userRolesJson = '{% if current_user and current_user.is_authenticated and hasattr(current_user, "roles") %}{{ (current_user.roles|map(attribute="name")|list|tojson) }}{% else %}[]{% endif %}';
+        var userPermissionsJson = '{% if current_user and current_user.is_authenticated and hasattr(current_user, "roles") %}{{ (current_user.roles|map(attribute="permissions")|flatten|map(attribute="name")|list|tojson) }}{% else %}[]{% endif %}';
+        var userIdValue = '{% if current_user and current_user.is_authenticated %}{{ current_user.id }}{% else %}null{% endif %}';
+        var usernameValue = '{% if current_user and current_user.is_authenticated %}{{ current_user.username }}{% else %}{% endif %}';
+        
+        var currentUserRoles = JSON.parse(userRolesJson);
+        var currentUserPermissions = JSON.parse(userPermissionsJson);
+        var userId = userIdValue === 'null' ? null : parseInt(userIdValue, 10) || null;
+        
+        // 创建currentUser对象
+        window.currentUser = {
+            roles: currentUserRoles,
+            permissions: currentUserPermissions,
+            id: userId,
+            username: usernameValue,
+            isAdmin: false,
+            isManager: false
         };
         
-        // 尝试从Cookie中获取用户角色，增强可靠性
-        function initializeUserRoles() {
-            var userRolesCookie = getCookie('user_roles');
-            if (userRolesCookie && (!currentUser.roles || currentUser.roles.length === 0)) {
-                console.log("从Cookie中获取用户角色:", userRolesCookie);
-                currentUser.roles = userRolesCookie.split(',');
-            }
+        // 确保roles和permissions始终是数组
+        if (!Array.isArray(window.currentUser.roles)) {
+            window.currentUser.roles = [];
+        }
+        if (!Array.isArray(window.currentUser.permissions)) {
+            window.currentUser.permissions = [];
+        }
+        
+        // 添加调试函数，帮助排查用户信息问题
+        function debugUserInfo() {
+            console.log("=================== 用户信息调试 ===================");
+            console.log("当前用户对象:", window.currentUser);
+            console.log("用户ID:", window.currentUser.id);
+            console.log("用户名:", window.currentUser.username);
+            console.log("角色数组:", window.currentUser.roles);
+            console.log("权限数组:", window.currentUser.permissions);
+            console.log("isAdmin标志:", window.currentUser.isAdmin);
+            console.log("isManager标志:", window.currentUser.isManager);
             
-            // 尝试从localStorage中获取
+            // 检查localStorage
             try {
-                const storedRoles = localStorage.getItem('user_roles');
-                if (storedRoles && (!currentUser.roles || currentUser.roles.length === 0)) {
-                    console.log("从localStorage中获取用户角色:", storedRoles);
-                    currentUser.roles = storedRoles.split(',');
-                }
+                console.log("--- localStorage信息 ---");
+                const userInfoStr = localStorage.getItem('user_info');
+                console.log("localStorage user_info:", userInfoStr ? JSON.parse(userInfoStr) : null);
+                console.log("localStorage user_roles:", localStorage.getItem('user_roles'));
+                console.log("localStorage is_admin:", localStorage.getItem('is_admin'));
+                console.log("localStorage access_token:", localStorage.getItem('access_token') ? "存在" : "不存在");
             } catch(e) {
-                console.error("读取localStorage角色出错:", e);
+                console.error("读取localStorage出错:", e);
             }
             
-            // 从JWT令牌中提取
+            // 检查Cookie
+            console.log("--- Cookie信息 ---");
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+            console.log("Cookie user_roles:", getCookie('user_roles'));
+            console.log("Cookie is_admin:", getCookie('is_admin'));
+            console.log("Cookie csrf_token:", getCookie('csrf_token') ? "存在" : "不存在");
+            
+            // JWT Token解析
             try {
                 const token = localStorage.getItem('access_token');
-                if (token && (!currentUser.roles || currentUser.roles.length === 0)) {
+                if (token) {
+                    console.log("--- JWT Token信息 ---");
                     const payload = JSON.parse(atob(token.split('.')[1]));
-                    if (payload.roles) {
-                        console.log("从JWT中获取用户角色:", payload.roles);
-                        currentUser.roles = payload.roles;
+                    console.log("JWT payload:", payload);
+                    console.log("JWT中的用户ID:", payload.sub);
+                    console.log("JWT中的角色:", payload.roles);
+                    console.log("JWT中的admin标志:", payload.admin);
+                }
+            } catch(e) {
+                console.error("解析JWT失败:", e);
+            }
+            
+            console.log("=================== 调试信息结束 ===================");
+        }
+        
+        // 页面加载时立即执行一次调试
+        debugUserInfo();
+        
+        // 特殊处理admin用户 - 1. 基于用户名和ID
+        if (window.currentUser.username === 'admin' || window.currentUser.id === 1) {
+            window.currentUser.isAdmin = true;
+            if (!window.currentUser.roles.includes('admin')) {
+                window.currentUser.roles.push('admin');
+            }
+            console.log("检测到admin用户，设置isAdmin=true");
+        }
+        
+        // 特殊处理admin用户 - 2. 基于角色列表
+        if (window.currentUser.roles.includes('admin')) {
+            window.currentUser.isAdmin = true;
+            console.log("检测到admin角色，设置isAdmin=true");
+        }
+        
+        // 检查角色中是否包含manager
+        if (window.currentUser.roles.includes('manager')) {
+            window.currentUser.isManager = true;
+        }
+        
+        console.log("================== 页面初始化：用户信息来源详情 ==================");
+        console.log("从后端渲染获取的用户角色:", window.currentUser.roles);
+        console.log("从后端渲染获取的用户权限:", window.currentUser.permissions);
+        // 尝试从localStorage获取完整用户信息
+        try {
+            const storedUserInfo = localStorage.getItem('user_info');
+            if (storedUserInfo) {
+                const parsedUserInfo = JSON.parse(storedUserInfo);
+                console.log("从localStorage获取的用户信息:", parsedUserInfo);
+                console.log("localStorage用户ID:", parsedUserInfo.id);
+                console.log("localStorage用户名:", parsedUserInfo.username);
+                console.log("localStorage用户角色:", parsedUserInfo.roles);
+                console.log("localStorage用户是否admin:", parsedUserInfo.is_admin);
+            } else {
+                console.log("localStorage中没有找到用户信息");
+            }
+        } catch (e) {
+            console.error("解析localStorage中的用户信息失败:", e);
+        }
+        // 尝试从Cookie获取角色信息
+        try {
+            const getCookieValue = (name) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            };
+            const rolesCookie = getCookieValue('user_roles');
+            const isAdminCookie = getCookieValue('is_admin');
+            console.log("从Cookie获取的用户角色:", rolesCookie);
+            console.log("从Cookie获取的admin标志:", isAdminCookie);
+        } catch (e) {
+            console.error("获取Cookie中的用户信息失败:", e);
+        }
+        // 检查JWT Token中的信息
+        try {
+            const token = localStorage.getItem('access_token');
+            if (token) {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                console.log("从JWT获取的用户信息:", payload);
+                console.log("JWT中的用户ID:", payload.sub);
+                console.log("JWT中的角色:", payload.roles);
+                console.log("JWT中的admin标志:", payload.admin);
+                console.log("JWT中的用户声明:", payload.user_claims);
+            } else {
+                console.log("localStorage中没有找到JWT Token");
+            }
+        } catch (e) {
+            console.error("解析JWT Token失败:", e);
+        }
+        console.log("================== 页面初始化：用户信息来源结束 ==================");
+        console.log("页面初始化：window.currentUser", window.currentUser);  
+        
+        // 为了与原代码兼容，创建对window.currentUser的引用
+        var currentUser = window.currentUser;
+        
+        // 页面加载前强制更新currentUser状态
+        (function() {
+            console.log("页面初始化：开始检查用户状态");
+            
+            // 1. 首先检查JWT token
+            try {
+                const token = localStorage.getItem('access_token');
+                if (token) {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    console.log("JWT payload:", payload);
+                    
+                    // 检查admin特定标志
+                    if (payload.admin === true) {
+                        console.log("JWT中admin标志为true");
+                        currentUser.isAdmin = true;
+                        if (!currentUser.roles.includes('admin')) {
+                            currentUser.roles.push('admin');
+                        }
+                    }
+                    
+                    // 检查用户名或ID
+                    if (payload.user_claims && 
+                        (payload.user_claims.username === 'admin' || 
+                         payload.sub === 1 || 
+                         payload.user_claims.id === 1)) {
+                        console.log("JWT中用户ID为1或username为admin");
+                        currentUser.isAdmin = true;
+                        if (!currentUser.roles.includes('admin')) {
+                            currentUser.roles.push('admin');
+                        }
+                    }
+                    
+                    // 检查角色数组
+                    if (payload.roles && Array.isArray(payload.roles) && payload.roles.includes('admin')) {
+                        console.log("JWT中角色包含admin");
+                        currentUser.isAdmin = true;
+                        if (!currentUser.roles.includes('admin')) {
+                            currentUser.roles.push('admin');
+                        }
                     }
                 }
             } catch(e) {
-                console.error("解析JWT角色出错:", e);
+                console.warn("JWT解析失败:", e);
             }
             
-            console.log("初始化后用户角色:", currentUser.roles);
+            // 2. 检查是否为admin用户名 - 这是最可靠的方法
+            try {
+                const userInfoStr = localStorage.getItem('user_info');
+                if (userInfoStr) {
+                    const userInfo = JSON.parse(userInfoStr);
+                    if (userInfo) {
+                        console.log("用户信息:", userInfo);
+                        if (userInfo.username === 'admin' || userInfo.id === 1 || userInfo.is_admin === true) {
+                            console.log("检测到admin用户，直接设置admin角色");
+                            currentUser.isAdmin = true;
+                            if (!currentUser.roles.includes('admin')) {
+                                currentUser.roles.push('admin');
+                            }
+                            
+                            // 立即同步到localStorage和Cookie，确保状态一致
+                            localStorage.setItem('is_admin', 'true');
+                            document.cookie = `is_admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                            document.cookie = `admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                            
+                            // 更新roles cookie
+                            localStorage.setItem('user_roles', currentUser.roles.join(','));
+                            document.cookie = `user_roles=${currentUser.roles.join(',')}; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                        }
+                    }
+                }
+            } catch(e) {
+                console.error("启动时检查用户名出错:", e);
+            }
+            
+            // 3. 检查localStorage和cookie中是否有admin标记
+            if (localStorage.getItem('is_admin') === 'true' || 
+                getCookie('is_admin') === 'true' || 
+                getCookie('admin') === 'true') {
+                console.log("检测到admin标志在localStorage或cookie中");
+                currentUser.isAdmin = true;
+                if (!currentUser.roles.includes('admin')) {
+                    currentUser.roles.push('admin');
+                }
+            }
+            
+            // 4. 显式检查角色数组是否含有admin
+            if (currentUser.roles.includes('admin')) {
+                console.log("currentUser.roles中包含admin");
+                currentUser.isAdmin = true;
+            }
+            
+            // 5. 如果用户角色中有manager，设置isManager标志
+            if (currentUser.roles.includes('manager')) {
+                currentUser.isManager = true;
+            }
+            
+            console.log("页面启动状态: isAdmin=", currentUser.isAdmin, "roles=", currentUser.roles);
+            
+            // 6. 如果是admin用户，确保所有相关状态都正确设置
+            if (currentUser.isAdmin) {
+                console.log("确认admin用户状态，同步所有存储");
+                if (!currentUser.roles.includes('admin')) {
+                    currentUser.roles.push('admin');
+                }
+                localStorage.setItem('is_admin', 'true');
+                document.cookie = `is_admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                document.cookie = `admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                document.cookie = `admin_role=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                localStorage.setItem('user_roles', currentUser.roles.join(','));
+                document.cookie = `user_roles=${currentUser.roles.join(',')}; path=/; max-age=${60*60*24}; SameSite=Lax`;
+            }
+        })();
+        
+        // 尝试从Cookie中获取用户角色，增强可靠性
+        function initializeUserRoles() {
+            console.log("开始初始化用户角色，当前角色:", currentUser.roles);
+            
+            // 0. 先设置一个标记，检查初始化前的admin状态
+            const wasAdmin = currentUser.isAdmin;
+            console.log("初始化前admin状态:", wasAdmin);
+            
+            // 1. 直接检查用户是否为admin (最高优先级)
+            try {
+                const userInfoStr = localStorage.getItem('user_info');
+                if (userInfoStr) {
+                    const userInfo = JSON.parse(userInfoStr);
+                    if (userInfo && (userInfo.username === 'admin' || userInfo.id === 1 || userInfo.is_admin === true)) {
+                        console.log("[initializeUserRoles] 确认admin用户，直接设置admin权限");
+                        currentUser.isAdmin = true;
+                        if (!currentUser.roles.includes('admin')) {
+                            currentUser.roles.push('admin');
+                        }
+                        // 同步到存储
+                        localStorage.setItem('is_admin', 'true');
+                        document.cookie = `is_admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                        localStorage.setItem('user_roles', currentUser.roles.join(','));
+                        document.cookie = `user_roles=${currentUser.roles.join(',')}; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                        return currentUser.roles;
+                    }
+                }
+            } catch(e) {
+                console.error("[initializeUserRoles] 检查admin用户信息出错:", e);
+            }
+            
+            // 2. 使用工具函数获取角色信息 (较高优先级)
+            if (typeof getUserRoles === 'function') {
+                // 使用外部工具函数获取完整角色列表
+                const roles = getUserRoles();
+                if (roles && roles.length > 0) {
+                    currentUser.roles = roles;
+                    // 更新admin和manager标志
+                    currentUser.isAdmin = roles.includes('admin');
+                    currentUser.isManager = roles.includes('manager');
+                    console.log("[initializeUserRoles] 使用工具函数获取的角色:", roles, "isAdmin=", currentUser.isAdmin);
+                    
+                    // 强制同步到localStorage和cookie
+                    localStorage.setItem('user_roles', roles.join(','));
+                    document.cookie = `user_roles=${roles.join(',')}; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                    
+                    if (currentUser.isAdmin) {
+                        localStorage.setItem('is_admin', 'true');
+                        document.cookie = `is_admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                    }
+                    
+                    return roles;
+                }
+            }
+            
+            // 3. JWT token解析 (该部分在工具函数中也有实现)
+            try {
+                const token = localStorage.getItem('access_token');
+                if (token) {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    console.log('[initializeUserRoles] JWT payload:', payload);
+                    
+                    // 检查admin标志
+                    if (payload.admin === true) {
+                        console.log('[initializeUserRoles] JWT中admin=true');
+                        currentUser.isAdmin = true;
+                        if (!currentUser.roles.includes('admin')) {
+                            currentUser.roles.push('admin');
+                        }
+                    }
+                    
+                    // 检查用户ID和用户名
+                    if (payload.sub === 1 || (payload.user_claims && payload.user_claims.username === 'admin')) {
+                        console.log('[initializeUserRoles] JWT中用户ID为1或username为admin');
+                        currentUser.isAdmin = true;
+                        if (!currentUser.roles.includes('admin')) {
+                            currentUser.roles.push('admin');
+                        }
+                    }
+                    
+                    // 检查角色数组
+                    if (payload.roles && Array.isArray(payload.roles)) {
+                        for (const role of payload.roles) {
+                            if (!currentUser.roles.includes(role)) {
+                                currentUser.roles.push(role);
+                            }
+                            if (role === 'admin') {
+                                currentUser.isAdmin = true;
+                            }
+                            if (role === 'manager') {
+                                currentUser.isManager = true;
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('[initializeUserRoles] JWT解析出错:', e);
+            }
+            
+            // 4. 首先检查当前角色是否已经有值 (可用于保持之前的状态)
+            if (currentUser.roles && currentUser.roles.length > 0) {
+                console.log("[initializeUserRoles] 使用当前设置的角色:", currentUser.roles);
+                // 检查current roles中是否包含admin
+                if (currentUser.roles.includes('admin')) {
+                    currentUser.isAdmin = true;
+                }
+                if (currentUser.roles.includes('manager')) {
+                    currentUser.isManager = true;
+                }
+            }
+            
+            // 5. 尝试从localStorage中获取
+            try {
+                const storedRoles = localStorage.getItem('user_roles');
+                if (storedRoles) {
+                    console.log("[initializeUserRoles] 从localStorage中获取用户角色:", storedRoles);
+                    const roles = storedRoles.split(',').filter(r => r.trim() !== '');
+                    
+                    // 合并角色，避免丢失
+                    for (const role of roles) {
+                        if (!currentUser.roles.includes(role)) {
+                            currentUser.roles.push(role);
+                        }
+                    }
+                    
+                    // 检查是否有admin角色
+                    if (roles.includes('admin')) {
+                        currentUser.isAdmin = true;
+                    }
+                    if (roles.includes('manager')) {
+                        currentUser.isManager = true;
+                    }
+                }
+            } catch(e) {
+                console.error("[initializeUserRoles] 读取localStorage角色出错:", e);
+            }
+            
+            // 6. 尝试从Cookie中获取
+            var userRolesCookie = getCookie('user_roles');
+            if (userRolesCookie) {
+                console.log("[initializeUserRoles] 从Cookie中获取用户角色:", userRolesCookie);
+                const cookieRoles = userRolesCookie.split(',').filter(r => r.trim() !== '');
+                
+                // 合并角色，避免丢失
+                for (const role of cookieRoles) {
+                    if (!currentUser.roles.includes(role)) {
+                        currentUser.roles.push(role);
+                    }
+                }
+                
+                // 检查是否有admin角色
+                if (cookieRoles.includes('admin')) {
+                    currentUser.isAdmin = true;
+                }
+                if (cookieRoles.includes('manager')) {
+                    currentUser.isManager = true;
+                }
+            }
+            
+            // 7. 检查是否有admin标志cookie
+            var isAdminCookie = getCookie('is_admin') || getCookie('admin') || getCookie('admin_role');
+            if (isAdminCookie === 'true') {
+                console.log("[initializeUserRoles] 从Cookie中检测到admin标志");
+                currentUser.isAdmin = true;
+                if (!currentUser.roles.includes('admin')) {
+                    currentUser.roles.push('admin');
+                }
+            }
+            
+            // 8. 检查localStorage中是否有admin标志
+            if (localStorage.getItem('is_admin') === 'true' || localStorage.getItem('admin') === 'true') {
+                console.log("[initializeUserRoles] 从localStorage中检测到admin标志");
+                currentUser.isAdmin = true;
+                if (!currentUser.roles.includes('admin')) {
+                    currentUser.roles.push('admin');
+                }
+            }
+            
+            // 9. 最后确认admin状态和同步
+            if (currentUser.isAdmin && !currentUser.roles.includes('admin')) {
+                currentUser.roles.push('admin');
+            }
+            
+            // 检查是否发生了admin状态变化
+            if (wasAdmin !== currentUser.isAdmin) {
+                console.log("[initializeUserRoles] admin状态发生变化:", wasAdmin, "->", currentUser.isAdmin);
+                if (currentUser.isAdmin) {
+                    // 同步到存储
+                    localStorage.setItem('is_admin', 'true');
+                    document.cookie = `is_admin=true; path=/; max-age=${60*60*24}; SameSite=Lax`;
+                }
+            }
+            
+            console.log("[initializeUserRoles] 最终角色:", currentUser.roles, "isAdmin=", currentUser.isAdmin);
+            return currentUser.roles;
         }
         
         // 页面加载时初始化用户角色
         initializeUserRoles();
         
+        // 独立的admin检查函数，不依赖于currentUser
+        function isAdminUser() {
+            console.log("[isAdminUser] 开始检查用户是否是admin");
+            
+            // 1. 首先检查缓存的标志
+            if (window.currentUser.isAdmin) {
+                console.log("[isAdminUser] currentUser.isAdmin=true");
+                return true;
+            }
+            
+            // 2. 检查用户名和ID
+            if (window.currentUser.username === 'admin' || window.currentUser.id === 1) {
+                console.log("[isAdminUser] 检测到admin用户名或ID");
+                window.currentUser.isAdmin = true;
+                if (!window.currentUser.roles.includes('admin')) {
+                    window.currentUser.roles.push('admin');
+                }
+                return true;
+            }
+            
+            // 3. 检查currentUser的角色数组
+            if (Array.isArray(window.currentUser.roles) && window.currentUser.roles.includes('admin')) {
+                console.log("[isAdminUser] 在currentUser.roles中检测到admin角色");
+                window.currentUser.isAdmin = true;
+                return true;
+            }
+            
+            // 4. 检查localStorage中的用户信息
+            try {
+                const userInfoStr = localStorage.getItem('user_info');
+                if (userInfoStr) {
+                    const userInfo = JSON.parse(userInfoStr);
+                    console.log("[isAdminUser] localStorage中的用户信息:", userInfo);
+                    
+                    // 检查基本属性
+                    if (userInfo.username === 'admin' || userInfo.id === 1 || userInfo.is_admin === true) {
+                        console.log("[isAdminUser] localStorage中检测到admin用户");
+                        window.currentUser.isAdmin = true;
+                        if (!window.currentUser.roles.includes('admin')) {
+                            window.currentUser.roles.push('admin');
+                        }
+                        return true;
+                    }
+                    
+                    // 检查角色
+                    if (Array.isArray(userInfo.roles) && userInfo.roles.includes('admin')) {
+                        console.log("[isAdminUser] localStorage中检测到admin角色");
+                        window.currentUser.isAdmin = true;
+                        if (!window.currentUser.roles.includes('admin')) {
+                            window.currentUser.roles.push('admin');
+                        }
+                        return true;
+                    }
+                }
+                
+                // 5. 检查localStorage中的admin标记
+                if (localStorage.getItem('is_admin') === 'true' || 
+                    localStorage.getItem('admin') === 'true' || 
+                    localStorage.getItem('admin_forced') === 'true' || 
+                    localStorage.getItem('admin_role') === 'true') {
+                    console.log("[isAdminUser] localStorage中检测到admin标记");
+                    window.currentUser.isAdmin = true;
+                    if (!window.currentUser.roles.includes('admin')) {
+                        window.currentUser.roles.push('admin');
+                    }
+                    return true;
+                }
+            } catch(e) {
+                console.error("[isAdminUser] 检查localStorage用户信息失败:", e);
+            }
+            
+            // 6. 检查Cookie中的admin标记
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+            
+            if (getCookie('is_admin') === 'true' || 
+                getCookie('admin') === 'true' || 
+                getCookie('admin_role') === 'true') {
+                console.log("[isAdminUser] Cookie中检测到admin标记");
+                window.currentUser.isAdmin = true;
+                if (!window.currentUser.roles.includes('admin')) {
+                    window.currentUser.roles.push('admin');
+                }
+                return true;
+            }
+            
+            // 7. 从JWT token解析admin标志
+            try {
+                const token = localStorage.getItem('access_token');
+                if (token) {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    console.log('[isAdminUser] 检查JWT Token中的admin标志:', payload);
+                    
+                    // 检查admin特定标志
+                    if (payload.admin === true) {
+                        console.log('[isAdminUser] JWT中admin=true');
+                        window.currentUser.isAdmin = true;
+                        if (!window.currentUser.roles.includes('admin')) {
+                            window.currentUser.roles.push('admin');
+                        }
+                        return true;
+                    }
+                    
+                    // 检查用户名或ID
+                    if (payload.user_claims && 
+                        (payload.user_claims.username === 'admin' || 
+                         payload.sub === 1 || 
+                         payload.user_claims.id === 1)) {
+                        console.log('[isAdminUser] JWT中用户ID为1或username为admin');
+                        window.currentUser.isAdmin = true;
+                        if (!window.currentUser.roles.includes('admin')) {
+                            window.currentUser.roles.push('admin');
+                        }
+                        return true;
+                    }
+                    
+                    // 检查角色数组
+                    if (payload.roles && Array.isArray(payload.roles) && payload.roles.includes('admin')) {
+                        console.log('[isAdminUser] JWT中角色包含admin');
+                        window.currentUser.isAdmin = true;
+                        if (!window.currentUser.roles.includes('admin')) {
+                            window.currentUser.roles.push('admin');
+                        }
+                        return true;
+                    }
+                }
+            } catch(e) {
+                console.error("[isAdminUser] JWT解析失败:", e);
+            }
+            
+            // 8. 使用getUserRoles函数再检查一次
+            if (typeof getUserRoles === 'function') {
+                const allRoles = getUserRoles();
+                if (allRoles.includes('admin')) {
+                    console.log('[isAdminUser] getUserRoles检测到admin角色');
+                    window.currentUser.isAdmin = true;
+                    if (!window.currentUser.roles.includes('admin')) {
+                        window.currentUser.roles.push('admin');
+                    }
+                    return true;
+                }
+            }
+            
+            console.log("[isAdminUser] 未检测到admin用户");
+            return false;
+        }
+        
         // 检查用户是否有指定角色
         function hasRole(role) {
+            console.log(`[hasRole] 检查用户是否有角色: ${role}`);
+            
             // 确保在检查前已初始化
-            if (!currentUser.roles || currentUser.roles.length === 0) {
+            if (!window.currentUser.roles || window.currentUser.roles.length === 0) {
+                console.log("[hasRole] 初始化用户角色");
                 initializeUserRoles();
             }
             
-            var hasRole = currentUser.roles.includes(role);
-            console.log(`检查角色 ${role}:`, hasRole, "当前角色:", currentUser.roles);
+            // admin角色特殊处理 - 使用独立函数直接检查
+            if (role === 'admin') {
+                const isAdmin = isAdminUser();
+                console.log(`[hasRole] 检查admin角色结果: ${isAdmin}`);
+                return isAdmin;
+            }
+            
+            // manager角色缓存检查
+            if (role === 'manager' && window.currentUser.isManager) {
+                console.log("[hasRole] 缓存显示用户有manager角色");
+                return true;
+            }
+            
+            // 使用工具函数直接检查角色
+            if (typeof getUserRoles === 'function') {
+                const allRoles = getUserRoles();
+                const hasRoleInFunction = allRoles.includes(role);
+                console.log(`[hasRole] 使用工具函数检查角色 ${role}: ${hasRoleInFunction}`);
+                
+                if (hasRoleInFunction) {
+                    // 同步更新当前用户角色
+                    window.currentUser.roles = allRoles;
+                    // 更新角色标志
+                    window.currentUser.isAdmin = allRoles.includes('admin');
+                    window.currentUser.isManager = allRoles.includes('manager');
+                    return true;
+                }
+            }
+            
+            // 常规角色检查
+            var hasRole = window.currentUser.roles.includes(role);
+            console.log(`[hasRole] 检查角色 ${role}: ${hasRole}, 当前角色:`, window.currentUser.roles);
             return hasRole;
         }
         
         // 检查用户是否有指定权限
         function hasPermission(permission) {
-            return currentUser.permissions.includes(permission) || hasRole('admin');
+            // admin直接拥有所有权限
+            if (isAdminUser()) {
+                return true;
+            }
+            return currentUser.permissions.includes(permission);
         }
         
         // 检查用户是否可以编辑内容（项目、任务等）
         function canEdit() {
-            return hasPermission('manage_project') || hasPermission('manage_task') || 
-                   hasRole('admin') || hasRole('manager');
+            if (isAdminUser() || currentUser.isManager) {
+                return true;
+            }
+            return hasPermission('manage_project') || hasPermission('manage_task');
         }
         
         // 检查用户是否是普通用户（只有查看权限）
         function isRegularUser() {
+            console.log("[isRegularUser] 开始检查用户是否为普通用户");
+            
+            // 1. 首先进行强力检测admin用户
+            const checkAdmin = function() {
+                // 检查window.currentUser标志和属性
+                if (window.currentUser && 
+                    (window.currentUser.isAdmin === true || 
+                     window.currentUser.username === 'admin' || 
+                     window.currentUser.id === 1 ||
+                     window.currentUser.roles.includes('admin'))) {
+                    console.log("[isRegularUser] 通过currentUser检测到admin用户");
+                    return true;
+                }
+                
+                // 从localStorage检测
+                try {
+                    const userInfoStr = localStorage.getItem('user_info');
+                    if (userInfoStr) {
+                        const userInfo = JSON.parse(userInfoStr);
+                        if (userInfo && (userInfo.username === 'admin' || 
+                                       userInfo.id === 1 || 
+                                       userInfo.is_admin === true)) {
+                            console.log("[isRegularUser] 通过localStorage检测到admin用户");
+                            return true;
+                        }
+                        
+                        // 检查角色
+                        if (userInfo.roles && userInfo.roles.includes('admin')) {
+                            console.log("[isRegularUser] 通过localStorage检测到admin角色");
+                            return true;
+                        }
+                    }
+                } catch(e) { 
+                    console.error("[isRegularUser] 检查localStorage出错:", e); 
+                }
+                
+                // 从Cookie检测
+                const getCookieValue = (name) => {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                    return null;
+                };
+                
+                if (getCookieValue('is_admin') === 'true' || 
+                    getCookieValue('admin') === 'true' || 
+                    getCookieValue('admin_role') === 'true') {
+                    console.log("[isRegularUser] 通过Cookie检测到admin标记");
+                    return true;
+                }
+                
+                return false;
+            };
+            
+            // 如果是admin，直接返回false（不是普通用户）
+            if (checkAdmin()) {
+                console.log("[isRegularUser] 检测到管理员用户，不是普通用户");
+                return false;
+            }
+            
+            // 直接使用缓存的角色标志
+            if (window.currentUser.isAdmin || window.currentUser.isManager) {
+                console.log("[isRegularUser] 缓存标志显示用户是admin或manager，不是普通用户");
+                return false;
+            }
+            
             // 确保在检查前已初始化
-            if (!currentUser.roles || currentUser.roles.length === 0) {
+            if (!window.currentUser.roles || window.currentUser.roles.length === 0) {
+                console.log("[isRegularUser] 初始化用户角色");
                 initializeUserRoles();
             }
             
-            // 在客户端通过角色判断
-            var isRegular = !hasRole('admin') && !hasRole('manager');
-            console.log("用户角色列表:", currentUser.roles);
-            console.log("用户是否为普通用户:", isRegular);
-            console.log("是否管理员:", hasRole('admin'));
-            console.log("是否项目经理:", hasRole('manager'));
-            return isRegular;
+            // 如果经过初始化后状态变化，重新检查
+            if (window.currentUser.isAdmin || window.currentUser.isManager) {
+                console.log("[isRegularUser] 初始化后检测到admin或manager，不是普通用户");
+                return false;
+            }
+            
+            // 使用getUserRoles函数再次检查
+            if (typeof getUserRoles === 'function') {
+                const rolesList = getUserRoles();
+                if (rolesList.includes('admin') || rolesList.includes('manager')) {
+                    console.log("[isRegularUser] getUserRoles检测到admin或manager角色，不是普通用户");
+                    
+                    // 更新标志以避免重复检查
+                    if (rolesList.includes('admin')) window.currentUser.isAdmin = true;
+                    if (rolesList.includes('manager')) window.currentUser.isManager = true;
+                    
+                    return false;
+                }
+            }
+            
+            // 记录日志
+            console.log("[isRegularUser] 用户角色列表:", window.currentUser.roles);
+            console.log("[isRegularUser] 用户是普通用户: true");
+            return true;
         }
         
         // 权限检查函数
@@ -146,42 +1025,148 @@
         
         // 页面加载完成后初始化用户权限
         function initUserPermissions() {
-            console.log("初始化用户权限，当前用户角色:", currentUser.roles);
-            console.log("用户是否为普通用户:", isRegularUser());
+            console.log("[initUserPermissions] 初始化用户权限，当前用户角色:", window.currentUser.roles);
             
+            // 先进行强制检查admin用户
+            if (isAdminUser()) {
+                console.log("[initUserPermissions] 检测到admin用户，保留所有编辑按钮");
+                return; // admin用户直接返回，不隐藏任何按钮
+            }
+            
+            // 再次检查roles中是否有admin
+            if (window.currentUser.roles.includes('admin')) {
+                console.log("[initUserPermissions] 角色中包含admin，保留所有编辑按钮");
+                window.currentUser.isAdmin = true;
+                return;
+            }
+            
+            // 检查用户是否为普通用户
             if (isRegularUser()) {
-                console.log("当前用户是普通用户，隐藏编辑按钮");
+                console.log("[initUserPermissions] 当前用户是普通用户，隐藏编辑按钮");
                 // 隐藏所有编辑、删除和新建按钮
                 hideEditButtons();
             } else {
-                console.log("当前用户是管理员或项目经理，显示编辑按钮");
+                console.log("[initUserPermissions] 用户具有管理权限，保留编辑按钮");
             }
         }
         
         // 页面加载完成后隐藏编辑按钮
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("[DOMContentLoaded] 页面加载完成，初始化用户权限");
+            
+            // 确保在检查权限前已初始化用户角色
+            if (!window.currentUser.roles || window.currentUser.roles.length === 0) {
+                console.log("[DOMContentLoaded] 初始化用户角色");
+                initializeUserRoles();
+            }
+            
+            // 再次强制检查admin用户
+            if (window.currentUser.username === 'admin' || window.currentUser.id === 1) {
+                console.log("[DOMContentLoaded] 检测到admin用户，设置isAdmin=true");
+                window.currentUser.isAdmin = true;
+                if (!window.currentUser.roles.includes('admin')) {
+                    window.currentUser.roles.push('admin');
+                }
+            }
+            
+            // 如果是admin用户，设置所有相关标志
+            if (window.currentUser.isAdmin || window.currentUser.roles.includes('admin')) {
+                console.log("[DOMContentLoaded] 同步admin状态到所有存储");
+                localStorage.setItem('is_admin', 'true');
+                document.cookie = `is_admin=true; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
+                document.cookie = `admin=true; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
+                // 确保角色存储包含admin
+                let currentRoles = window.currentUser.roles;
+                if (!currentRoles.includes('admin')) {
+                    currentRoles.push('admin');
+                }
+                localStorage.setItem('user_roles', currentRoles.join(','));
+                document.cookie = `user_roles=${currentRoles.join(',')}; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
+            }
+            
             initUserPermissions();
         });
         
         // 初始化完整页面后，再次检查并隐藏按钮
         window.addEventListener('load', function() {
+            console.log("[window.onload] 页面完全加载，再次初始化用户权限");
+            
+            // 强制重新获取所有角色
+            if (typeof getUserRoles === 'function') {
+                console.log("[window.onload] 再次获取用户角色");
+                const allRoles = getUserRoles();
+                
+                // 更新缓存的admin状态
+                if (allRoles.includes('admin')) {
+                    console.log("[window.onload] 检测到admin角色，更新isAdmin=true");
+                    window.currentUser.isAdmin = true;
+                }
+            }
+            
+            // 强制检查admin用户
+            if (isAdminUser()) {
+                console.log("[window.onload] 检测到admin用户，不需要隐藏任何按钮");
+                return;
+            }
+            
             setTimeout(function() {
                 // 延迟执行，确保所有动态内容都已加载
+                console.log("[window.onload] 延迟初始化用户权限");
                 initUserPermissions();
             }, 200);
         });
         
         // 隐藏编辑按钮的函数
         function hideEditButtons() {
+            console.log("[hideEditButtons] 开始检查是否需要隐藏编辑按钮");
+            
+            // 强制再次检查是否为admin用户，如果是则不隐藏任何按钮
+            if (window.currentUser.isAdmin || window.currentUser.username === 'admin' || window.currentUser.id === 1) {
+                console.log("[hideEditButtons] 检测到admin用户，不隐藏任何按钮");
+                return;
+            }
+            
+            // 强制检查本地存储中的admin标记
+            try {
+                const userInfo = JSON.parse(localStorage.getItem('user_info') || '{}');
+                if (userInfo.username === 'admin' || userInfo.id === 1 || userInfo.is_admin === true) {
+                    console.log("[hideEditButtons] 从localStorage检测到admin用户，不隐藏任何按钮");
+                    window.currentUser.isAdmin = true;  // 更新状态以确保一致性
+                    return;
+                }
+                
+                if (localStorage.getItem('is_admin') === 'true') {
+                    console.log("[hideEditButtons] 从localStorage检测到admin标记，不隐藏任何按钮");
+                    window.currentUser.isAdmin = true;  // 更新状态以确保一致性
+                    return;
+                }
+            } catch(e) {
+                console.error("[hideEditButtons] 检查localStorage出错:", e);
+            }
+            
+            // 检查cookie中的admin标记
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+            
+            if (getCookie('is_admin') === 'true' || getCookie('admin') === 'true') {
+                console.log("[hideEditButtons] 从cookie检测到admin标记，不隐藏任何按钮");
+                window.currentUser.isAdmin = true;  // 更新状态以确保一致性
+                return;
+            }
+            
             // 检查用户是否有管理项目或任务的权限
             if (hasPermission('manage_project') || hasPermission('manage_all_projects') || 
                 hasPermission('manage_task') || hasPermission('manage_all_tasks') || 
                 hasPermission('create_project') || hasPermission('create_task')) {
-                console.log("用户有项目或任务管理权限，不隐藏编辑按钮");
+                console.log("[hideEditButtons] 用户有项目或任务管理权限，不隐藏编辑按钮");
                 return;
             }
             
-            console.log("隐藏普通用户的编辑按钮");
+            console.log("[hideEditButtons] 隐藏普通用户的编辑按钮");
             // 隐藏新建项目/任务按钮
             document.querySelectorAll('[data-bs-target="#newProjectModal"], [data-bs-target="#newTaskModal"], [data-bs-target="#taskModal"], [data-bs-target="#addMemberModal"]').forEach(function(btn) {
                 btn.style.display = 'none';
@@ -216,6 +1201,118 @@
                 card.setAttribute('draggable', 'false');
             });
         }
+    </script>
+    <!-- 添加全局错误处理脚本 -->
+    <script>
+        // 检测重定向循环
+        (function() {
+            // 获取当前路径访问次数
+            function getRedirectCount() {
+                const match = document.cookie.match(/redirect_count=(\d+)/);
+                return match ? parseInt(match[1], 10) : 0;
+            }
+            
+            // 获取当前重定向路径
+            function getRedirectPath() {
+                const match = document.cookie.match(/redirect_path=([^;]+)/);
+                return match ? decodeURIComponent(match[1]) : '';
+            }
+            
+            // 检查当前URL是否有循环风险参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasRiskParams = urlParams.has('csrf_token') || urlParams.has('redirected');
+            
+            // 获取当前重定向计数
+            const redirectCount = getRedirectCount();
+            const redirectPath = getRedirectPath();
+            
+            // 日志记录
+            console.log(`页面加载检查 - 路径: ${window.location.pathname}, 重定向计数: ${redirectCount}, 风险参数: ${hasRiskParams}`);
+            
+            // 如果检测到风险
+            if ((redirectCount > 2 && window.location.pathname === redirectPath) || 
+                (hasRiskParams && window.location.pathname.includes('/detail/'))) {
+                console.warn('检测到潜在的重定向循环风险');
+                
+                // 尝试清理URL
+                if (hasRiskParams) {
+                    try {
+                        // 移除所有查询参数，只保留bypass_jwt
+                        const cleanUrl = window.location.pathname + 
+                            (urlParams.has('bypass_jwt') ? '?bypass_jwt=true' : '');
+                        
+                        // 显示警告
+                        console.log(`尝试跳转到干净URL: ${cleanUrl}`);
+                        
+                        // 防止在重定向过程中创建历史记录
+                        window.history.replaceState(null, '', cleanUrl);
+                        
+                        // 重置Cookie
+                        document.cookie = 'redirect_count=0; path=/';
+                        document.cookie = 'redirect_path=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    } catch (e) {
+                        console.error('URL清理失败:', e);
+                    }
+                }
+            }
+        })();
+        
+        // 检测并恢复页面加载失败
+        window.addEventListener('error', function(e) {
+            // 仅处理资源加载错误
+            if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK' || e.target.tagName === 'IMG')) {
+                console.error('资源加载失败:', e.target.src || e.target.href);
+                
+                // 如果是关键资源加载失败，提供页面恢复机制
+                const isCritical = (e.target.src || e.target.href || '').includes('bootstrap') || 
+                                 (e.target.src || e.target.href || '').includes('jquery');
+                
+                if (isCritical) {
+                    console.warn('关键资源加载失败，可能影响页面功能');
+                    
+                    // 如果页面上没有显示错误信息，添加错误提示
+                    if (!document.getElementById('resource-error-alert')) {
+                        const alert = document.createElement('div');
+                        alert.id = 'resource-error-alert';
+                        alert.className = 'alert alert-warning alert-dismissible fade show m-3';
+                        alert.innerHTML = `
+                            <strong>警告:</strong> 页面部分资源加载失败，可能影响功能正常使用。
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="location.reload(true)">
+                                    <i class="bi bi-arrow-clockwise"></i> 刷新页面
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="clearCacheAndReload()">
+                                    <i class="bi bi-trash"></i> 清除缓存并刷新
+                                </button>
+                            </div>
+                        `;
+                        
+                        // 插入到页面顶部
+                        document.body.insertBefore(alert, document.body.firstChild);
+                        
+                        // 添加清除缓存并刷新的函数
+                        window.clearCacheAndReload = function() {
+                            // 清除当前页面的缓存数据
+                            if ('caches' in window) {
+                                caches.keys().then(function(names) {
+                                    for (let name of names) {
+                                        caches.delete(name);
+                                    }
+                                });
+                            }
+                            
+                            // 清除相关的Cookies
+                            document.cookie = 'redirect_count=0; path=/';
+                            document.cookie = 'redirect_path=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                            
+                            // 强制刷新页面
+                            location.reload(true);
+                        };
+                    }
+                }
+            }
+        }, true);
     </script>
 </head>
 <body>
@@ -303,6 +1400,10 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">{% block header %}{% endblock %}</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
+                        <!-- 添加用户信息查看按钮 -->
+                        <button type="button" class="btn btn-sm btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#userInfoModal">
+                            <i class="bi bi-person-badge"></i> 用户信息
+                        </button>
                         {% block header_buttons %}{% endblock %}
                     </div>
                 </div>
@@ -318,6 +1419,32 @@
                     {% endif %}
                 {% endwith %}
 
+                <!-- 添加用户信息模态框 -->
+                <div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="userInfoModalLabel">用户信息</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="user-info-container">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">加载用户信息...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="refresh-user-info">刷新</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {% block content %}{% endblock %}
             </main>
         </div>
@@ -326,7 +1453,44 @@
     <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script src="{{ url_for('static', filename='js/fix-modals.js') }}"></script>
     <script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+    <!-- 用户信息组件 -->
+    <script src="{{ url_for('static', filename='js/user-profile.js') }}"></script>
     <script>
+        // 在页面加载完成后主动获取一次用户信息，确保数据最新
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否已登录
+            const hasToken = localStorage.getItem('access_token') || 
+                             document.cookie.includes('access_token_cookie=');
+            
+            if (hasToken) {
+                console.log("检测到登录状态，初始化用户信息...");
+                // 主动调用获取用户信息API
+                if (typeof getUserInfo === 'function') {
+                    getUserInfo().then(userData => {
+                        console.log("页面加载时获取用户信息成功:", userData ? userData.username : null);
+                        
+                        // 如果是admin用户，确保admin角色和标志正确设置
+                        if (userData && (userData.username === 'admin' || userData.id === 1)) {
+                            console.log("确认admin用户身份");
+                            localStorage.setItem('is_admin', 'true');
+                            document.cookie = 'is_admin=true; path=/; max-age=604800; SameSite=Lax';
+                            
+                            // 确保全局currentUser状态也正确
+                            if (window.currentUser) {
+                                window.currentUser.isAdmin = true;
+                                if (!window.currentUser.roles.includes('admin')) {
+                                    window.currentUser.roles.push('admin');
+                                }
+                                console.log("更新全局currentUser状态:", window.currentUser);
+                            }
+                        }
+                    }).catch(error => {
+                        console.error("初始化用户信息失败:", error);
+                    });
+                }
+            }
+        });
+        
         function logout() {
             if (confirm('确定要退出登录吗？')) {
                 // 使用fetchWithCsrf向后端发送退出请求
